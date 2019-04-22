@@ -8,7 +8,7 @@ import com.aaa.framework.web.domain.BaseEntity;
  * 巡检人员表 tbl_routing_people
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-22
  */
 public class RoutingPeople extends BaseEntity
 {

@@ -8,20 +8,18 @@ import com.aaa.framework.web.domain.BaseEntity;
  * 驻点表 tbl_stagnation
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-22
  */
 public class Stagnation extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 	
-	/** 驻点编号 */
-	private Integer stagnationId;
 	/** 驻点代码 */
-	private String stagnationCode;
+	private Integer stagnationId;
 	/** 驻点名称 */
 	private String stagnationPname;
 	/** 城市代码 */
-	private String addressId;
+	private Integer addressId;
 	/** 上级驻点代码 */
 	private Integer pID;
 	/** 驻点资源总数 */
@@ -38,15 +36,6 @@ public class Stagnation extends BaseEntity
 	{
 		return stagnationId;
 	}
-	public void setStagnationCode(String stagnationCode) 
-	{
-		this.stagnationCode = stagnationCode;
-	}
-
-	public String getStagnationCode() 
-	{
-		return stagnationCode;
-	}
 	public void setStagnationPname(String stagnationPname) 
 	{
 		this.stagnationPname = stagnationPname;
@@ -56,12 +45,12 @@ public class Stagnation extends BaseEntity
 	{
 		return stagnationPname;
 	}
-	public void setAddressId(String addressId) 
+	public void setAddressId(Integer addressId) 
 	{
 		this.addressId = addressId;
 	}
 
-	public String getAddressId() 
+	public Integer getAddressId() 
 	{
 		return addressId;
 	}
@@ -96,7 +85,6 @@ public class Stagnation extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("stagnationId", getStagnationId())
-            .append("stagnationCode", getStagnationCode())
             .append("stagnationPname", getStagnationPname())
             .append("addressId", getAddressId())
             .append("pID", getPID())

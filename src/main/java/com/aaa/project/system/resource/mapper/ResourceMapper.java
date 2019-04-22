@@ -50,15 +50,15 @@ public interface ResourceMapper
      * @return 结果
      */
 	public int updateResource(Resource resource);
-	
+
 	/**
-     * 删除资源点
-     * 
-     * @param resourceId 资源点ID
-     * @return 结果
-     */
-	public int deleteResourceById(Long resourceId);
-	
+	 * 释放资源
+	 * @param resource
+	 * @return
+	 */
+	public int cancelDistribute(Resource resource);
+
+
 	/**
      * 批量删除资源点
      * 

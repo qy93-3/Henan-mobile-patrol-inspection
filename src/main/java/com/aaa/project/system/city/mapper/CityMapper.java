@@ -7,26 +7,18 @@ import java.util.List;
  * 市 数据层
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-22
  */
 public interface CityMapper 
 {
 	/**
      * 查询市信息
      * 
-     * @param id 市ID
+     * @param cityId 市ID
      * @return 市信息
      */
-	public City selectCityById(Integer id);
-
-
-	/**
-	 * 查询市信息
-	 * @param cityId
-	 * @return
-	 */
-	public City selectCityByCode(String cityId);
-
+	public City selectCityById(Integer cityId);
+	
 	/**
      * 查询市列表
      * 
@@ -54,17 +46,17 @@ public interface CityMapper
 	/**
      * 删除市
      * 
-     * @param id 市ID
+     * @param cityId 市ID
      * @return 结果
      */
-	public int deleteCityById(Integer id);
+	public int deleteCityById(Integer cityId);
 	
 	/**
      * 批量删除市
      * 
-     * @param ids 需要删除的数据ID
+     * @param cityIds 需要删除的数据ID
      * @return 结果
      */
-	public int deleteCityByIds(String[] ids);
+	public int deleteCityByIds(String[] cityIds);
 	
 }

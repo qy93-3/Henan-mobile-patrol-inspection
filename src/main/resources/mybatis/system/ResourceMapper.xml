@@ -142,6 +142,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where resource_id = #{resourceId}
     </update>
 
+    <update id="cancelDistribute" parameterType="Resource">
+        update tbl_resource set resource_stagantion_company = null where resource_id = #{resourceId}
+    </update>
+
 	<delete id="deleteResourceById" parameterType="Long">
         delete from tbl_resource where resource_id = #{resourceId}
     </delete>

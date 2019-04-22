@@ -8,52 +8,40 @@ import com.aaa.framework.web.domain.BaseEntity;
  * 市表 tbl_city
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-22
  */
 public class City extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 	
-	/** 市编号 */
-	private Integer id;
 	/** 市代码 */
-	private String cityId;
+	private Integer cityId;
 	/** 市名称 */
-	private String city;
+	private String cityName;
 
-	public void setId(Integer id) 
-	{
-		this.id = id;
-	}
-
-	public Integer getId() 
-	{
-		return id;
-	}
-	public void setCityId(String cityId) 
+	public void setCityId(Integer cityId) 
 	{
 		this.cityId = cityId;
 	}
 
-	public String getCityId() 
+	public Integer getCityId() 
 	{
 		return cityId;
 	}
-	public void setCity(String city) 
+	public void setCityName(String cityName) 
 	{
-		this.city = city;
+		this.cityName = cityName;
 	}
 
-	public String getCity() 
+	public String getCityName() 
 	{
-		return city;
+		return cityName;
 	}
 
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
             .append("cityId", getCityId())
-            .append("city", getCity())
+            .append("cityName", getCityName())
             .toString();
     }
 }

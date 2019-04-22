@@ -12,7 +12,7 @@ import com.aaa.common.support.Convert;
  * 市 服务层实现
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-22
  */
 @Service
 public class CityServiceImpl implements ICityService 
@@ -23,25 +23,15 @@ public class CityServiceImpl implements ICityService
 	/**
      * 查询市信息
      * 
-     * @param id 市ID
+     * @param cityId 市ID
      * @return 市信息
      */
     @Override
-	public City selectCityById(Integer id)
+	public City selectCityById(Integer cityId)
 	{
-	    return cityMapper.selectCityById(id);
+	    return cityMapper.selectCityById(cityId);
 	}
-
-	/**
-	 * 查询市信息
-	 * @param cityId
-	 * @return
-	 */
-	@Override
-	public City selectCityByCode(String cityId) {
-		return cityMapper.selectCityByCode(cityId);
-	}
-
+	
 	/**
      * 查询市列表
      * 

@@ -7,25 +7,18 @@ import java.util.List;
  * 地区 服务层
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-22
  */
 public interface IAreaService 
 {
 	/**
      * 查询地区信息
      * 
-     * @param id 地区ID
+     * @param areaId 地区ID
      * @return 地区信息
      */
-	public Area selectAreaById(Integer id);
-
-	/**
-	 * 查询地区信息
-	 * @param areaID
-	 * @return
-	 */
-	public Area selectAreaByCode(String areaID);
-
+	public Area selectAreaById(Integer areaId);
+	
 	/**
      * 查询地区列表
      * 

@@ -1,5 +1,6 @@
 package com.aaa.project.system.resource.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.aaa.framework.web.domain.BaseEntity;
@@ -63,7 +64,18 @@ public class Resource extends BaseEntity
 	/** 地区 */
 	private String areaName;
 
-	public String getAreaName() {
+	/** 周期名称 */
+	private String cycleName;
+
+    public String getCycleName() {
+        return cycleName;
+    }
+
+    public void setCycleName(String cycleName) {
+        this.cycleName = cycleName;
+    }
+
+    public String getAreaName() {
 		return areaName;
 	}
 

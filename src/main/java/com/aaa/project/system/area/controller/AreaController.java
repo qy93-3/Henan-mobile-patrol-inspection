@@ -23,7 +23,7 @@ import com.aaa.common.utils.poi.ExcelUtil;
  * 地区 信息操作处理
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-22
  */
 @Controller
 @RequestMapping("/system/area")
@@ -92,10 +92,10 @@ public class AreaController extends BaseController
 	/**
 	 * 修改地区
 	 */
-	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") Integer id, ModelMap mmap)
+	@GetMapping("/edit/{areaId}")
+	public String edit(@PathVariable("areaId") Integer areaId, ModelMap mmap)
 	{
-		Area area = areaService.selectAreaById(id);
+		Area area = areaService.selectAreaById(areaId);
 		mmap.put("area", area);
 	    return prefix + "/edit";
 	}

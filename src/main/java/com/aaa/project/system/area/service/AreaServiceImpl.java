@@ -12,7 +12,7 @@ import com.aaa.common.support.Convert;
  * 地区 服务层实现
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-22
  */
 @Service
 public class AreaServiceImpl implements IAreaService 
@@ -23,20 +23,15 @@ public class AreaServiceImpl implements IAreaService
 	/**
      * 查询地区信息
      * 
-     * @param id 地区ID
+     * @param areaId 地区ID
      * @return 地区信息
      */
     @Override
-	public Area selectAreaById(Integer id)
+	public Area selectAreaById(Integer areaId)
 	{
-	    return areaMapper.selectAreaById(id);
+	    return areaMapper.selectAreaById(areaId);
 	}
-
-	@Override
-	public Area selectAreaByCode(String areaID) {
-		return areaMapper.selectAreaByCode(areaID);
-	}
-
+	
 	/**
      * 查询地区列表
      * 

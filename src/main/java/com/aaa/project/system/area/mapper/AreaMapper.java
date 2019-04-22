@@ -7,25 +7,18 @@ import java.util.List;
  * 地区 数据层
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-22
  */
 public interface AreaMapper 
 {
 	/**
      * 查询地区信息
      * 
-     * @param id 地区ID
+     * @param areaId 地区ID
      * @return 地区信息
      */
-	public Area selectAreaById(Integer id);
-
-	/**
-	 *
-	 * @param areaID
-	 * @return
-	 */
-	public Area selectAreaByCode(String areaID);
-
+	public Area selectAreaById(Integer areaId);
+	
 	/**
      * 查询地区列表
      * 
@@ -53,17 +46,17 @@ public interface AreaMapper
 	/**
      * 删除地区
      * 
-     * @param id 地区ID
+     * @param areaId 地区ID
      * @return 结果
      */
-	public int deleteAreaById(Integer id);
+	public int deleteAreaById(Integer areaId);
 	
 	/**
      * 批量删除地区
      * 
-     * @param ids 需要删除的数据ID
+     * @param areaIds 需要删除的数据ID
      * @return 结果
      */
-	public int deleteAreaByIds(String[] ids);
+	public int deleteAreaByIds(String[] areaIds);
 	
 }

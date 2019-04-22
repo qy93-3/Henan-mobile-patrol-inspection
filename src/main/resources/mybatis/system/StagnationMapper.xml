@@ -6,7 +6,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="Stagnation" id="StagnationResult">
         <result property="stagnationId"    column="stagnation_id"    />
-        <result property="stagnationCode"    column="stagnation_code"    />
         <result property="stagnationPname"    column="stagnation_pname"    />
         <result property="addressId"    column="address_id"    />
         <result property="pID"    column="PID"    />
@@ -15,16 +14,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectStagnationVo">
-        select stagnation_id, stagnation_code, stagnation_pname, address_id, PID, resources_number, area_level_id from tbl_stagnation
+        select stagnation_id, stagnation_pname, address_id, PID, resources_number, area_level_id from tbl_stagnation
     </sql>
 	
     <select id="selectStagnationList" parameterType="Stagnation" resultMap="StagnationResult">
         <include refid="selectStagnationVo"/>
         <where>  
             <if test="stagnationId != null "> and stagnation_id = #{stagnationId}</if>
-             <if test="stagnationCode != null  and stagnationCode != '' "> and stagnation_code = #{stagnationCode}</if>
-             <if test="stagnationPname != null  and stagnationPname != '' "> and stagnation_pname = #{stagnationPname}</if>
-             <if test="addressId != null  and addressId != '' "> and address_id = #{addressId}</if>
+             <if test="stagnationPname != null  and stagnationPname != '' "> and stagnation_pname like "%"#{stagnationPname}"%"</if>
+             <if test="addressId != null "> and address_id = #{addressId}</if>
              <if test="pID != null "> and PID = #{pID}</if>
              <if test="resourcesNumber != null "> and resources_number = #{resourcesNumber}</if>
              <if test="areaLevelId != null "> and area_level_id = #{areaLevelId}</if>
@@ -40,18 +38,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into tbl_stagnation
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="stagnationId != null  ">stagnation_id,</if>
-			<if test="stagnationCode != null  and stagnationCode != ''  ">stagnation_code,</if>
 			<if test="stagnationPname != null  and stagnationPname != ''  ">stagnation_pname,</if>
-			<if test="addressId != null  and addressId != ''  ">address_id,</if>
+			<if test="addressId != null  ">address_id,</if>
 			<if test="pID != null  ">PID,</if>
 			<if test="resourcesNumber != null  ">resources_number,</if>
 			<if test="areaLevelId != null  ">area_level_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="stagnationId != null  ">#{stagnationId},</if>
-			<if test="stagnationCode != null  and stagnationCode != ''  ">#{stagnationCode},</if>
 			<if test="stagnationPname != null  and stagnationPname != ''  ">#{stagnationPname},</if>
-			<if test="addressId != null  and addressId != ''  ">#{addressId},</if>
+			<if test="addressId != null  ">#{addressId},</if>
 			<if test="pID != null  ">#{pID},</if>
 			<if test="resourcesNumber != null  ">#{resourcesNumber},</if>
 			<if test="areaLevelId != null  ">#{areaLevelId},</if>
@@ -61,9 +57,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateStagnation" parameterType="Stagnation">
         update tbl_stagnation
         <trim prefix="SET" suffixOverrides=",">
-            <if test="stagnationCode != null  and stagnationCode != ''  ">stagnation_code = #{stagnationCode},</if>
             <if test="stagnationPname != null  and stagnationPname != ''  ">stagnation_pname = #{stagnationPname},</if>
-            <if test="addressId != null  and addressId != ''  ">address_id = #{addressId},</if>
+            <if test="addressId != null  ">address_id = #{addressId},</if>
             <if test="pID != null  ">PID = #{pID},</if>
             <if test="resourcesNumber != null  ">resources_number = #{resourcesNumber},</if>
             <if test="areaLevelId != null  ">area_level_id = #{areaLevelId},</if>

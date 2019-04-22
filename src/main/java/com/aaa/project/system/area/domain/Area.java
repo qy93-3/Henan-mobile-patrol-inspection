@@ -8,63 +8,51 @@ import com.aaa.framework.web.domain.BaseEntity;
  * 地区表 tbl_area
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-22
  */
 public class Area extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 	
-	/** 地区编号 */
-	private Integer id;
 	/** 地区代码 */
-	private String areaID;
+	private Integer areaId;
 	/** 地区名称 */
-	private String area;
+	private String areaName;
 	/** 市代码 */
-	private String father;
+	private Integer father;
 
-	public void setId(Integer id) 
+	public void setAreaId(Integer areaId) 
 	{
-		this.id = id;
-	}
-
-	public Integer getId() 
-	{
-		return id;
-	}
-	public void setAreaID(String areaID) 
-	{
-		this.areaID = areaID;
+		this.areaId = areaId;
 	}
 
-	public String getAreaID() 
+	public Integer getAreaId() 
 	{
-		return areaID;
+		return areaId;
 	}
-	public void setArea(String area) 
+	public void setAreaName(String areaName) 
 	{
-		this.area = area;
+		this.areaName = areaName;
 	}
 
-	public String getArea() 
+	public String getAreaName() 
 	{
-		return area;
+		return areaName;
 	}
-	public void setFather(String father) 
+	public void setFather(Integer father) 
 	{
 		this.father = father;
 	}
 
-	public String getFather() 
+	public Integer getFather() 
 	{
 		return father;
 	}
 
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("areaID", getAreaID())
-            .append("area", getArea())
+            .append("areaId", getAreaId())
+            .append("areaName", getAreaName())
             .append("father", getFather())
             .toString();
     }

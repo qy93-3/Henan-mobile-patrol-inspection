@@ -81,6 +81,11 @@ public class ResourceServiceImpl implements IResourceService
 	    return resourceMapper.updateResource(resource);
 	}
 
+	@Override
+	public int cancelDistribute(Resource resource) {
+		return resourceMapper.cancelDistribute(resource);
+	}
+
 	/**
      * 删除资源点对象
      * 

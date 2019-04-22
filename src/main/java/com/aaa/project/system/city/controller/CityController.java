@@ -23,7 +23,7 @@ import com.aaa.common.utils.poi.ExcelUtil;
  * 市 信息操作处理
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-22
  */
 @Controller
 @RequestMapping("/system/city")
@@ -92,10 +92,10 @@ public class CityController extends BaseController
 	/**
 	 * 修改市
 	 */
-	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") Integer id, ModelMap mmap)
+	@GetMapping("/edit/{cityId}")
+	public String edit(@PathVariable("cityId") Integer cityId, ModelMap mmap)
 	{
-		City city = cityService.selectCityById(id);
+		City city = cityService.selectCityById(cityId);
 		mmap.put("city", city);
 	    return prefix + "/edit";
 	}

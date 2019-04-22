@@ -24,7 +24,7 @@
                             <td><input type="text" name="resourceName"/></td>
                             <td>资源ID</td>
                             <td>
-                                <input type="text" name="resourceCounty"/>
+                                <input type="text" name="resourceId"/>
                             </td>
                         </tr>
                         <tr>
@@ -33,7 +33,7 @@
                                 <select name="resourceCity" id="city">
                                     <option value=0>--请选择--</option>
                                     <div th:each="city:${cities}">
-                                        <option th:value="${city.cityId}" th:text="${city.city}"></option>
+                                        <option th:value="${city.cityId}" th:text="${city.cityName}"></option>
                                     </div>
                                 </select>
                             </td>
@@ -47,13 +47,14 @@
                         <tr>
                             <td>巡检周期</td>
                             <td>
-                                <input type="checkbox" name="resourceCycle" value="1"/>月
-                                <input type="checkbox" name="resourceCycle" value="3"/>季
-                                <input type="checkbox" name="resourceCycle" value="6"/>半年
-                                <input type="checkbox" name="resourceCycle" value="12"/>年
+                                <input type="radio" name="resourceCycle" value="1"/>月
+                                <input type="radio" name="resourceCycle" value="2"/>季
+                                <input type="radio" name="resourceCycle" value="3"/>半年
+                                <input type="radio" name="resourceCycle" value="4"/>年
                             </td>
                             <td></td>
-                            <td></td>
+                            <td>
+                            </td>
                         </tr>
                     </table>
                     <div align="center">
@@ -74,7 +75,7 @@
             <select id="city2">
                 <option value=0>--请选择城市--</option>
                 <div th:each="city:${cities}">
-                    <option th:value="${city.cityId}" th:text="${city.city}"></option>
+                    <option th:value="${city.cityId}" th:text="${city.cityName}"></option>
                 </div>
             </select>
             <select id="area2">
@@ -88,16 +89,9 @@
 
 
         <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:resource:add">
-                <i class="fa fa-plus"></i> 添加
-            </a>
             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
                shiro:hasPermission="system:resource:edit">
                 <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()"
-               shiro:hasPermission="system:resource:remove">
-                <i class="fa fa-remove"></i> 删除
             </a>
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:resource:export">
                 <i class="fa fa-download"></i> 导出
@@ -124,9 +118,7 @@
         }
         var options = {
             url: prefix + "/list/{" + [[${flag}]] + "}",
-            createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
-            removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             modalName: "资源点",
             search: false,
@@ -163,8 +155,7 @@
                 },
                 {
                     field: 'resourceAddress',
-                    title: '资源点地址',
-                    sortable: true
+                    title: '资源点地址'
                 },
                 {
                     field: 'resourceDotType',
@@ -221,9 +212,8 @@
                     visible: false
                 },
                 {
-                    field: 'resourceCycle',
-                    title: '资源点周期',
-                    sortable: true
+                    field: 'cycleName',
+                    title: '巡检周期'
                 },
                 {
                     field: 'resourceLastDate',
@@ -244,9 +234,18 @@
                 {
                     field: 'distributeStatus',
                     title: '分配状态',
-                    sortable: true,
                     visible: true
-                }]
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.resourceId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        return actions.join('');
+                    }
+                }
+            ]
         };
         $.table.init(options);
         /**
@@ -255,16 +254,15 @@
         $("#city").change(function () {
             $("#area option:not(:first)").remove();
             var city = $(this).val();
-            if (city != "") {
+            if (city != "0") {
                 var url = ctx + "system/resource/getLocation";
                 $.post(url, {
-                    locationId: city,
-                    "location": "city"
+                    locationId: city
                 }, function (data) {
                     for (var i = 0; i < data.length; i++) {
-                        var areaId = data[i].areaID;
-                        var area = data[i].area;
-                        $("#area").append("<option value='" + areaId + "'>" + area + "</option>");
+                        var areaId = data[i].areaId;
+                        var areaName = data[i].areaName;
+                        $("#area").append("<option value='" + areaId + "'>" + areaName + "</option>");
                     }
                 })
             }
@@ -276,16 +274,16 @@
             $("#area2 option:not(:first)").remove();
             $("#stagantion option:not(:first)").remove();
             var city = $(this).val();
-            if (city != "") {
+            if (city != "0") {
                 var urlArea = ctx + "system/resource/getLocation";
                 var urlStagantion = ctx + "system/resource/getStagantion";
                 $.post(urlArea, {
                     locationId: city
                 }, function (data) {
                     for (var i = 0; i < data.length; i++) {
-                        var areaId = data[i].areaID;
-                        var area = data[i].area;
-                        $("#area2").append("<option value='" + areaId + "'>" + area + "</option>");
+                        var areaId = data[i].areaId;
+                        var areaName = data[i].areaName;
+                        $("#area2").append("<option value='" + areaId + "'>" + areaName + "</option>");
                     }
                 })
                 $.post(urlStagantion, {
@@ -306,19 +304,24 @@
         $("#area2").change(function () {
             $("#stagantion option:not(:first)").remove();
             var area = $(this).val();
-            if (area != "") {
-                var url = ctx + "system/resource/getStagantion";
-                $.post(url, {
+            if (area == "0")
+                var dataarr = {
+                    locationId: $("#city2").val(),
+                    areaLevel: "city"
+                }
+            else
+                var dataarr = {
                     locationId: area,
                     areaLevel: "area"
-                }, function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var stagnationId = data[i].stagnationId;
-                        var stagnationPname = data[i].stagnationPname;
-                        $("#stagantion").append("<option value='" + stagnationId + "'>" + stagnationPname + "</option>");
-                    }
-                })
-            }
+                }
+            var url = ctx + "system/resource/getStagantion";
+            $.post(url, dataarr, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var stagnationId = data[i].stagnationId;
+                    var stagnationPname = data[i].stagnationPname;
+                    $("#stagantion").append("<option value='" + stagnationId + "'>" + stagnationPname + "</option>");
+                }
+            })
         })
     });
 
@@ -344,6 +347,25 @@
                 });
             });
         }
+    }
+
+    /**
+     * 释放资源点
+     */
+    function cancelDistribute() {
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        $.modal.confirm("确认要释放选中的" + rows.length + "个资源点吗?", function () {
+            $.modal.loading("正在处理中，请稍后...");
+            $.ajax({
+                url: ctx + "system/resource/cancelDistribute",
+                type: "post",
+                dataType: "json",
+                data: {"ids": rows.join()},
+                success: function (result) {
+                    $.operate.ajaxSuccess(result);
+                }
+            });
+        });
     }
 </script>
 </body>

@@ -7,33 +7,26 @@ import java.util.List;
  * 市 服务层
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-22
  */
 public interface ICityService 
 {
 	/**
      * 查询市信息
      * 
-     * @param id 市ID
+     * @param cityId 市ID
      * @return 市信息
      */
-	public City selectCityById(Integer id);
-
-	/**
-	 * 查询市信息
-	 * @param cityId
-	 * @return
-	 */
-	public City selectCityByCode(String cityId);
-
+	public City selectCityById(Integer cityId);
+	
 	/**
      * 查询市列表
-     *
+     * 
      * @param city 市信息
      * @return 市集合
      */
 	public List<City> selectCityList(City city);
-
+	
 	/**
      * 新增市
      * 

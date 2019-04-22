@@ -50,7 +50,14 @@ public interface IResourceService
      * @return 结果
      */
 	public int updateResource(Resource resource);
-		
+
+	/**
+	 * 释放资源
+	 * @param resource
+	 * @return
+	 */
+	public int cancelDistribute(Resource resource);
+
 	/**
      * 删除资源点信息
      * 
