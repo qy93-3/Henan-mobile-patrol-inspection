@@ -31,7 +31,17 @@ public class CityServiceImpl implements ICityService
 	{
 	    return cityMapper.selectCityById(id);
 	}
-	
+
+	/**
+	 * 查询市信息
+	 * @param cityId
+	 * @return
+	 */
+	@Override
+	public City selectCityByCode(String cityId) {
+		return cityMapper.selectCityByCode(cityId);
+	}
+
 	/**
      * 查询市列表
      * 

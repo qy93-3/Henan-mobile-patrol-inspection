@@ -18,7 +18,15 @@ public interface CityMapper
      * @return 市信息
      */
 	public City selectCityById(Integer id);
-	
+
+
+	/**
+	 * 查询市信息
+	 * @param cityId
+	 * @return
+	 */
+	public City selectCityByCode(String cityId);
+
 	/**
      * 查询市列表
      * 

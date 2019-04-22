@@ -41,9 +41,22 @@ public class ResourceServiceImpl implements IResourceService
 	@Override
 	public List<Resource> selectResourceList(Resource resource)
 	{
+		System.out.println("=====================================");
 	    return resourceMapper.selectResourceList(resource);
 	}
-	
+
+	/**
+     * 查询有驻点资源点列表
+     *
+     * @param resource 资源点信息
+     * @return 资源点集合
+     */
+	@Override
+	public List<Resource> selectResourceListHasDis(Resource resource)
+	{
+	    return resourceMapper.selectResourceListHasDis(resource);
+	}
+
     /**
      * 新增资源点
      * 
@@ -79,5 +92,4 @@ public class ResourceServiceImpl implements IResourceService
 	{
 		return resourceMapper.deleteResourceByIds(Convert.toStrArray(ids));
 	}
-	
 }

@@ -26,7 +26,15 @@ public interface IResourceService
      * @return 资源点集合
      */
 	public List<Resource> selectResourceList(Resource resource);
-	
+
+	/**
+     * 查询有驻点资源点列表
+     *
+     * @param resource 资源点信息
+     * @return 资源点集合
+     */
+	public List<Resource> selectResourceListHasDis(Resource resource);
+
 	/**
      * 新增资源点
      * 
@@ -50,5 +58,5 @@ public interface IResourceService
      * @return 结果
      */
 	public int deleteResourceByIds(String ids);
-	
+
 }

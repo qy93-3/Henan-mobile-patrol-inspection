@@ -54,7 +54,40 @@ public class Resource extends BaseEntity
 	/** 资源类型 */
 	private String resourceType;
 
-	public void setResourceId(Long resourceId) 
+	/** 分配状态 */
+	private String distributeStatus;
+
+	/** 驻点名称 */
+	private String stagantionCompanyName;
+
+	/** 地区 */
+	private String areaName;
+
+	public String getAreaName() {
+		return areaName;
+	}
+
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
+	}
+
+	public String getStagantionCompanyName() {
+		return stagantionCompanyName;
+	}
+
+	public void setStagantionCompanyName(String stagantionCompanyName) {
+		this.stagantionCompanyName = stagantionCompanyName;
+	}
+
+	public String getDistributeStatus() {
+		return distributeStatus;
+	}
+
+	public void setDistributeStatus(String distributeStatus) {
+		this.distributeStatus = distributeStatus;
+	}
+
+	public void setResourceId(Long resourceId)
 	{
 		this.resourceId = resourceId;
 	}

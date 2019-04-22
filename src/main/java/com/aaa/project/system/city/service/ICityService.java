@@ -18,15 +18,22 @@ public interface ICityService
      * @return 市信息
      */
 	public City selectCityById(Integer id);
-	
+
+	/**
+	 * 查询市信息
+	 * @param cityId
+	 * @return
+	 */
+	public City selectCityByCode(String cityId);
+
 	/**
      * 查询市列表
-     * 
+     *
      * @param city 市信息
      * @return 市集合
      */
 	public List<City> selectCityList(City city);
-	
+
 	/**
      * 新增市
      * 

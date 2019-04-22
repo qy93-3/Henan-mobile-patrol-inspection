@@ -1,0 +1,23 @@
+table{
+    width: 100%;
+    border: 1px solid #A3C0E8;
+    height: 120px;
+    align:center;
+}
+tr{
+    border: 1px solid #A3C0E8;
+}
+td{
+    padding-left: 10px;
+}
+td input{
+    border: 1px solid #A3C0E8;
+}
+tr td:first-child,td:nth-child(3){
+    background-color: #E9F3FA;
+}
+table+div{
+    width:100%;
+    align:center;
+    margin-top: 20px;
+}

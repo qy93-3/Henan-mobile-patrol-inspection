@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="resourceId != null "> and resource_id = #{resourceId}</if>
              <if test="resourceAreaId != null "> and resource_area_id = #{resourceAreaId}</if>
-             <if test="resourceName != null  and resourceName != '' "> and resource_name = #{resourceName}</if>
+             <if test="resourceName != null  and resourceName != '' "> and resource_name like "%"#{resourceName}"%"</if>
              <if test="resourceLongitude != null  and resourceLongitude != '' "> and resource_longitude = #{resourceLongitude}</if>
              <if test="resourceLatitude != null  and resourceLatitude != '' "> and resource_latitude = #{resourceLatitude}</if>
              <if test="resourceAddress != null  and resourceAddress != '' "> and resource_address = #{resourceAddress}</if>
@@ -54,7 +54,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="resourceType != null  and resourceType != '' "> and resource_type = #{resourceType}</if>
          </where>
     </select>
-    
+
+    <select id="selectResourceListHasDis" parameterType="Resource" resultMap="ResourceResult">
+        <include refid="selectResourceVo"/>
+        <where>
+            <if test="resourceId != null "> and resource_id = #{resourceId}</if>
+             <if test="resourceAreaId != null "> and resource_area_id = #{resourceAreaId}</if>
+             <if test="resourceName != null  and resourceName != '' "> and resource_name like "%"#{resourceName}"%"</if>
+             <if test="resourceCycle != null "> and resource_cycle = #{resourceCycle}</if>
+            and resource_stagantion_company is not null
+         </where>
+    </select>
+
     <select id="selectResourceById" parameterType="Long" resultMap="ResourceResult">
         <include refid="selectResourceVo"/>
         where resource_id = #{resourceId}

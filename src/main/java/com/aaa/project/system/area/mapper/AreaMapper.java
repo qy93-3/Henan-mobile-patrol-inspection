@@ -18,7 +18,14 @@ public interface AreaMapper
      * @return 地区信息
      */
 	public Area selectAreaById(Integer id);
-	
+
+	/**
+	 *
+	 * @param areaID
+	 * @return
+	 */
+	public Area selectAreaByCode(String areaID);
+
 	/**
      * 查询地区列表
      * 

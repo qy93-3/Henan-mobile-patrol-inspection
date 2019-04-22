@@ -27,6 +27,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectCityVo"/>
         where id = #{id}
     </select>
+
+    <select id="selectCityByCode" parameterType="String" resultMap="CityResult">
+        <include refid="selectCityVo"/>
+        where city_id = #{cityId}
+    </select>
         
     <insert id="insertCity" parameterType="City">
         insert into tbl_city

@@ -31,7 +31,12 @@ public class AreaServiceImpl implements IAreaService
 	{
 	    return areaMapper.selectAreaById(id);
 	}
-	
+
+	@Override
+	public Area selectAreaByCode(String areaID) {
+		return areaMapper.selectAreaByCode(areaID);
+	}
+
 	/**
      * 查询地区列表
      * 
