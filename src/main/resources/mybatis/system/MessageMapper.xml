@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.message.mapper.MessageMapper">
+    
+    <resultMap type="Message" id="MessageResult">
+        <result property="messageId"    column="message_id"    />
+        <result property="messageTitle"    column="message_title"    />
+        <result property="messageContent"    column="message_content"    />
+        <result property="messagePicture"    column="message_picture"    />
+    </resultMap>
+	
+	<sql id="selectMessageVo">
+        select message_id, message_title, message_content, message_picture from tbl_message
+    </sql>
+	
+    <select id="selectMessageList" parameterType="Message" resultMap="MessageResult">
+        <include refid="selectMessageVo"/>
+        <where>  
+            <if test="messageId != null "> and message_id = #{messageId}</if>
+             <if test="messageTitle != null  and messageTitle != '' "> and message_title = #{messageTitle}</if>
+             <if test="messageContent != null  and messageContent != '' "> and message_content = #{messageContent}</if>
+             <if test="messagePicture != null  and messagePicture != '' "> and message_picture = #{messagePicture}</if>
+         </where>
+    </select>
+    
+    <select id="selectMessageById" parameterType="Integer" resultMap="MessageResult">
+        <include refid="selectMessageVo"/>
+        where message_id = #{messageId}
+    </select>
+        
+    <insert id="insertMessage" parameterType="Message">
+        insert into tbl_message
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="messageId != null  ">message_id,</if>
+			<if test="messageTitle != null  and messageTitle != ''  ">message_title,</if>
+			<if test="messageContent != null  and messageContent != ''  ">message_content,</if>
+			<if test="messagePicture != null  and messagePicture != ''  ">message_picture,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="messageId != null  ">#{messageId},</if>
+			<if test="messageTitle != null  and messageTitle != ''  ">#{messageTitle},</if>
+			<if test="messageContent != null  and messageContent != ''  ">#{messageContent},</if>
+			<if test="messagePicture != null  and messagePicture != ''  ">#{messagePicture},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateMessage" parameterType="Message">
+        update tbl_message
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="messageTitle != null  and messageTitle != ''  ">message_title = #{messageTitle},</if>
+            <if test="messageContent != null  and messageContent != ''  ">message_content = #{messageContent},</if>
+            <if test="messagePicture != null  and messagePicture != ''  ">message_picture = #{messagePicture},</if>
+        </trim>
+        where message_id = #{messageId}
+    </update>
+
+	<delete id="deleteMessageById" parameterType="Integer">
+        delete from tbl_message where message_id = #{messageId}
+    </delete>
+	
+    <delete id="deleteMessageByIds" parameterType="String">
+        delete from tbl_message where message_id in 
+        <foreach item="messageId" collection="array" open="(" separator="," close=")">
+            #{messageId}
+        </foreach>
+    </delete>
+    
+</mapper>

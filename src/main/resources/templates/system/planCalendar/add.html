@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-planCalendar-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">日历月份：</label>
+				<div class="col-sm-8">
+					<input id="calendarMonth" name="calendarMonth" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">日历每日状态：</label>
+				<div class="col-sm-8">
+					<input id="calendarStatus" name="calendarStatus" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">日历年：</label>
+				<div class="col-sm-8">
+					<input id="calendarYear" name="calendarYear" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">日历天：</label>
+				<div class="col-sm-8">
+					<input id="calendarDay" name="calendarDay" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">每日日期：</label>
+				<div class="col-sm-8">
+					<input id="calendarDate" name="calendarDate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">月计划编号：</label>
+				<div class="col-sm-8">
+					<input id="monthPlanId" name="monthPlanId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">日资源数：</label>
+				<div class="col-sm-8">
+					<input id="calendarDayResources" name="calendarDayResources" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/planCalendar"
+		$("#form-planCalendar-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-planCalendar-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

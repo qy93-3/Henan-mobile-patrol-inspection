@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.systemRole.mapper.SystemRoleMapper">
+    
+    <resultMap type="SystemRole" id="SystemRoleResult">
+        <result property="roleId"    column="role_id"    />
+        <result property="roleName"    column="role_name"    />
+        <result property="roleDeleted"    column="role_deleted"    />
+        <result property="areaLevel"    column="area_level"    />
+    </resultMap>
+	
+	<sql id="selectSystemRoleVo">
+        select role_id, role_name, role_deleted, area_level from tbl_system_role
+    </sql>
+	
+    <select id="selectSystemRoleList" parameterType="SystemRole" resultMap="SystemRoleResult">
+        <include refid="selectSystemRoleVo"/>
+        <where>  
+            <if test="roleId != null "> and role_id = #{roleId}</if>
+             <if test="roleName != null  and roleName != '' "> and role_name = #{roleName}</if>
+             <if test="roleDeleted != null "> and role_deleted = #{roleDeleted}</if>
+             <if test="areaLevel != null "> and area_level = #{areaLevel}</if>
+         </where>
+    </select>
+    
+    <select id="selectSystemRoleById" parameterType="Integer" resultMap="SystemRoleResult">
+        <include refid="selectSystemRoleVo"/>
+        where role_id = #{roleId}
+    </select>
+        
+    <insert id="insertSystemRole" parameterType="SystemRole">
+        insert into tbl_system_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleId != null  ">role_id,</if>
+			<if test="roleName != null  and roleName != ''  ">role_name,</if>
+			<if test="roleDeleted != null  ">role_deleted,</if>
+			<if test="areaLevel != null  ">area_level,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleId != null  ">#{roleId},</if>
+			<if test="roleName != null  and roleName != ''  ">#{roleName},</if>
+			<if test="roleDeleted != null  ">#{roleDeleted},</if>
+			<if test="areaLevel != null  ">#{areaLevel},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateSystemRole" parameterType="SystemRole">
+        update tbl_system_role
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleName != null  and roleName != ''  ">role_name = #{roleName},</if>
+            <if test="roleDeleted != null  ">role_deleted = #{roleDeleted},</if>
+            <if test="areaLevel != null  ">area_level = #{areaLevel},</if>
+        </trim>
+        where role_id = #{roleId}
+    </update>
+
+	<delete id="deleteSystemRoleById" parameterType="Integer">
+        delete from tbl_system_role where role_id = #{roleId}
+    </delete>
+	
+    <delete id="deleteSystemRoleByIds" parameterType="String">
+        delete from tbl_system_role where role_id in 
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+    
+</mapper>

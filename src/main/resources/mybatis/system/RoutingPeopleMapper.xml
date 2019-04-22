@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.routingPeople.mapper.RoutingPeopleMapper">
+    
+    <resultMap type="RoutingPeople" id="RoutingPeopleResult">
+        <result property="routingId"    column="routing_id"    />
+        <result property="routingName"    column="routing_name"    />
+        <result property="routingUsername"    column="routing_username"    />
+        <result property="routingPassword"    column="routing_password"    />
+        <result property="routingIdcard"    column="routing_idcard"    />
+        <result property="stagnationId"    column="stagnation_id"    />
+        <result property="routingPoint"    column="routing_point"    />
+    </resultMap>
+	
+	<sql id="selectRoutingPeopleVo">
+        select routing_id, routing_name, routing_username, routing_password, routing_idcard, stagnation_id, routing_point from tbl_routing_people
+    </sql>
+	
+    <select id="selectRoutingPeopleList" parameterType="RoutingPeople" resultMap="RoutingPeopleResult">
+        <include refid="selectRoutingPeopleVo"/>
+        <where>  
+            <if test="routingId != null "> and routing_id = #{routingId}</if>
+             <if test="routingName != null  and routingName != '' "> and routing_name = #{routingName}</if>
+             <if test="routingUsername != null  and routingUsername != '' "> and routing_username = #{routingUsername}</if>
+             <if test="routingPassword != null  and routingPassword != '' "> and routing_password = #{routingPassword}</if>
+             <if test="routingIdcard != null  and routingIdcard != '' "> and routing_idcard = #{routingIdcard}</if>
+             <if test="stagnationId != null "> and stagnation_id = #{stagnationId}</if>
+             <if test="routingPoint != null "> and routing_point = #{routingPoint}</if>
+         </where>
+    </select>
+    
+    <select id="selectRoutingPeopleById" parameterType="Integer" resultMap="RoutingPeopleResult">
+        <include refid="selectRoutingPeopleVo"/>
+        where routing_id = #{routingId}
+    </select>
+        
+    <insert id="insertRoutingPeople" parameterType="RoutingPeople">
+        insert into tbl_routing_people
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="routingId != null  ">routing_id,</if>
+			<if test="routingName != null  and routingName != ''  ">routing_name,</if>
+			<if test="routingUsername != null  and routingUsername != ''  ">routing_username,</if>
+			<if test="routingPassword != null  and routingPassword != ''  ">routing_password,</if>
+			<if test="routingIdcard != null  and routingIdcard != ''  ">routing_idcard,</if>
+			<if test="stagnationId != null  ">stagnation_id,</if>
+			<if test="routingPoint != null  ">routing_point,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="routingId != null  ">#{routingId},</if>
+			<if test="routingName != null  and routingName != ''  ">#{routingName},</if>
+			<if test="routingUsername != null  and routingUsername != ''  ">#{routingUsername},</if>
+			<if test="routingPassword != null  and routingPassword != ''  ">#{routingPassword},</if>
+			<if test="routingIdcard != null  and routingIdcard != ''  ">#{routingIdcard},</if>
+			<if test="stagnationId != null  ">#{stagnationId},</if>
+			<if test="routingPoint != null  ">#{routingPoint},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateRoutingPeople" parameterType="RoutingPeople">
+        update tbl_routing_people
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="routingName != null  and routingName != ''  ">routing_name = #{routingName},</if>
+            <if test="routingUsername != null  and routingUsername != ''  ">routing_username = #{routingUsername},</if>
+            <if test="routingPassword != null  and routingPassword != ''  ">routing_password = #{routingPassword},</if>
+            <if test="routingIdcard != null  and routingIdcard != ''  ">routing_idcard = #{routingIdcard},</if>
+            <if test="stagnationId != null  ">stagnation_id = #{stagnationId},</if>
+            <if test="routingPoint != null  ">routing_point = #{routingPoint},</if>
+        </trim>
+        where routing_id = #{routingId}
+    </update>
+
+	<delete id="deleteRoutingPeopleById" parameterType="Integer">
+        delete from tbl_routing_people where routing_id = #{routingId}
+    </delete>
+	
+    <delete id="deleteRoutingPeopleByIds" parameterType="String">
+        delete from tbl_routing_people where routing_id in 
+        <foreach item="routingId" collection="array" open="(" separator="," close=")">
+            #{routingId}
+        </foreach>
+    </delete>
+    
+</mapper>

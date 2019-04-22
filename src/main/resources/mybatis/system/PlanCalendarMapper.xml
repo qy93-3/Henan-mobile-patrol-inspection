@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.planCalendar.mapper.PlanCalendarMapper">
+    
+    <resultMap type="PlanCalendar" id="PlanCalendarResult">
+        <result property="calendarId"    column="calendar_id"    />
+        <result property="calendarMonth"    column="calendar_month"    />
+        <result property="calendarStatus"    column="calendar_status"    />
+        <result property="calendarYear"    column="calendar_year"    />
+        <result property="calendarDay"    column="calendar_day"    />
+        <result property="calendarDate"    column="calendar_date"    />
+        <result property="monthPlanId"    column="month_plan_id"    />
+        <result property="calendarDayResources"    column="calendar_day_resources"    />
+    </resultMap>
+	
+	<sql id="selectPlanCalendarVo">
+        select calendar_id, calendar_month, calendar_status, calendar_year, calendar_day, calendar_date, month_plan_id, calendar_day_resources from tbl_plan_calendar
+    </sql>
+	
+    <select id="selectPlanCalendarList" parameterType="PlanCalendar" resultMap="PlanCalendarResult">
+        <include refid="selectPlanCalendarVo"/>
+        <where>  
+            <if test="calendarId != null "> and calendar_id = #{calendarId}</if>
+             <if test="calendarMonth != null "> and calendar_month = #{calendarMonth}</if>
+             <if test="calendarStatus != null "> and calendar_status = #{calendarStatus}</if>
+             <if test="calendarYear != null "> and calendar_year = #{calendarYear}</if>
+             <if test="calendarDay != null  and calendarDay != '' "> and calendar_day = #{calendarDay}</if>
+             <if test="calendarDate != null "> and calendar_date = #{calendarDate}</if>
+             <if test="monthPlanId != null "> and month_plan_id = #{monthPlanId}</if>
+             <if test="calendarDayResources != null "> and calendar_day_resources = #{calendarDayResources}</if>
+         </where>
+    </select>
+    
+    <select id="selectPlanCalendarById" parameterType="Integer" resultMap="PlanCalendarResult">
+        <include refid="selectPlanCalendarVo"/>
+        where calendar_id = #{calendarId}
+    </select>
+        
+    <insert id="insertPlanCalendar" parameterType="PlanCalendar">
+        insert into tbl_plan_calendar
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="calendarId != null  ">calendar_id,</if>
+			<if test="calendarMonth != null  ">calendar_month,</if>
+			<if test="calendarStatus != null  ">calendar_status,</if>
+			<if test="calendarYear != null  ">calendar_year,</if>
+			<if test="calendarDay != null  and calendarDay != ''  ">calendar_day,</if>
+			<if test="calendarDate != null  ">calendar_date,</if>
+			<if test="monthPlanId != null  ">month_plan_id,</if>
+			<if test="calendarDayResources != null  ">calendar_day_resources,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="calendarId != null  ">#{calendarId},</if>
+			<if test="calendarMonth != null  ">#{calendarMonth},</if>
+			<if test="calendarStatus != null  ">#{calendarStatus},</if>
+			<if test="calendarYear != null  ">#{calendarYear},</if>
+			<if test="calendarDay != null  and calendarDay != ''  ">#{calendarDay},</if>
+			<if test="calendarDate != null  ">#{calendarDate},</if>
+			<if test="monthPlanId != null  ">#{monthPlanId},</if>
+			<if test="calendarDayResources != null  ">#{calendarDayResources},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updatePlanCalendar" parameterType="PlanCalendar">
+        update tbl_plan_calendar
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="calendarMonth != null  ">calendar_month = #{calendarMonth},</if>
+            <if test="calendarStatus != null  ">calendar_status = #{calendarStatus},</if>
+            <if test="calendarYear != null  ">calendar_year = #{calendarYear},</if>
+            <if test="calendarDay != null  and calendarDay != ''  ">calendar_day = #{calendarDay},</if>
+            <if test="calendarDate != null  ">calendar_date = #{calendarDate},</if>
+            <if test="monthPlanId != null  ">month_plan_id = #{monthPlanId},</if>
+            <if test="calendarDayResources != null  ">calendar_day_resources = #{calendarDayResources},</if>
+        </trim>
+        where calendar_id = #{calendarId}
+    </update>
+
+	<delete id="deletePlanCalendarById" parameterType="Integer">
+        delete from tbl_plan_calendar where calendar_id = #{calendarId}
+    </delete>
+	
+    <delete id="deletePlanCalendarByIds" parameterType="String">
+        delete from tbl_plan_calendar where calendar_id in 
+        <foreach item="calendarId" collection="array" open="(" separator="," close=")">
+            #{calendarId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.reply.mapper.ReplyMapper">
+    
+    <resultMap type="Reply" id="ReplyResult">
+        <result property="replyId"    column="reply_id"    />
+        <result property="messionId"    column="mession_id"    />
+        <result property="routingProjectId"    column="routing_project_id"    />
+        <result property="potentialSafetyHazard"    column="potential_safety_hazard"    />
+        <result property="replySiteId"    column="reply_site_id"    />
+        <result property="replyResourceId"    column="reply_resource_id"    />
+        <result property="picture"    column="picture"    />
+        <result property="routingPersonId"    column="routing_person_id"    />
+    </resultMap>
+	
+	<sql id="selectReplyVo">
+        select reply_id, mession_id, routing_project_id, potential_safety_hazard, reply_site_id, reply_resource_id, picture, routing_person_id from tbl_reply
+    </sql>
+	
+    <select id="selectReplyList" parameterType="Reply" resultMap="ReplyResult">
+        <include refid="selectReplyVo"/>
+        <where>  
+            <if test="replyId != null "> and reply_id = #{replyId}</if>
+             <if test="messionId != null "> and mession_id = #{messionId}</if>
+             <if test="routingProjectId != null "> and routing_project_id = #{routingProjectId}</if>
+             <if test="potentialSafetyHazard != null "> and potential_safety_hazard = #{potentialSafetyHazard}</if>
+             <if test="replySiteId != null "> and reply_site_id = #{replySiteId}</if>
+             <if test="replyResourceId != null "> and reply_resource_id = #{replyResourceId}</if>
+             <if test="picture != null  and picture != '' "> and picture = #{picture}</if>
+             <if test="routingPersonId != null "> and routing_person_id = #{routingPersonId}</if>
+         </where>
+    </select>
+    
+    <select id="selectReplyById" parameterType="Integer" resultMap="ReplyResult">
+        <include refid="selectReplyVo"/>
+        where reply_id = #{replyId}
+    </select>
+        
+    <insert id="insertReply" parameterType="Reply">
+        insert into tbl_reply
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="replyId != null  ">reply_id,</if>
+			<if test="messionId != null  ">mession_id,</if>
+			<if test="routingProjectId != null  ">routing_project_id,</if>
+			<if test="potentialSafetyHazard != null  ">potential_safety_hazard,</if>
+			<if test="replySiteId != null  ">reply_site_id,</if>
+			<if test="replyResourceId != null  ">reply_resource_id,</if>
+			<if test="picture != null  and picture != ''  ">picture,</if>
+			<if test="routingPersonId != null  ">routing_person_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="replyId != null  ">#{replyId},</if>
+			<if test="messionId != null  ">#{messionId},</if>
+			<if test="routingProjectId != null  ">#{routingProjectId},</if>
+			<if test="potentialSafetyHazard != null  ">#{potentialSafetyHazard},</if>
+			<if test="replySiteId != null  ">#{replySiteId},</if>
+			<if test="replyResourceId != null  ">#{replyResourceId},</if>
+			<if test="picture != null  and picture != ''  ">#{picture},</if>
+			<if test="routingPersonId != null  ">#{routingPersonId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateReply" parameterType="Reply">
+        update tbl_reply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="messionId != null  ">mession_id = #{messionId},</if>
+            <if test="routingProjectId != null  ">routing_project_id = #{routingProjectId},</if>
+            <if test="potentialSafetyHazard != null  ">potential_safety_hazard = #{potentialSafetyHazard},</if>
+            <if test="replySiteId != null  ">reply_site_id = #{replySiteId},</if>
+            <if test="replyResourceId != null  ">reply_resource_id = #{replyResourceId},</if>
+            <if test="picture != null  and picture != ''  ">picture = #{picture},</if>
+            <if test="routingPersonId != null  ">routing_person_id = #{routingPersonId},</if>
+        </trim>
+        where reply_id = #{replyId}
+    </update>
+
+	<delete id="deleteReplyById" parameterType="Integer">
+        delete from tbl_reply where reply_id = #{replyId}
+    </delete>
+	
+    <delete id="deleteReplyByIds" parameterType="String">
+        delete from tbl_reply where reply_id in 
+        <foreach item="replyId" collection="array" open="(" separator="," close=")">
+            #{replyId}
+        </foreach>
+    </delete>
+    
+</mapper>

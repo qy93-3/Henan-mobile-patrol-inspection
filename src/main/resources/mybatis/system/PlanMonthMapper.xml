@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.planMonth.mapper.PlanMonthMapper">
+    
+    <resultMap type="PlanMonth" id="PlanMonthResult">
+        <result property="monthPlanId"    column="month_plan_id"    />
+        <result property="monthPlanName"    column="month_plan_name"    />
+        <result property="monthPlanType"    column="month_plan_type"    />
+        <result property="monthPlanMonth"    column="month_plan_month"    />
+        <result property="monthPlanYear"    column="month_plan_year"    />
+        <result property="monthPlanStagnation"    column="month_plan_stagnation"    />
+        <result property="monthPlanResources"    column="month_plan_resources"    />
+        <result property="monthPlanStatus"    column="month_plan_status"    />
+        <result property="areaLevel"    column="area_level"    />
+        <result property="monthRoutingResources"    column="month_routing_resources"    />
+    </resultMap>
+	
+	<sql id="selectPlanMonthVo">
+        select month_plan_id, month_plan_name, month_plan_type, month_plan_month, month_plan_year, month_plan_stagnation, month_plan_resources, month_plan_status, area_level, month_routing_resources from tbl_plan_month
+    </sql>
+	
+    <select id="selectPlanMonthList" parameterType="PlanMonth" resultMap="PlanMonthResult">
+        <include refid="selectPlanMonthVo"/>
+        <where>  
+            <if test="monthPlanId != null "> and month_plan_id = #{monthPlanId}</if>
+             <if test="monthPlanName != null  and monthPlanName != '' "> and month_plan_name = #{monthPlanName}</if>
+             <if test="monthPlanType != null  and monthPlanType != '' "> and month_plan_type = #{monthPlanType}</if>
+             <if test="monthPlanMonth != null "> and month_plan_month = #{monthPlanMonth}</if>
+             <if test="monthPlanYear != null "> and month_plan_year = #{monthPlanYear}</if>
+             <if test="monthPlanStagnation != null "> and month_plan_stagnation = #{monthPlanStagnation}</if>
+             <if test="monthPlanResources != null "> and month_plan_resources = #{monthPlanResources}</if>
+             <if test="monthPlanStatus != null "> and month_plan_status = #{monthPlanStatus}</if>
+             <if test="areaLevel != null "> and area_level = #{areaLevel}</if>
+             <if test="monthRoutingResources != null "> and month_routing_resources = #{monthRoutingResources}</if>
+         </where>
+    </select>
+    
+    <select id="selectPlanMonthById" parameterType="Integer" resultMap="PlanMonthResult">
+        <include refid="selectPlanMonthVo"/>
+        where month_plan_id = #{monthPlanId}
+    </select>
+        
+    <insert id="insertPlanMonth" parameterType="PlanMonth">
+        insert into tbl_plan_month
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="monthPlanId != null  ">month_plan_id,</if>
+			<if test="monthPlanName != null  and monthPlanName != ''  ">month_plan_name,</if>
+			<if test="monthPlanType != null  and monthPlanType != ''  ">month_plan_type,</if>
+			<if test="monthPlanMonth != null  ">month_plan_month,</if>
+			<if test="monthPlanYear != null  ">month_plan_year,</if>
+			<if test="monthPlanStagnation != null  ">month_plan_stagnation,</if>
+			<if test="monthPlanResources != null  ">month_plan_resources,</if>
+			<if test="monthPlanStatus != null  ">month_plan_status,</if>
+			<if test="areaLevel != null  ">area_level,</if>
+			<if test="monthRoutingResources != null  ">month_routing_resources,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="monthPlanId != null  ">#{monthPlanId},</if>
+			<if test="monthPlanName != null  and monthPlanName != ''  ">#{monthPlanName},</if>
+			<if test="monthPlanType != null  and monthPlanType != ''  ">#{monthPlanType},</if>
+			<if test="monthPlanMonth != null  ">#{monthPlanMonth},</if>
+			<if test="monthPlanYear != null  ">#{monthPlanYear},</if>
+			<if test="monthPlanStagnation != null  ">#{monthPlanStagnation},</if>
+			<if test="monthPlanResources != null  ">#{monthPlanResources},</if>
+			<if test="monthPlanStatus != null  ">#{monthPlanStatus},</if>
+			<if test="areaLevel != null  ">#{areaLevel},</if>
+			<if test="monthRoutingResources != null  ">#{monthRoutingResources},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updatePlanMonth" parameterType="PlanMonth">
+        update tbl_plan_month
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="monthPlanName != null  and monthPlanName != ''  ">month_plan_name = #{monthPlanName},</if>
+            <if test="monthPlanType != null  and monthPlanType != ''  ">month_plan_type = #{monthPlanType},</if>
+            <if test="monthPlanMonth != null  ">month_plan_month = #{monthPlanMonth},</if>
+            <if test="monthPlanYear != null  ">month_plan_year = #{monthPlanYear},</if>
+            <if test="monthPlanStagnation != null  ">month_plan_stagnation = #{monthPlanStagnation},</if>
+            <if test="monthPlanResources != null  ">month_plan_resources = #{monthPlanResources},</if>
+            <if test="monthPlanStatus != null  ">month_plan_status = #{monthPlanStatus},</if>
+            <if test="areaLevel != null  ">area_level = #{areaLevel},</if>
+            <if test="monthRoutingResources != null  ">month_routing_resources = #{monthRoutingResources},</if>
+        </trim>
+        where month_plan_id = #{monthPlanId}
+    </update>
+
+	<delete id="deletePlanMonthById" parameterType="Integer">
+        delete from tbl_plan_month where month_plan_id = #{monthPlanId}
+    </delete>
+	
+    <delete id="deletePlanMonthByIds" parameterType="String">
+        delete from tbl_plan_month where month_plan_id in 
+        <foreach item="monthPlanId" collection="array" open="(" separator="," close=")">
+            #{monthPlanId}
+        </foreach>
+    </delete>
+    
+</mapper>

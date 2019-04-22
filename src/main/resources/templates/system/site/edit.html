@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-site-edit" th:object="${site}">
+            <input id="siteId" name="siteId" th:field="*{siteId}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点名称：</label>
+				<div class="col-sm-8">
+					<input id="siteName" name="siteName" th:field="*{siteName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点名称缩写：</label>
+				<div class="col-sm-8">
+					<input id="siteNameAbbreviate" name="siteNameAbbreviate" th:field="*{siteNameAbbreviate}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点地区编号：</label>
+				<div class="col-sm-8">
+					<input id="siteAreaId" name="siteAreaId" th:field="*{siteAreaId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点经度：</label>
+				<div class="col-sm-8">
+					<input id="siteLongitude" name="siteLongitude" th:field="*{siteLongitude}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点维度：</label>
+				<div class="col-sm-8">
+					<input id="siteLatitude" name="siteLatitude" th:field="*{siteLatitude}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点类型：</label>
+				<div class="col-sm-8">
+					<input id="siteType" name="siteType" th:field="*{siteType}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点地址：</label>
+				<div class="col-sm-8">
+					<input id="siteAddress" name="siteAddress" th:field="*{siteAddress}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点传输业务级别：</label>
+				<div class="col-sm-8">
+					<input id="siteServiceLevel" name="siteServiceLevel" th:field="*{siteServiceLevel}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点生命周期状态：</label>
+				<div class="col-sm-8">
+					<input id="siteStatus" name="siteStatus" th:field="*{siteStatus}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点入网时间：</label>
+				<div class="col-sm-8">
+					<input id="siteInnetDate" name="siteInnetDate" th:field="*{siteInnetDate}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点总层数：</label>
+				<div class="col-sm-8">
+					<input id="siteFloorCount" name="siteFloorCount" th:field="*{siteFloorCount}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点产权单位：</label>
+				<div class="col-sm-8">
+					<input id="sitePropertyDepartment" name="sitePropertyDepartment" th:field="*{sitePropertyDepartment}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点产权性质：</label>
+				<div class="col-sm-8">
+					<input id="siteProperty" name="siteProperty" th:field="*{siteProperty}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点使用单位：</label>
+				<div class="col-sm-8">
+					<input id="siteUserDepartment" name="siteUserDepartment" th:field="*{siteUserDepartment}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点物业联系人：</label>
+				<div class="col-sm-8">
+					<input id="siteContacts" name="siteContacts" th:field="*{siteContacts}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点物业联系电话：</label>
+				<div class="col-sm-8">
+					<input id="siteContactsMobile" name="siteContactsMobile" th:field="*{siteContactsMobile}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点覆盖类型：</label>
+				<div class="col-sm-8">
+					<input id="siteOverlayType" name="siteOverlayType" th:field="*{siteOverlayType}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点删除状态：</label>
+				<div class="col-sm-8">
+					<input id="siteDeleted" name="siteDeleted" th:field="*{siteDeleted}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点计划日：</label>
+				<div class="col-sm-8">
+					<input id="sitePlanDay" name="sitePlanDay" th:field="*{sitePlanDay}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点巡检周期：</label>
+				<div class="col-sm-8">
+					<input id="siteCycle" name="siteCycle" th:field="*{siteCycle}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点代维公司：</label>
+				<div class="col-sm-8">
+					<input id="siteStagantionCompany" name="siteStagantionCompany" th:field="*{siteStagantionCompany}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">上次巡检日期：</label>
+				<div class="col-sm-8">
+					<input id="siteLastDate" name="siteLastDate" th:field="*{siteLastDate}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源类型：</label>
+				<div class="col-sm-8">
+					<input id="resourceType" name="resourceType" th:field="*{resourceType}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/site"
+		$("#form-site-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-site-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

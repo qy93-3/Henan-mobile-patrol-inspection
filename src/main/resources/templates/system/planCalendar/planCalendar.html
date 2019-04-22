@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								日历月份：<input type="text" name="calendarMonth"/>
+							</li>
+
+							<li>
+								日历每日状态：<input type="text" name="calendarStatus"/>
+							</li>
+
+							<li>
+								日历年：<input type="text" name="calendarYear"/>
+							</li>
+
+							<li>
+								日历天：<input type="text" name="calendarDay"/>
+							</li>
+
+							<li>
+								每日日期：<input type="text" name="calendarDate"/>
+							</li>
+
+							<li>
+								月计划编号：<input type="text" name="monthPlanId"/>
+							</li>
+
+							<li>
+								日资源数：<input type="text" name="calendarDayResources"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:planCalendar:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:planCalendar:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:planCalendar:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:planCalendar:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:planCalendar:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:planCalendar:remove')}]];
+        var prefix = ctx + "system/planCalendar";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "每日计划分配(显示日历)",
+				search: false,
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'calendarId', 
+					title : '日历编号',
+					visible: false
+				},
+				{
+					field : 'calendarMonth', 
+					title : '日历月份',
+					sortable: true
+				},
+				{
+					field : 'calendarStatus', 
+					title : '日历每日状态',
+					sortable: true
+				},
+				{
+					field : 'calendarYear', 
+					title : '日历年',
+					sortable: true
+				},
+				{
+					field : 'calendarDay', 
+					title : '日历天',
+					sortable: true
+				},
+				{
+					field : 'calendarDate', 
+					title : '每日日期',
+					sortable: true
+				},
+				{
+					field : 'monthPlanId', 
+					title : '月计划编号',
+					sortable: true
+				},
+				{
+					field : 'calendarDayResources', 
+					title : '日资源数',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.calendarId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.calendarId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.change.mapper.ChangeMapper">
+    
+    <resultMap type="Change" id="ChangeResult">
+        <result property="changeId"    column="change_id"    />
+        <result property="changeReason"    column="change_reason"    />
+        <result property="changeStatus"    column="change_status"    />
+        <result property="changeMonthPlan"    column="change_month_plan"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+	
+	<sql id="selectChangeVo">
+        select change_id, change_reason, change_status, change_month_plan, user_id from tbl_change
+    </sql>
+	
+    <select id="selectChangeList" parameterType="Change" resultMap="ChangeResult">
+        <include refid="selectChangeVo"/>
+        <where>  
+            <if test="changeId != null "> and change_id = #{changeId}</if>
+             <if test="changeReason != null  and changeReason != '' "> and change_reason = #{changeReason}</if>
+             <if test="changeStatus != null "> and change_status = #{changeStatus}</if>
+             <if test="changeMonthPlan != null "> and change_month_plan = #{changeMonthPlan}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
+         </where>
+    </select>
+    
+    <select id="selectChangeById" parameterType="Integer" resultMap="ChangeResult">
+        <include refid="selectChangeVo"/>
+        where change_id = #{changeId}
+    </select>
+        
+    <insert id="insertChange" parameterType="Change">
+        insert into tbl_change
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="changeId != null  ">change_id,</if>
+			<if test="changeReason != null  and changeReason != ''  ">change_reason,</if>
+			<if test="changeStatus != null  ">change_status,</if>
+			<if test="changeMonthPlan != null  ">change_month_plan,</if>
+			<if test="userId != null  ">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="changeId != null  ">#{changeId},</if>
+			<if test="changeReason != null  and changeReason != ''  ">#{changeReason},</if>
+			<if test="changeStatus != null  ">#{changeStatus},</if>
+			<if test="changeMonthPlan != null  ">#{changeMonthPlan},</if>
+			<if test="userId != null  ">#{userId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateChange" parameterType="Change">
+        update tbl_change
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="changeReason != null  and changeReason != ''  ">change_reason = #{changeReason},</if>
+            <if test="changeStatus != null  ">change_status = #{changeStatus},</if>
+            <if test="changeMonthPlan != null  ">change_month_plan = #{changeMonthPlan},</if>
+            <if test="userId != null  ">user_id = #{userId},</if>
+        </trim>
+        where change_id = #{changeId}
+    </update>
+
+	<delete id="deleteChangeById" parameterType="Integer">
+        delete from tbl_change where change_id = #{changeId}
+    </delete>
+	
+    <delete id="deleteChangeByIds" parameterType="String">
+        delete from tbl_change where change_id in 
+        <foreach item="changeId" collection="array" open="(" separator="," close=")">
+            #{changeId}
+        </foreach>
+    </delete>
+    
+</mapper>

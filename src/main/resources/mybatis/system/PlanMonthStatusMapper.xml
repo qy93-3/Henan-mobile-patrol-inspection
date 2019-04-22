@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.planMonthStatus.mapper.PlanMonthStatusMapper">
+    
+    <resultMap type="PlanMonthStatus" id="PlanMonthStatusResult">
+        <result property="monthStatusId"    column="month_status_id"    />
+        <result property="monthStatusName"    column="month_status_name"    />
+        <result property="monthStatusColor"    column="month_status_color"    />
+    </resultMap>
+	
+	<sql id="selectPlanMonthStatusVo">
+        select month_status_id, month_status_name, month_status_color from tbl_plan_month_status
+    </sql>
+	
+    <select id="selectPlanMonthStatusList" parameterType="PlanMonthStatus" resultMap="PlanMonthStatusResult">
+        <include refid="selectPlanMonthStatusVo"/>
+        <where>  
+            <if test="monthStatusId != null "> and month_status_id = #{monthStatusId}</if>
+             <if test="monthStatusName != null  and monthStatusName != '' "> and month_status_name = #{monthStatusName}</if>
+             <if test="monthStatusColor != null  and monthStatusColor != '' "> and month_status_color = #{monthStatusColor}</if>
+         </where>
+    </select>
+    
+    <select id="selectPlanMonthStatusById" parameterType="Integer" resultMap="PlanMonthStatusResult">
+        <include refid="selectPlanMonthStatusVo"/>
+        where month_status_id = #{monthStatusId}
+    </select>
+        
+    <insert id="insertPlanMonthStatus" parameterType="PlanMonthStatus">
+        insert into tbl_plan_month_status
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="monthStatusId != null  ">month_status_id,</if>
+			<if test="monthStatusName != null  and monthStatusName != ''  ">month_status_name,</if>
+			<if test="monthStatusColor != null  and monthStatusColor != ''  ">month_status_color,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="monthStatusId != null  ">#{monthStatusId},</if>
+			<if test="monthStatusName != null  and monthStatusName != ''  ">#{monthStatusName},</if>
+			<if test="monthStatusColor != null  and monthStatusColor != ''  ">#{monthStatusColor},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updatePlanMonthStatus" parameterType="PlanMonthStatus">
+        update tbl_plan_month_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="monthStatusName != null  and monthStatusName != ''  ">month_status_name = #{monthStatusName},</if>
+            <if test="monthStatusColor != null  and monthStatusColor != ''  ">month_status_color = #{monthStatusColor},</if>
+        </trim>
+        where month_status_id = #{monthStatusId}
+    </update>
+
+	<delete id="deletePlanMonthStatusById" parameterType="Integer">
+        delete from tbl_plan_month_status where month_status_id = #{monthStatusId}
+    </delete>
+	
+    <delete id="deletePlanMonthStatusByIds" parameterType="String">
+        delete from tbl_plan_month_status where month_status_id in 
+        <foreach item="monthStatusId" collection="array" open="(" separator="," close=")">
+            #{monthStatusId}
+        </foreach>
+    </delete>
+    
+</mapper>

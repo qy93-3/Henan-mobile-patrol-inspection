@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.messionStatus.mapper.MessionStatusMapper">
+    
+    <resultMap type="MessionStatus" id="MessionStatusResult">
+        <result property="messionStatusId"    column="mession_status_id"    />
+        <result property="messionStatusName"    column="mession_status_name"    />
+    </resultMap>
+	
+	<sql id="selectMessionStatusVo">
+        select mession_status_id, mession_status_name from tbl_mession_status
+    </sql>
+	
+    <select id="selectMessionStatusList" parameterType="MessionStatus" resultMap="MessionStatusResult">
+        <include refid="selectMessionStatusVo"/>
+        <where>  
+            <if test="messionStatusId != null "> and mession_status_id = #{messionStatusId}</if>
+             <if test="messionStatusName != null  and messionStatusName != '' "> and mession_status_name = #{messionStatusName}</if>
+         </where>
+    </select>
+    
+    <select id="selectMessionStatusById" parameterType="Integer" resultMap="MessionStatusResult">
+        <include refid="selectMessionStatusVo"/>
+        where mession_status_id = #{messionStatusId}
+    </select>
+        
+    <insert id="insertMessionStatus" parameterType="MessionStatus">
+        insert into tbl_mession_status
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="messionStatusId != null  ">mession_status_id,</if>
+			<if test="messionStatusName != null  and messionStatusName != ''  ">mession_status_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="messionStatusId != null  ">#{messionStatusId},</if>
+			<if test="messionStatusName != null  and messionStatusName != ''  ">#{messionStatusName},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateMessionStatus" parameterType="MessionStatus">
+        update tbl_mession_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="messionStatusName != null  and messionStatusName != ''  ">mession_status_name = #{messionStatusName},</if>
+        </trim>
+        where mession_status_id = #{messionStatusId}
+    </update>
+
+	<delete id="deleteMessionStatusById" parameterType="Integer">
+        delete from tbl_mession_status where mession_status_id = #{messionStatusId}
+    </delete>
+	
+    <delete id="deleteMessionStatusByIds" parameterType="String">
+        delete from tbl_mession_status where mession_status_id in 
+        <foreach item="messionStatusId" collection="array" open="(" separator="," close=")">
+            #{messionStatusId}
+        </foreach>
+    </delete>
+    
+</mapper>

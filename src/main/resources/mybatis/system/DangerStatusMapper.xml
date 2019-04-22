@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.dangerStatus.mapper.DangerStatusMapper">
+    
+    <resultMap type="DangerStatus" id="DangerStatusResult">
+        <result property="dangerHandleId"    column="danger_handle_id"    />
+        <result property="dangerHandleName"    column="danger_handle_name"    />
+    </resultMap>
+	
+	<sql id="selectDangerStatusVo">
+        select danger_handle_id, danger_handle_name from tbl_danger_status
+    </sql>
+	
+    <select id="selectDangerStatusList" parameterType="DangerStatus" resultMap="DangerStatusResult">
+        <include refid="selectDangerStatusVo"/>
+        <where>  
+            <if test="dangerHandleId != null "> and danger_handle_id = #{dangerHandleId}</if>
+             <if test="dangerHandleName != null  and dangerHandleName != '' "> and danger_handle_name = #{dangerHandleName}</if>
+         </where>
+    </select>
+    
+    <select id="selectDangerStatusById" parameterType="Integer" resultMap="DangerStatusResult">
+        <include refid="selectDangerStatusVo"/>
+        where danger_handle_id = #{dangerHandleId}
+    </select>
+        
+    <insert id="insertDangerStatus" parameterType="DangerStatus">
+        insert into tbl_danger_status
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dangerHandleId != null  ">danger_handle_id,</if>
+			<if test="dangerHandleName != null  and dangerHandleName != ''  ">danger_handle_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dangerHandleId != null  ">#{dangerHandleId},</if>
+			<if test="dangerHandleName != null  and dangerHandleName != ''  ">#{dangerHandleName},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateDangerStatus" parameterType="DangerStatus">
+        update tbl_danger_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dangerHandleName != null  and dangerHandleName != ''  ">danger_handle_name = #{dangerHandleName},</if>
+        </trim>
+        where danger_handle_id = #{dangerHandleId}
+    </update>
+
+	<delete id="deleteDangerStatusById" parameterType="Integer">
+        delete from tbl_danger_status where danger_handle_id = #{dangerHandleId}
+    </delete>
+	
+    <delete id="deleteDangerStatusByIds" parameterType="String">
+        delete from tbl_danger_status where danger_handle_id in 
+        <foreach item="dangerHandleId" collection="array" open="(" separator="," close=")">
+            #{dangerHandleId}
+        </foreach>
+    </delete>
+    
+</mapper>

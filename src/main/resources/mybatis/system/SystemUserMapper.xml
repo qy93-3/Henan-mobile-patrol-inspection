@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.systemUser.mapper.SystemUserMapper">
+    
+    <resultMap type="SystemUser" id="SystemUserResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="userUsername"    column="user_username"    />
+        <result property="userPassword"    column="user_password"    />
+        <result property="userPhone"    column="user_phone"    />
+        <result property="gender"    column="gender"    />
+        <result property="userEmail"    column="user_email"    />
+        <result property="loginDate"    column="login_date"    />
+        <result property="editDate"    column="edit_date"    />
+        <result property="loginIp"    column="login_ip"    />
+        <result property="loginCount"    column="login_count"    />
+        <result property="roleId"    column="role_id"    />
+        <result property="areaLevel"    column="area_level"    />
+        <result property="addressId"    column="address_id"    />
+    </resultMap>
+	
+	<sql id="selectSystemUserVo">
+        select user_id, user_name, user_username, user_password, user_phone, gender, user_email, login_date, edit_date, login_ip, login_count, role_id, area_level, address_id from tbl_system_user
+    </sql>
+	
+    <select id="selectSystemUserList" parameterType="SystemUser" resultMap="SystemUserResult">
+        <include refid="selectSystemUserVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="userName != null  and userName != '' "> and user_name = #{userName}</if>
+             <if test="userUsername != null  and userUsername != '' "> and user_username = #{userUsername}</if>
+             <if test="userPassword != null  and userPassword != '' "> and user_password = #{userPassword}</if>
+             <if test="userPhone != null  and userPhone != '' "> and user_phone = #{userPhone}</if>
+             <if test="gender != null "> and gender = #{gender}</if>
+             <if test="userEmail != null  and userEmail != '' "> and user_email = #{userEmail}</if>
+             <if test="loginDate != null "> and login_date = #{loginDate}</if>
+             <if test="editDate != null "> and edit_date = #{editDate}</if>
+             <if test="loginIp != null  and loginIp != '' "> and login_ip = #{loginIp}</if>
+             <if test="loginCount != null "> and login_count = #{loginCount}</if>
+             <if test="roleId != null "> and role_id = #{roleId}</if>
+             <if test="areaLevel != null "> and area_level = #{areaLevel}</if>
+             <if test="addressId != null "> and address_id = #{addressId}</if>
+         </where>
+    </select>
+    
+    <select id="selectSystemUserById" parameterType="Integer" resultMap="SystemUserResult">
+        <include refid="selectSystemUserVo"/>
+        where user_id = #{userId}
+    </select>
+        
+    <insert id="insertSystemUser" parameterType="SystemUser">
+        insert into tbl_system_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">user_id,</if>
+			<if test="userName != null  and userName != ''  ">user_name,</if>
+			<if test="userUsername != null  and userUsername != ''  ">user_username,</if>
+			<if test="userPassword != null  and userPassword != ''  ">user_password,</if>
+			<if test="userPhone != null  and userPhone != ''  ">user_phone,</if>
+			<if test="gender != null  ">gender,</if>
+			<if test="userEmail != null  and userEmail != ''  ">user_email,</if>
+			<if test="loginDate != null  ">login_date,</if>
+			<if test="editDate != null  ">edit_date,</if>
+			<if test="loginIp != null  and loginIp != ''  ">login_ip,</if>
+			<if test="loginCount != null  ">login_count,</if>
+			<if test="roleId != null  ">role_id,</if>
+			<if test="areaLevel != null  ">area_level,</if>
+			<if test="addressId != null  ">address_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">#{userId},</if>
+			<if test="userName != null  and userName != ''  ">#{userName},</if>
+			<if test="userUsername != null  and userUsername != ''  ">#{userUsername},</if>
+			<if test="userPassword != null  and userPassword != ''  ">#{userPassword},</if>
+			<if test="userPhone != null  and userPhone != ''  ">#{userPhone},</if>
+			<if test="gender != null  ">#{gender},</if>
+			<if test="userEmail != null  and userEmail != ''  ">#{userEmail},</if>
+			<if test="loginDate != null  ">#{loginDate},</if>
+			<if test="editDate != null  ">#{editDate},</if>
+			<if test="loginIp != null  and loginIp != ''  ">#{loginIp},</if>
+			<if test="loginCount != null  ">#{loginCount},</if>
+			<if test="roleId != null  ">#{roleId},</if>
+			<if test="areaLevel != null  ">#{areaLevel},</if>
+			<if test="addressId != null  ">#{addressId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateSystemUser" parameterType="SystemUser">
+        update tbl_system_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null  and userName != ''  ">user_name = #{userName},</if>
+            <if test="userUsername != null  and userUsername != ''  ">user_username = #{userUsername},</if>
+            <if test="userPassword != null  and userPassword != ''  ">user_password = #{userPassword},</if>
+            <if test="userPhone != null  and userPhone != ''  ">user_phone = #{userPhone},</if>
+            <if test="gender != null  ">gender = #{gender},</if>
+            <if test="userEmail != null  and userEmail != ''  ">user_email = #{userEmail},</if>
+            <if test="loginDate != null  ">login_date = #{loginDate},</if>
+            <if test="editDate != null  ">edit_date = #{editDate},</if>
+            <if test="loginIp != null  and loginIp != ''  ">login_ip = #{loginIp},</if>
+            <if test="loginCount != null  ">login_count = #{loginCount},</if>
+            <if test="roleId != null  ">role_id = #{roleId},</if>
+            <if test="areaLevel != null  ">area_level = #{areaLevel},</if>
+            <if test="addressId != null  ">address_id = #{addressId},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+	<delete id="deleteSystemUserById" parameterType="Integer">
+        delete from tbl_system_user where user_id = #{userId}
+    </delete>
+	
+    <delete id="deleteSystemUserByIds" parameterType="String">
+        delete from tbl_system_user where user_id in 
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+    
+</mapper>

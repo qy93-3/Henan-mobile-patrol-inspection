@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.area.mapper.AreaMapper">
+    
+    <resultMap type="Area" id="AreaResult">
+        <result property="id"    column="id"    />
+        <result property="areaID"    column="areaID"    />
+        <result property="area"    column="area"    />
+        <result property="father"    column="father"    />
+    </resultMap>
+	
+	<sql id="selectAreaVo">
+        select id, areaID, area, father from tbl_area
+    </sql>
+	
+    <select id="selectAreaList" parameterType="Area" resultMap="AreaResult">
+        <include refid="selectAreaVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="areaID != null  and areaID != '' "> and areaID = #{areaID}</if>
+             <if test="area != null  and area != '' "> and area = #{area}</if>
+             <if test="father != null  and father != '' "> and father = #{father}</if>
+         </where>
+    </select>
+    
+    <select id="selectAreaById" parameterType="Integer" resultMap="AreaResult">
+        <include refid="selectAreaVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertArea" parameterType="Area">
+        insert into tbl_area
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="areaID != null  and areaID != ''  ">areaID,</if>
+			<if test="area != null  and area != ''  ">area,</if>
+			<if test="father != null  and father != ''  ">father,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="areaID != null  and areaID != ''  ">#{areaID},</if>
+			<if test="area != null  and area != ''  ">#{area},</if>
+			<if test="father != null  and father != ''  ">#{father},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateArea" parameterType="Area">
+        update tbl_area
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="areaID != null  and areaID != ''  ">areaID = #{areaID},</if>
+            <if test="area != null  and area != ''  ">area = #{area},</if>
+            <if test="father != null  and father != ''  ">father = #{father},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteAreaById" parameterType="Integer">
+        delete from tbl_area where id = #{id}
+    </delete>
+	
+    <delete id="deleteAreaByIds" parameterType="String">
+        delete from tbl_area where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

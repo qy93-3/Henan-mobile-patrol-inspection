@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.routingProject.mapper.RoutingProjectMapper">
+    
+    <resultMap type="RoutingProject" id="RoutingProjectResult">
+        <result property="routingProjectId"    column="routing_project_id"    />
+        <result property="routingProjectName"    column="routing_project_name"    />
+    </resultMap>
+	
+	<sql id="selectRoutingProjectVo">
+        select routing_project_id, routing_project_name from tbl_routing_project
+    </sql>
+	
+    <select id="selectRoutingProjectList" parameterType="RoutingProject" resultMap="RoutingProjectResult">
+        <include refid="selectRoutingProjectVo"/>
+        <where>  
+            <if test="routingProjectId != null "> and routing_project_id = #{routingProjectId}</if>
+             <if test="routingProjectName != null  and routingProjectName != '' "> and routing_project_name = #{routingProjectName}</if>
+         </where>
+    </select>
+    
+    <select id="selectRoutingProjectById" parameterType="Integer" resultMap="RoutingProjectResult">
+        <include refid="selectRoutingProjectVo"/>
+        where routing_project_id = #{routingProjectId}
+    </select>
+        
+    <insert id="insertRoutingProject" parameterType="RoutingProject">
+        insert into tbl_routing_project
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="routingProjectId != null  ">routing_project_id,</if>
+			<if test="routingProjectName != null  and routingProjectName != ''  ">routing_project_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="routingProjectId != null  ">#{routingProjectId},</if>
+			<if test="routingProjectName != null  and routingProjectName != ''  ">#{routingProjectName},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateRoutingProject" parameterType="RoutingProject">
+        update tbl_routing_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="routingProjectName != null  and routingProjectName != ''  ">routing_project_name = #{routingProjectName},</if>
+        </trim>
+        where routing_project_id = #{routingProjectId}
+    </update>
+
+	<delete id="deleteRoutingProjectById" parameterType="Integer">
+        delete from tbl_routing_project where routing_project_id = #{routingProjectId}
+    </delete>
+	
+    <delete id="deleteRoutingProjectByIds" parameterType="String">
+        delete from tbl_routing_project where routing_project_id in 
+        <foreach item="routingProjectId" collection="array" open="(" separator="," close=")">
+            #{routingProjectId}
+        </foreach>
+    </delete>
+    
+</mapper>

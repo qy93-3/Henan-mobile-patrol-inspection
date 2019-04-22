@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.check.mapper.CheckMapper">
+    
+    <resultMap type="Check" id="CheckResult">
+        <result property="checkId"    column="check_id"    />
+        <result property="checkContent"    column="check_content"    />
+        <result property="checkMonthPlan"    column="check_month_plan"    />
+        <result property="checkResult"    column="check_result"    />
+    </resultMap>
+	
+	<sql id="selectCheckVo">
+        select check_id, check_content, check_month_plan, check_result from tbl_check
+    </sql>
+	
+    <select id="selectCheckList" parameterType="Check" resultMap="CheckResult">
+        <include refid="selectCheckVo"/>
+        <where>  
+            <if test="checkId != null "> and check_id = #{checkId}</if>
+             <if test="checkContent != null  and checkContent != '' "> and check_content = #{checkContent}</if>
+             <if test="checkMonthPlan != null "> and check_month_plan = #{checkMonthPlan}</if>
+             <if test="checkResult != null "> and check_result = #{checkResult}</if>
+         </where>
+    </select>
+    
+    <select id="selectCheckById" parameterType="Integer" resultMap="CheckResult">
+        <include refid="selectCheckVo"/>
+        where check_id = #{checkId}
+    </select>
+        
+    <insert id="insertCheck" parameterType="Check">
+        insert into tbl_check
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="checkId != null  ">check_id,</if>
+			<if test="checkContent != null  and checkContent != ''  ">check_content,</if>
+			<if test="checkMonthPlan != null  ">check_month_plan,</if>
+			<if test="checkResult != null  ">check_result,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="checkId != null  ">#{checkId},</if>
+			<if test="checkContent != null  and checkContent != ''  ">#{checkContent},</if>
+			<if test="checkMonthPlan != null  ">#{checkMonthPlan},</if>
+			<if test="checkResult != null  ">#{checkResult},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateCheck" parameterType="Check">
+        update tbl_check
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="checkContent != null  and checkContent != ''  ">check_content = #{checkContent},</if>
+            <if test="checkMonthPlan != null  ">check_month_plan = #{checkMonthPlan},</if>
+            <if test="checkResult != null  ">check_result = #{checkResult},</if>
+        </trim>
+        where check_id = #{checkId}
+    </update>
+
+	<delete id="deleteCheckById" parameterType="Integer">
+        delete from tbl_check where check_id = #{checkId}
+    </delete>
+	
+    <delete id="deleteCheckByIds" parameterType="String">
+        delete from tbl_check where check_id in 
+        <foreach item="checkId" collection="array" open="(" separator="," close=")">
+            #{checkId}
+        </foreach>
+    </delete>
+    
+</mapper>

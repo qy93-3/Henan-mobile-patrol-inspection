@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.planDay.mapper.PlanDayMapper">
+    
+    <resultMap type="PlanDay" id="PlanDayResult">
+        <result property="dayPlanId"    column="day_plan_id"    />
+        <result property="dayPlanName"    column="day_plan_name"    />
+        <result property="dayPlanDate"    column="day_plan_date"    />
+        <result property="dayPlanType"    column="day_plan_type"    />
+        <result property="dayPlanSite"    column="day_plan_site"    />
+        <result property="dayPlanResource"    column="day_plan_resource"    />
+        <result property="dayPlanStagnation"    column="day_plan_stagnation"    />
+        <result property="monthPlanId"    column="month_plan_id"    />
+        <result property="calendarPlanId"    column="calendar_plan_id"    />
+        <result property="dayPlanStatus"    column="day_plan_status"    />
+    </resultMap>
+	
+	<sql id="selectPlanDayVo">
+        select day_plan_id, day_plan_name, day_plan_date, day_plan_type, day_plan_site, day_plan_resource, day_plan_stagnation, month_plan_id, calendar_plan_id, day_plan_status from tbl_plan_day
+    </sql>
+	
+    <select id="selectPlanDayList" parameterType="PlanDay" resultMap="PlanDayResult">
+        <include refid="selectPlanDayVo"/>
+        <where>  
+            <if test="dayPlanId != null "> and day_plan_id = #{dayPlanId}</if>
+             <if test="dayPlanName != null  and dayPlanName != '' "> and day_plan_name = #{dayPlanName}</if>
+             <if test="dayPlanDate != null "> and day_plan_date = #{dayPlanDate}</if>
+             <if test="dayPlanType != null  and dayPlanType != '' "> and day_plan_type = #{dayPlanType}</if>
+             <if test="dayPlanSite != null "> and day_plan_site = #{dayPlanSite}</if>
+             <if test="dayPlanResource != null "> and day_plan_resource = #{dayPlanResource}</if>
+             <if test="dayPlanStagnation != null "> and day_plan_stagnation = #{dayPlanStagnation}</if>
+             <if test="monthPlanId != null "> and month_plan_id = #{monthPlanId}</if>
+             <if test="calendarPlanId != null "> and calendar_plan_id = #{calendarPlanId}</if>
+             <if test="dayPlanStatus != null "> and day_plan_status = #{dayPlanStatus}</if>
+         </where>
+    </select>
+    
+    <select id="selectPlanDayById" parameterType="Integer" resultMap="PlanDayResult">
+        <include refid="selectPlanDayVo"/>
+        where day_plan_id = #{dayPlanId}
+    </select>
+        
+    <insert id="insertPlanDay" parameterType="PlanDay">
+        insert into tbl_plan_day
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dayPlanId != null  ">day_plan_id,</if>
+			<if test="dayPlanName != null  and dayPlanName != ''  ">day_plan_name,</if>
+			<if test="dayPlanDate != null  ">day_plan_date,</if>
+			<if test="dayPlanType != null  and dayPlanType != ''  ">day_plan_type,</if>
+			<if test="dayPlanSite != null  ">day_plan_site,</if>
+			<if test="dayPlanResource != null  ">day_plan_resource,</if>
+			<if test="dayPlanStagnation != null  ">day_plan_stagnation,</if>
+			<if test="monthPlanId != null  ">month_plan_id,</if>
+			<if test="calendarPlanId != null  ">calendar_plan_id,</if>
+			<if test="dayPlanStatus != null  ">day_plan_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dayPlanId != null  ">#{dayPlanId},</if>
+			<if test="dayPlanName != null  and dayPlanName != ''  ">#{dayPlanName},</if>
+			<if test="dayPlanDate != null  ">#{dayPlanDate},</if>
+			<if test="dayPlanType != null  and dayPlanType != ''  ">#{dayPlanType},</if>
+			<if test="dayPlanSite != null  ">#{dayPlanSite},</if>
+			<if test="dayPlanResource != null  ">#{dayPlanResource},</if>
+			<if test="dayPlanStagnation != null  ">#{dayPlanStagnation},</if>
+			<if test="monthPlanId != null  ">#{monthPlanId},</if>
+			<if test="calendarPlanId != null  ">#{calendarPlanId},</if>
+			<if test="dayPlanStatus != null  ">#{dayPlanStatus},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updatePlanDay" parameterType="PlanDay">
+        update tbl_plan_day
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dayPlanName != null  and dayPlanName != ''  ">day_plan_name = #{dayPlanName},</if>
+            <if test="dayPlanDate != null  ">day_plan_date = #{dayPlanDate},</if>
+            <if test="dayPlanType != null  and dayPlanType != ''  ">day_plan_type = #{dayPlanType},</if>
+            <if test="dayPlanSite != null  ">day_plan_site = #{dayPlanSite},</if>
+            <if test="dayPlanResource != null  ">day_plan_resource = #{dayPlanResource},</if>
+            <if test="dayPlanStagnation != null  ">day_plan_stagnation = #{dayPlanStagnation},</if>
+            <if test="monthPlanId != null  ">month_plan_id = #{monthPlanId},</if>
+            <if test="calendarPlanId != null  ">calendar_plan_id = #{calendarPlanId},</if>
+            <if test="dayPlanStatus != null  ">day_plan_status = #{dayPlanStatus},</if>
+        </trim>
+        where day_plan_id = #{dayPlanId}
+    </update>
+
+	<delete id="deletePlanDayById" parameterType="Integer">
+        delete from tbl_plan_day where day_plan_id = #{dayPlanId}
+    </delete>
+	
+    <delete id="deletePlanDayByIds" parameterType="String">
+        delete from tbl_plan_day where day_plan_id in 
+        <foreach item="dayPlanId" collection="array" open="(" separator="," close=")">
+            #{dayPlanId}
+        </foreach>
+    </delete>
+    
+</mapper>

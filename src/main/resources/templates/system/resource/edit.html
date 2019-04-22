@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-resource-edit" th:object="${resource}">
+            <input id="resourceId" name="resourceId" th:field="*{resourceId}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点地区编号：</label>
+				<div class="col-sm-8">
+					<input id="resourceAreaId" name="resourceAreaId" th:field="*{resourceAreaId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点名称：</label>
+				<div class="col-sm-8">
+					<input id="resourceName" name="resourceName" th:field="*{resourceName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点经度：</label>
+				<div class="col-sm-8">
+					<input id="resourceLongitude" name="resourceLongitude" th:field="*{resourceLongitude}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点纬度：</label>
+				<div class="col-sm-8">
+					<input id="resourceLatitude" name="resourceLatitude" th:field="*{resourceLatitude}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点地址：</label>
+				<div class="col-sm-8">
+					<input id="resourceAddress" name="resourceAddress" th:field="*{resourceAddress}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点属性：</label>
+				<div class="col-sm-8">
+					<input id="resourceDotType" name="resourceDotType" th:field="*{resourceDotType}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点状态(在网)：</label>
+				<div class="col-sm-8">
+					<input id="resourceStatus" name="resourceStatus" th:field="*{resourceStatus}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点开始时间：</label>
+				<div class="col-sm-8">
+					<input id="resourceStartTime" name="resourceStartTime" th:field="*{resourceStartTime}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点维护的单位：</label>
+				<div class="col-sm-8">
+					<input id="resourceMaintainUnit" name="resourceMaintainUnit" th:field="*{resourceMaintainUnit}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点维护单位联系电话：</label>
+				<div class="col-sm-8">
+					<input id="resourceMaintainUnitTel" name="resourceMaintainUnitTel" th:field="*{resourceMaintainUnitTel}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点维护单位联系人：</label>
+				<div class="col-sm-8">
+					<input id="resourceMaintainUnitName" name="resourceMaintainUnitName" th:field="*{resourceMaintainUnitName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点安检员电话：</label>
+				<div class="col-sm-8">
+					<input id="resourceSadegrareManTel" name="resourceSadegrareManTel" th:field="*{resourceSadegrareManTel}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点删除状态：</label>
+				<div class="col-sm-8">
+					<input id="resourceDeleted" name="resourceDeleted" th:field="*{resourceDeleted}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点计划使用日期：</label>
+				<div class="col-sm-8">
+					<input id="resourcePlanDay" name="resourcePlanDay" th:field="*{resourcePlanDay}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点周期：</label>
+				<div class="col-sm-8">
+					<input id="resourceCycle" name="resourceCycle" th:field="*{resourceCycle}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源点代维公司：</label>
+				<div class="col-sm-8">
+					<input id="resourceStagantionCompany" name="resourceStagantionCompany" th:field="*{resourceStagantionCompany}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">上次巡检日期：</label>
+				<div class="col-sm-8">
+					<input id="resourceLastDate" name="resourceLastDate" th:field="*{resourceLastDate}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源类型：</label>
+				<div class="col-sm-8">
+					<input id="resourceType" name="resourceType" th:field="*{resourceType}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/resource"
+		$("#form-resource-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-resource-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

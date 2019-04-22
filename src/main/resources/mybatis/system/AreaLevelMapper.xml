@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.areaLevel.mapper.AreaLevelMapper">
+    
+    <resultMap type="AreaLevel" id="AreaLevelResult">
+        <result property="areaLevelId"    column="area_level_id"    />
+        <result property="areaLevelName"    column="area_level_name"    />
+    </resultMap>
+	
+	<sql id="selectAreaLevelVo">
+        select area_level_id, area_level_name from tbl_area_level
+    </sql>
+	
+    <select id="selectAreaLevelList" parameterType="AreaLevel" resultMap="AreaLevelResult">
+        <include refid="selectAreaLevelVo"/>
+        <where>  
+            <if test="areaLevelId != null "> and area_level_id = #{areaLevelId}</if>
+             <if test="areaLevelName != null  and areaLevelName != '' "> and area_level_name = #{areaLevelName}</if>
+         </where>
+    </select>
+    
+    <select id="selectAreaLevelById" parameterType="Integer" resultMap="AreaLevelResult">
+        <include refid="selectAreaLevelVo"/>
+        where area_level_id = #{areaLevelId}
+    </select>
+        
+    <insert id="insertAreaLevel" parameterType="AreaLevel">
+        insert into tbl_area_level
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="areaLevelId != null  ">area_level_id,</if>
+			<if test="areaLevelName != null  and areaLevelName != ''  ">area_level_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="areaLevelId != null  ">#{areaLevelId},</if>
+			<if test="areaLevelName != null  and areaLevelName != ''  ">#{areaLevelName},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateAreaLevel" parameterType="AreaLevel">
+        update tbl_area_level
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="areaLevelName != null  and areaLevelName != ''  ">area_level_name = #{areaLevelName},</if>
+        </trim>
+        where area_level_id = #{areaLevelId}
+    </update>
+
+	<delete id="deleteAreaLevelById" parameterType="Integer">
+        delete from tbl_area_level where area_level_id = #{areaLevelId}
+    </delete>
+	
+    <delete id="deleteAreaLevelByIds" parameterType="String">
+        delete from tbl_area_level where area_level_id in 
+        <foreach item="areaLevelId" collection="array" open="(" separator="," close=")">
+            #{areaLevelId}
+        </foreach>
+    </delete>
+    
+</mapper>

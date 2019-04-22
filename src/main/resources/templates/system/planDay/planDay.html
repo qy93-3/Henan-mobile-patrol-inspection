@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								日计划名称：<input type="text" name="dayPlanName"/>
+							</li>
+
+							<li>
+								日计划日期：<input type="text" name="dayPlanDate"/>
+							</li>
+
+							<li>
+								日计划类型：<input type="text" name="dayPlanType"/>
+							</li>
+
+							<li>
+								日计划站点编号：<input type="text" name="dayPlanSite"/>
+							</li>
+
+							<li>
+								日计划资源点编号：<input type="text" name="dayPlanResource"/>
+							</li>
+
+							<li>
+								日计划驻点编号：<input type="text" name="dayPlanStagnation"/>
+							</li>
+
+							<li>
+								月计划编号：<input type="text" name="monthPlanId"/>
+							</li>
+
+							<li>
+								日历编号：<input type="text" name="calendarPlanId"/>
+							</li>
+
+							<li>
+								日计划状态：<input type="text" name="dayPlanStatus"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:planDay:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:planDay:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:planDay:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:planDay:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:planDay:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:planDay:remove')}]];
+        var prefix = ctx + "system/planDay";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "巡检资源日计划",
+				search: false,
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'dayPlanId', 
+					title : '日计划编号',
+					visible: false
+				},
+				{
+					field : 'dayPlanName', 
+					title : '日计划名称',
+					sortable: true
+				},
+				{
+					field : 'dayPlanDate', 
+					title : '日计划日期',
+					sortable: true
+				},
+				{
+					field : 'dayPlanType', 
+					title : '日计划类型',
+					sortable: true
+				},
+				{
+					field : 'dayPlanSite', 
+					title : '日计划站点编号',
+					sortable: true
+				},
+				{
+					field : 'dayPlanResource', 
+					title : '日计划资源点编号',
+					sortable: true
+				},
+				{
+					field : 'dayPlanStagnation', 
+					title : '日计划驻点编号',
+					sortable: true
+				},
+				{
+					field : 'monthPlanId', 
+					title : '月计划编号',
+					sortable: true
+				},
+				{
+					field : 'calendarPlanId', 
+					title : '日历编号',
+					sortable: true
+				},
+				{
+					field : 'dayPlanStatus', 
+					title : '日计划状态',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.dayPlanId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.dayPlanId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

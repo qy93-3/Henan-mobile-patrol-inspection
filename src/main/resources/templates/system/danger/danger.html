@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								隐患名称：<input type="text" name="dangerName"/>
+							</li>
+
+							<li>
+								任务编号：<input type="text" name="messionId"/>
+							</li>
+
+							<li>
+								隐患站点编号：<input type="text" name="dangerSiteId"/>
+							</li>
+
+							<li>
+								隐患资源点编号：<input type="text" name="dangerResourceId"/>
+							</li>
+
+							<li>
+								巡检项目编号：<input type="text" name="routingProjectId"/>
+							</li>
+
+							<li>
+								严重程度：<input type="text" name="dangerLevel"/>
+							</li>
+
+							<li>
+								隐患状态：<input type="text" name="dangerStatus"/>
+							</li>
+
+							<li>
+								隐患来源：<input type="text" name="dangerSources"/>
+							</li>
+
+							<li>
+								问题描述：<input type="text" name="dangerDescription"/>
+							</li>
+
+							<li>
+								解决办法：<input type="text" name="dangerSolution"/>
+							</li>
+
+							<li>
+								发现日期：<input type="text" name="dangerDate"/>
+							</li>
+
+							<li>
+								隐患照片：<input type="text" name="dangerPicture"/>
+							</li>
+
+							<li>
+								提交巡检人员编号：<input type="text" name="routingPersonId"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:danger:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:danger:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:danger:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:danger:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:danger:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:danger:remove')}]];
+        var prefix = ctx + "system/danger";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "巡检资源隐患",
+				search: false,
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'dangerId', 
+					title : '隐患ID',
+					visible: false
+				},
+				{
+					field : 'dangerName', 
+					title : '隐患名称',
+					sortable: true
+				},
+				{
+					field : 'messionId', 
+					title : '任务编号',
+					sortable: true
+				},
+				{
+					field : 'dangerSiteId', 
+					title : '隐患站点编号',
+					sortable: true
+				},
+				{
+					field : 'dangerResourceId', 
+					title : '隐患资源点编号',
+					sortable: true
+				},
+				{
+					field : 'routingProjectId', 
+					title : '巡检项目编号',
+					sortable: true
+				},
+				{
+					field : 'dangerLevel', 
+					title : '严重程度',
+					sortable: true
+				},
+				{
+					field : 'dangerStatus', 
+					title : '隐患状态',
+					sortable: true
+				},
+				{
+					field : 'dangerSources', 
+					title : '隐患来源',
+					sortable: true
+				},
+				{
+					field : 'dangerDescription', 
+					title : '问题描述',
+					sortable: true
+				},
+				{
+					field : 'dangerSolution', 
+					title : '解决办法',
+					sortable: true
+				},
+				{
+					field : 'dangerDate', 
+					title : '发现日期',
+					sortable: true
+				},
+				{
+					field : 'dangerPicture', 
+					title : '隐患照片',
+					sortable: true
+				},
+				{
+					field : 'routingPersonId', 
+					title : '提交巡检人员编号',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.dangerId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.dangerId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

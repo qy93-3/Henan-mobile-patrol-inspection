@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								站点名称：<input type="text" name="siteName"/>
+							</li>
+
+							<li>
+								站点名称缩写：<input type="text" name="siteNameAbbreviate"/>
+							</li>
+
+							<li>
+								站点地区编号：<input type="text" name="siteAreaId"/>
+							</li>
+
+							<li>
+								站点经度：<input type="text" name="siteLongitude"/>
+							</li>
+
+							<li>
+								站点维度：<input type="text" name="siteLatitude"/>
+							</li>
+
+							<li>
+								站点类型：<input type="text" name="siteType"/>
+							</li>
+
+							<li>
+								站点地址：<input type="text" name="siteAddress"/>
+							</li>
+
+							<li>
+								站点传输业务级别：<input type="text" name="siteServiceLevel"/>
+							</li>
+
+							<li>
+								站点生命周期状态：<input type="text" name="siteStatus"/>
+							</li>
+
+							<li>
+								站点入网时间：<input type="text" name="siteInnetDate"/>
+							</li>
+
+							<li>
+								站点总层数：<input type="text" name="siteFloorCount"/>
+							</li>
+
+							<li>
+								站点产权单位：<input type="text" name="sitePropertyDepartment"/>
+							</li>
+
+							<li>
+								站点产权性质：<input type="text" name="siteProperty"/>
+							</li>
+
+							<li>
+								站点使用单位：<input type="text" name="siteUserDepartment"/>
+							</li>
+
+							<li>
+								站点物业联系人：<input type="text" name="siteContacts"/>
+							</li>
+
+							<li>
+								站点物业联系电话：<input type="text" name="siteContactsMobile"/>
+							</li>
+
+							<li>
+								站点覆盖类型：<input type="text" name="siteOverlayType"/>
+							</li>
+
+							<li>
+								站点删除状态：<input type="text" name="siteDeleted"/>
+							</li>
+
+							<li>
+								站点计划日：<input type="text" name="sitePlanDay"/>
+							</li>
+
+							<li>
+								站点巡检周期：<input type="text" name="siteCycle"/>
+							</li>
+
+							<li>
+								站点代维公司：<input type="text" name="siteStagantionCompany"/>
+							</li>
+
+							<li>
+								上次巡检日期：<input type="text" name="siteLastDate"/>
+							</li>
+
+							<li>
+								资源类型：<input type="text" name="resourceType"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:site:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:site:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:site:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:site:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:site:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:site:remove')}]];
+        var prefix = ctx + "system/site";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "站点",
+				search: false,
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'siteId', 
+					title : '站点编号',
+					visible: false
+				},
+				{
+					field : 'siteName', 
+					title : '站点名称',
+					sortable: true
+				},
+				{
+					field : 'siteNameAbbreviate', 
+					title : '站点名称缩写',
+					sortable: true
+				},
+				{
+					field : 'siteAreaId', 
+					title : '站点地区编号',
+					sortable: true
+				},
+				{
+					field : 'siteLongitude', 
+					title : '站点经度',
+					sortable: true
+				},
+				{
+					field : 'siteLatitude', 
+					title : '站点维度',
+					sortable: true
+				},
+				{
+					field : 'siteType', 
+					title : '站点类型',
+					sortable: true
+				},
+				{
+					field : 'siteAddress', 
+					title : '站点地址',
+					sortable: true
+				},
+				{
+					field : 'siteServiceLevel', 
+					title : '站点传输业务级别',
+					sortable: true
+				},
+				{
+					field : 'siteStatus', 
+					title : '站点生命周期状态',
+					sortable: true
+				},
+				{
+					field : 'siteInnetDate', 
+					title : '站点入网时间',
+					sortable: true
+				},
+				{
+					field : 'siteFloorCount', 
+					title : '站点总层数',
+					sortable: true
+				},
+				{
+					field : 'sitePropertyDepartment', 
+					title : '站点产权单位',
+					sortable: true
+				},
+				{
+					field : 'siteProperty', 
+					title : '站点产权性质',
+					sortable: true
+				},
+				{
+					field : 'siteUserDepartment', 
+					title : '站点使用单位',
+					sortable: true
+				},
+				{
+					field : 'siteContacts', 
+					title : '站点物业联系人',
+					sortable: true
+				},
+				{
+					field : 'siteContactsMobile', 
+					title : '站点物业联系电话',
+					sortable: true
+				},
+				{
+					field : 'siteOverlayType', 
+					title : '站点覆盖类型',
+					sortable: true
+				},
+				{
+					field : 'siteDeleted', 
+					title : '站点删除状态',
+					sortable: true
+				},
+				{
+					field : 'sitePlanDay', 
+					title : '站点计划日',
+					sortable: true
+				},
+				{
+					field : 'siteCycle', 
+					title : '站点巡检周期',
+					sortable: true
+				},
+				{
+					field : 'siteStagantionCompany', 
+					title : '站点代维公司',
+					sortable: true
+				},
+				{
+					field : 'siteLastDate', 
+					title : '上次巡检日期',
+					sortable: true
+				},
+				{
+					field : 'resourceType', 
+					title : '资源类型',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.siteId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.siteId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

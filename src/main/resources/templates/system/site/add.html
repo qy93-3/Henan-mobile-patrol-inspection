@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-site-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点名称：</label>
+				<div class="col-sm-8">
+					<input id="siteName" name="siteName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点名称缩写：</label>
+				<div class="col-sm-8">
+					<input id="siteNameAbbreviate" name="siteNameAbbreviate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点地区编号：</label>
+				<div class="col-sm-8">
+					<input id="siteAreaId" name="siteAreaId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点经度：</label>
+				<div class="col-sm-8">
+					<input id="siteLongitude" name="siteLongitude" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点维度：</label>
+				<div class="col-sm-8">
+					<input id="siteLatitude" name="siteLatitude" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点类型：</label>
+				<div class="col-sm-8">
+					<input id="siteType" name="siteType" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点地址：</label>
+				<div class="col-sm-8">
+					<input id="siteAddress" name="siteAddress" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点传输业务级别：</label>
+				<div class="col-sm-8">
+					<input id="siteServiceLevel" name="siteServiceLevel" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点生命周期状态：</label>
+				<div class="col-sm-8">
+					<input id="siteStatus" name="siteStatus" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点入网时间：</label>
+				<div class="col-sm-8">
+					<input id="siteInnetDate" name="siteInnetDate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点总层数：</label>
+				<div class="col-sm-8">
+					<input id="siteFloorCount" name="siteFloorCount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点产权单位：</label>
+				<div class="col-sm-8">
+					<input id="sitePropertyDepartment" name="sitePropertyDepartment" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点产权性质：</label>
+				<div class="col-sm-8">
+					<input id="siteProperty" name="siteProperty" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点使用单位：</label>
+				<div class="col-sm-8">
+					<input id="siteUserDepartment" name="siteUserDepartment" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点物业联系人：</label>
+				<div class="col-sm-8">
+					<input id="siteContacts" name="siteContacts" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点物业联系电话：</label>
+				<div class="col-sm-8">
+					<input id="siteContactsMobile" name="siteContactsMobile" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点覆盖类型：</label>
+				<div class="col-sm-8">
+					<input id="siteOverlayType" name="siteOverlayType" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点删除状态：</label>
+				<div class="col-sm-8">
+					<input id="siteDeleted" name="siteDeleted" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点计划日：</label>
+				<div class="col-sm-8">
+					<input id="sitePlanDay" name="sitePlanDay" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点巡检周期：</label>
+				<div class="col-sm-8">
+					<input id="siteCycle" name="siteCycle" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">站点代维公司：</label>
+				<div class="col-sm-8">
+					<input id="siteStagantionCompany" name="siteStagantionCompany" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">上次巡检日期：</label>
+				<div class="col-sm-8">
+					<input id="siteLastDate" name="siteLastDate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">资源类型：</label>
+				<div class="col-sm-8">
+					<input id="resourceType" name="resourceType" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/site"
+		$("#form-site-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-site-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

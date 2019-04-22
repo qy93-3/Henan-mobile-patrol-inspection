@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-mession-edit" th:object="${mession}">
+            <input id="messionId" name="messionId" th:field="*{messionId}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">巡检人员编号：</label>
+				<div class="col-sm-8">
+					<input id="messionRoutingId" name="messionRoutingId" th:field="*{messionRoutingId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">任务日计划编号：</label>
+				<div class="col-sm-8">
+					<input id="messionDayId" name="messionDayId" th:field="*{messionDayId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">任务站点编号：</label>
+				<div class="col-sm-8">
+					<input id="messionSiteId" name="messionSiteId" th:field="*{messionSiteId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">任务资源点编号：</label>
+				<div class="col-sm-8">
+					<input id="messionResourceId" name="messionResourceId" th:field="*{messionResourceId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">任务日期：</label>
+				<div class="col-sm-8">
+					<input id="messionDate" name="messionDate" th:field="*{messionDate}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">任务状态：</label>
+				<div class="col-sm-8">
+					<input id="messionStatus" name="messionStatus" th:field="*{messionStatus}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">任务签到状态：</label>
+				<div class="col-sm-8">
+					<input id="messionCheckStatus" name="messionCheckStatus" th:field="*{messionCheckStatus}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">任务驻点编号：</label>
+				<div class="col-sm-8">
+					<input id="messionStagnationId" name="messionStagnationId" th:field="*{messionStagnationId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">任务签到经度：</label>
+				<div class="col-sm-8">
+					<input id="messionLongitude" name="messionLongitude" th:field="*{messionLongitude}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">任务签到纬度：</label>
+				<div class="col-sm-8">
+					<input id="messionLatitude" name="messionLatitude" th:field="*{messionLatitude}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/mession"
+		$("#form-mession-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-mession-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

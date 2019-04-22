@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.danger.mapper.DangerMapper">
+    
+    <resultMap type="Danger" id="DangerResult">
+        <result property="dangerId"    column="danger_id"    />
+        <result property="dangerName"    column="danger_name"    />
+        <result property="messionId"    column="mession_id"    />
+        <result property="dangerSiteId"    column="danger_site_id"    />
+        <result property="dangerResourceId"    column="danger_resource_id"    />
+        <result property="routingProjectId"    column="routing_project_id"    />
+        <result property="dangerLevel"    column="danger_level"    />
+        <result property="dangerStatus"    column="danger_status"    />
+        <result property="dangerSources"    column="danger_sources"    />
+        <result property="dangerDescription"    column="danger_description"    />
+        <result property="dangerSolution"    column="danger_solution"    />
+        <result property="dangerDate"    column="danger_date"    />
+        <result property="dangerPicture"    column="danger_picture"    />
+        <result property="routingPersonId"    column="routing_person_id"    />
+    </resultMap>
+	
+	<sql id="selectDangerVo">
+        select danger_id, danger_name, mession_id, danger_site_id, danger_resource_id, routing_project_id, danger_level, danger_status, danger_sources, danger_description, danger_solution, danger_date, danger_picture, routing_person_id from tbl_danger
+    </sql>
+	
+    <select id="selectDangerList" parameterType="Danger" resultMap="DangerResult">
+        <include refid="selectDangerVo"/>
+        <where>  
+            <if test="dangerId != null "> and danger_id = #{dangerId}</if>
+             <if test="dangerName != null  and dangerName != '' "> and danger_name = #{dangerName}</if>
+             <if test="messionId != null "> and mession_id = #{messionId}</if>
+             <if test="dangerSiteId != null "> and danger_site_id = #{dangerSiteId}</if>
+             <if test="dangerResourceId != null "> and danger_resource_id = #{dangerResourceId}</if>
+             <if test="routingProjectId != null "> and routing_project_id = #{routingProjectId}</if>
+             <if test="dangerLevel != null "> and danger_level = #{dangerLevel}</if>
+             <if test="dangerStatus != null "> and danger_status = #{dangerStatus}</if>
+             <if test="dangerSources != null  and dangerSources != '' "> and danger_sources = #{dangerSources}</if>
+             <if test="dangerDescription != null  and dangerDescription != '' "> and danger_description = #{dangerDescription}</if>
+             <if test="dangerSolution != null  and dangerSolution != '' "> and danger_solution = #{dangerSolution}</if>
+             <if test="dangerDate != null "> and danger_date = #{dangerDate}</if>
+             <if test="dangerPicture != null  and dangerPicture != '' "> and danger_picture = #{dangerPicture}</if>
+             <if test="routingPersonId != null "> and routing_person_id = #{routingPersonId}</if>
+         </where>
+    </select>
+    
+    <select id="selectDangerById" parameterType="Integer" resultMap="DangerResult">
+        <include refid="selectDangerVo"/>
+        where danger_id = #{dangerId}
+    </select>
+        
+    <insert id="insertDanger" parameterType="Danger">
+        insert into tbl_danger
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dangerId != null  ">danger_id,</if>
+			<if test="dangerName != null  and dangerName != ''  ">danger_name,</if>
+			<if test="messionId != null  ">mession_id,</if>
+			<if test="dangerSiteId != null  ">danger_site_id,</if>
+			<if test="dangerResourceId != null  ">danger_resource_id,</if>
+			<if test="routingProjectId != null  ">routing_project_id,</if>
+			<if test="dangerLevel != null  ">danger_level,</if>
+			<if test="dangerStatus != null  ">danger_status,</if>
+			<if test="dangerSources != null  and dangerSources != ''  ">danger_sources,</if>
+			<if test="dangerDescription != null  and dangerDescription != ''  ">danger_description,</if>
+			<if test="dangerSolution != null  and dangerSolution != ''  ">danger_solution,</if>
+			<if test="dangerDate != null  ">danger_date,</if>
+			<if test="dangerPicture != null  and dangerPicture != ''  ">danger_picture,</if>
+			<if test="routingPersonId != null  ">routing_person_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dangerId != null  ">#{dangerId},</if>
+			<if test="dangerName != null  and dangerName != ''  ">#{dangerName},</if>
+			<if test="messionId != null  ">#{messionId},</if>
+			<if test="dangerSiteId != null  ">#{dangerSiteId},</if>
+			<if test="dangerResourceId != null  ">#{dangerResourceId},</if>
+			<if test="routingProjectId != null  ">#{routingProjectId},</if>
+			<if test="dangerLevel != null  ">#{dangerLevel},</if>
+			<if test="dangerStatus != null  ">#{dangerStatus},</if>
+			<if test="dangerSources != null  and dangerSources != ''  ">#{dangerSources},</if>
+			<if test="dangerDescription != null  and dangerDescription != ''  ">#{dangerDescription},</if>
+			<if test="dangerSolution != null  and dangerSolution != ''  ">#{dangerSolution},</if>
+			<if test="dangerDate != null  ">#{dangerDate},</if>
+			<if test="dangerPicture != null  and dangerPicture != ''  ">#{dangerPicture},</if>
+			<if test="routingPersonId != null  ">#{routingPersonId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateDanger" parameterType="Danger">
+        update tbl_danger
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dangerName != null  and dangerName != ''  ">danger_name = #{dangerName},</if>
+            <if test="messionId != null  ">mession_id = #{messionId},</if>
+            <if test="dangerSiteId != null  ">danger_site_id = #{dangerSiteId},</if>
+            <if test="dangerResourceId != null  ">danger_resource_id = #{dangerResourceId},</if>
+            <if test="routingProjectId != null  ">routing_project_id = #{routingProjectId},</if>
+            <if test="dangerLevel != null  ">danger_level = #{dangerLevel},</if>
+            <if test="dangerStatus != null  ">danger_status = #{dangerStatus},</if>
+            <if test="dangerSources != null  and dangerSources != ''  ">danger_sources = #{dangerSources},</if>
+            <if test="dangerDescription != null  and dangerDescription != ''  ">danger_description = #{dangerDescription},</if>
+            <if test="dangerSolution != null  and dangerSolution != ''  ">danger_solution = #{dangerSolution},</if>
+            <if test="dangerDate != null  ">danger_date = #{dangerDate},</if>
+            <if test="dangerPicture != null  and dangerPicture != ''  ">danger_picture = #{dangerPicture},</if>
+            <if test="routingPersonId != null  ">routing_person_id = #{routingPersonId},</if>
+        </trim>
+        where danger_id = #{dangerId}
+    </update>
+
+	<delete id="deleteDangerById" parameterType="Integer">
+        delete from tbl_danger where danger_id = #{dangerId}
+    </delete>
+	
+    <delete id="deleteDangerByIds" parameterType="String">
+        delete from tbl_danger where danger_id in 
+        <foreach item="dangerId" collection="array" open="(" separator="," close=")">
+            #{dangerId}
+        </foreach>
+    </delete>
+    
+</mapper>

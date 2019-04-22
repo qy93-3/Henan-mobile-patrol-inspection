@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.resourcesCycleType.mapper.ResourcesCycleTypeMapper">
+    
+    <resultMap type="ResourcesCycleType" id="ResourcesCycleTypeResult">
+        <result property="resourcesCycleId"    column="resources_cycle_id"    />
+        <result property="resourcesCycleName"    column="resources_cycle_name"    />
+        <result property="resourcesCycleMonth"    column="resources_cycle_month"    />
+    </resultMap>
+	
+	<sql id="selectResourcesCycleTypeVo">
+        select resources_cycle_id, resources_cycle_name, resources_cycle_month from tbl_resources_cycle_type
+    </sql>
+	
+    <select id="selectResourcesCycleTypeList" parameterType="ResourcesCycleType" resultMap="ResourcesCycleTypeResult">
+        <include refid="selectResourcesCycleTypeVo"/>
+        <where>  
+            <if test="resourcesCycleId != null "> and resources_cycle_id = #{resourcesCycleId}</if>
+             <if test="resourcesCycleName != null  and resourcesCycleName != '' "> and resources_cycle_name = #{resourcesCycleName}</if>
+             <if test="resourcesCycleMonth != null "> and resources_cycle_month = #{resourcesCycleMonth}</if>
+         </where>
+    </select>
+    
+    <select id="selectResourcesCycleTypeById" parameterType="Integer" resultMap="ResourcesCycleTypeResult">
+        <include refid="selectResourcesCycleTypeVo"/>
+        where resources_cycle_id = #{resourcesCycleId}
+    </select>
+        
+    <insert id="insertResourcesCycleType" parameterType="ResourcesCycleType">
+        insert into tbl_resources_cycle_type
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="resourcesCycleId != null  ">resources_cycle_id,</if>
+			<if test="resourcesCycleName != null  and resourcesCycleName != ''  ">resources_cycle_name,</if>
+			<if test="resourcesCycleMonth != null  ">resources_cycle_month,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="resourcesCycleId != null  ">#{resourcesCycleId},</if>
+			<if test="resourcesCycleName != null  and resourcesCycleName != ''  ">#{resourcesCycleName},</if>
+			<if test="resourcesCycleMonth != null  ">#{resourcesCycleMonth},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateResourcesCycleType" parameterType="ResourcesCycleType">
+        update tbl_resources_cycle_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="resourcesCycleName != null  and resourcesCycleName != ''  ">resources_cycle_name = #{resourcesCycleName},</if>
+            <if test="resourcesCycleMonth != null  ">resources_cycle_month = #{resourcesCycleMonth},</if>
+        </trim>
+        where resources_cycle_id = #{resourcesCycleId}
+    </update>
+
+	<delete id="deleteResourcesCycleTypeById" parameterType="Integer">
+        delete from tbl_resources_cycle_type where resources_cycle_id = #{resourcesCycleId}
+    </delete>
+	
+    <delete id="deleteResourcesCycleTypeByIds" parameterType="String">
+        delete from tbl_resources_cycle_type where resources_cycle_id in 
+        <foreach item="resourcesCycleId" collection="array" open="(" separator="," close=")">
+            #{resourcesCycleId}
+        </foreach>
+    </delete>
+    
+</mapper>

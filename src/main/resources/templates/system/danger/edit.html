@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-danger-edit" th:object="${danger}">
+            <input id="dangerId" name="dangerId" th:field="*{dangerId}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">隐患名称：</label>
+				<div class="col-sm-8">
+					<input id="dangerName" name="dangerName" th:field="*{dangerName}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">任务编号：</label>
+				<div class="col-sm-8">
+					<input id="messionId" name="messionId" th:field="*{messionId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">隐患站点编号：</label>
+				<div class="col-sm-8">
+					<input id="dangerSiteId" name="dangerSiteId" th:field="*{dangerSiteId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">隐患资源点编号：</label>
+				<div class="col-sm-8">
+					<input id="dangerResourceId" name="dangerResourceId" th:field="*{dangerResourceId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">巡检项目编号：</label>
+				<div class="col-sm-8">
+					<input id="routingProjectId" name="routingProjectId" th:field="*{routingProjectId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">严重程度：</label>
+				<div class="col-sm-8">
+					<input id="dangerLevel" name="dangerLevel" th:field="*{dangerLevel}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">隐患状态：</label>
+				<div class="col-sm-8">
+					<input id="dangerStatus" name="dangerStatus" th:field="*{dangerStatus}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">隐患来源：</label>
+				<div class="col-sm-8">
+					<input id="dangerSources" name="dangerSources" th:field="*{dangerSources}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">问题描述：</label>
+				<div class="col-sm-8">
+					<input id="dangerDescription" name="dangerDescription" th:field="*{dangerDescription}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">解决办法：</label>
+				<div class="col-sm-8">
+					<input id="dangerSolution" name="dangerSolution" th:field="*{dangerSolution}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">发现日期：</label>
+				<div class="col-sm-8">
+					<input id="dangerDate" name="dangerDate" th:field="*{dangerDate}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">隐患照片：</label>
+				<div class="col-sm-8">
+					<input id="dangerPicture" name="dangerPicture" th:field="*{dangerPicture}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">提交巡检人员编号：</label>
+				<div class="col-sm-8">
+					<input id="routingPersonId" name="routingPersonId" th:field="*{routingPersonId}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/danger"
+		$("#form-danger-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-danger-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

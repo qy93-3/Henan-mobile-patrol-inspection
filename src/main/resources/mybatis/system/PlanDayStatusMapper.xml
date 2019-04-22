@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.project.system.planDayStatus.mapper.PlanDayStatusMapper">
+    
+    <resultMap type="PlanDayStatus" id="PlanDayStatusResult">
+        <result property="dayStatusId"    column="day_status_id"    />
+        <result property="dayStatusName"    column="day_status_name"    />
+    </resultMap>
+	
+	<sql id="selectPlanDayStatusVo">
+        select day_status_id, day_status_name from tbl_plan_day_status
+    </sql>
+	
+    <select id="selectPlanDayStatusList" parameterType="PlanDayStatus" resultMap="PlanDayStatusResult">
+        <include refid="selectPlanDayStatusVo"/>
+        <where>  
+            <if test="dayStatusId != null "> and day_status_id = #{dayStatusId}</if>
+             <if test="dayStatusName != null  and dayStatusName != '' "> and day_status_name = #{dayStatusName}</if>
+         </where>
+    </select>
+    
+    <select id="selectPlanDayStatusById" parameterType="Integer" resultMap="PlanDayStatusResult">
+        <include refid="selectPlanDayStatusVo"/>
+        where day_status_id = #{dayStatusId}
+    </select>
+        
+    <insert id="insertPlanDayStatus" parameterType="PlanDayStatus">
+        insert into tbl_plan_day_status
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dayStatusId != null  ">day_status_id,</if>
+			<if test="dayStatusName != null  and dayStatusName != ''  ">day_status_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dayStatusId != null  ">#{dayStatusId},</if>
+			<if test="dayStatusName != null  and dayStatusName != ''  ">#{dayStatusName},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updatePlanDayStatus" parameterType="PlanDayStatus">
+        update tbl_plan_day_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dayStatusName != null  and dayStatusName != ''  ">day_status_name = #{dayStatusName},</if>
+        </trim>
+        where day_status_id = #{dayStatusId}
+    </update>
+
+	<delete id="deletePlanDayStatusById" parameterType="Integer">
+        delete from tbl_plan_day_status where day_status_id = #{dayStatusId}
+    </delete>
+	
+    <delete id="deletePlanDayStatusByIds" parameterType="String">
+        delete from tbl_plan_day_status where day_status_id in 
+        <foreach item="dayStatusId" collection="array" open="(" separator="," close=")">
+            #{dayStatusId}
+        </foreach>
+    </delete>
+    
+</mapper>

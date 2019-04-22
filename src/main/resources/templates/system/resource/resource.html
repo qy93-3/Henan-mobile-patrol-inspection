@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<table align="center" style="width: 100%;border: 1px solid #E9F3FA;height: 80px">
+							<tr>
+								<td>资源点名称：</td>
+								<td><input type="text" name="resourceName"/></td>
+								<td>资源点维护驻点：</td>
+								<td><input type="text" name="resourceStagantionCompany"/></td>
+							</tr>
+							<tr>
+								<td>市</td>
+								<td><input type="text" name="resourceCity"/></td>
+								<td>县</td>
+								<td><input type="text" name="resourceCounty"/></td>
+							</tr>
+							<tr>
+								<td>巡检周期</td>
+								<td>
+									<input type="checkbox" name="resourceCycle" value="1"/>月
+									<input type="checkbox" name="resourceCycle" value="3"/>季
+									<input type="checkbox" name="resourceCycle" value="6"/>半年
+									<input type="checkbox" name="resourceCycle" value="12"/>年
+								</td>
+								<td>资源ID</td>
+								<td><input type="text" name="resourceCounty"/></td>
+							</tr>
+							<tr>
+								<td colspan="4">
+									<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+									<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:resource:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:resource:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:resource:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:resource:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:resource:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:resource:remove')}]];
+        var prefix = ctx + "system/resource";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "资源点",
+				search: false,
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'resourceId', 
+					title : '资源点编号',
+					visible: false
+				},
+				{
+					field : 'resourceAreaId', 
+					title : '资源点地区编号',
+					sortable: true
+				},
+				{
+					field : 'resourceName', 
+					title : '资源点名称',
+					sortable: true
+				},
+				{
+					field : 'resourceLongitude', 
+					title : '资源点经度',
+					sortable: true
+				},
+				{
+					field : 'resourceLatitude', 
+					title : '资源点纬度',
+					sortable: true
+				},
+				{
+					field : 'resourceAddress', 
+					title : '资源点地址',
+					sortable: true
+				},
+				{
+					field : 'resourceDotType', 
+					title : '资源点属性',
+					sortable: true
+				},
+				{
+					field : 'resourceStatus', 
+					title : '资源点状态(在网)',
+					sortable: true
+				},
+				{
+					field : 'resourceStartTime', 
+					title : '资源点开始时间',
+					sortable: true
+				},
+				{
+					field : 'resourceMaintainUnit', 
+					title : '资源点维护的单位',
+					sortable: true
+				},
+				{
+					field : 'resourceMaintainUnitTel', 
+					title : '资源点维护单位联系电话',
+					sortable: true
+				},
+				{
+					field : 'resourceMaintainUnitName', 
+					title : '资源点维护单位联系人',
+					sortable: true
+				},
+				{
+					field : 'resourceSadegrareManTel', 
+					title : '资源点安检员电话',
+					sortable: true
+				},
+				{
+					field : 'resourceDeleted', 
+					title : '资源点删除状态',
+					sortable: true
+				},
+				{
+					field : 'resourcePlanDay', 
+					title : '资源点计划使用日期',
+					sortable: true
+				},
+				{
+					field : 'resourceCycle', 
+					title : '资源点周期',
+					sortable: true
+				},
+				{
+					field : 'resourceStagantionCompany', 
+					title : '资源点代维公司',
+					sortable: true
+				},
+				{
+					field : 'resourceLastDate', 
+					title : '上次巡检日期',
+					sortable: true
+				},
+				{
+					field : 'resourceType', 
+					title : '资源类型',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.resourceId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.resourceId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>
