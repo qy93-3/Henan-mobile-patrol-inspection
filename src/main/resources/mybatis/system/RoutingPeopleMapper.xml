@@ -37,6 +37,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectRoutingPeopleVo"/>
         where routing_id = #{routingId}
     </select>
+
+    <select id="selectRoutingPeopleLogin"  resultMap="RoutingPeopleResult">
+        <include refid="selectRoutingPeopleVo"/>
+        where routing_username = #{routingUsername} and  routing_password = #{routingPassword} and open_id = #{openId}
+    </select>
+
+
         
     <insert id="insertRoutingPeople" parameterType="RoutingPeople">
         insert into tbl_routing_people

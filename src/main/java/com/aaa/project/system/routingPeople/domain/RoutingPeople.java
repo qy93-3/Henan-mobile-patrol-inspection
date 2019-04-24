@@ -28,8 +28,18 @@ public class RoutingPeople extends BaseEntity
 	private Integer stagnationId;
 	/** 巡检人员积分 */
 	private Integer routingPoint;
+	/**用户openid*/
+	private  String  openId;
 
-	public void setRoutingId(Integer routingId) 
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+
+	public void setRoutingId(Integer routingId)
 	{
 		this.routingId = routingId;
 	}
