@@ -1,15 +1,18 @@
 package com.aaa.project.system.mession.controller;
 
+import java.net.InetAddress;
 import java.util.List;
+import java.util.Map;
+
+import com.aaa.project.system.mession.results.Result;
+import com.aaa.project.system.resource.service.IResourceService;
+import com.aaa.project.system.site.service.ISiteService;
+import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.aaa.framework.aspectj.lang.annotation.Log;
 import com.aaa.framework.aspectj.lang.enums.BusinessType;
 import com.aaa.project.system.mession.domain.Mession;
@@ -33,7 +36,10 @@ public class MessionController extends BaseController
 	
 	@Autowired
 	private IMessionService messionService;
-	
+	@Autowired
+    private IResourceService resourceService;
+	@Autowired
+    private ISiteService siteService;
 	@RequiresPermissions("system:mession:view")
 	@GetMapping()
 	public String mession()
@@ -123,5 +129,31 @@ public class MessionController extends BaseController
 	{		
 		return toAjax(messionService.deleteMessionByIds(ids));
 	}
-	
+
+	/**
+	 * 微信小程序
+	 */
+    /**
+     * 待巡检日任务列表
+     * @param mession
+     * @return
+     */
+	@PostMapping("/wxmessioonlist")
+    @ResponseBody
+	public  Result<Mession>  wxmessionlist(Mession mession, @RequestBody Map<String,Integer> data){
+        mession.setMessionRoutingId(data.get("messionRoutingId"));
+        mession.setMessionStatus(data.get("messionStatus"));
+		Result<Mession> result=new Result();
+        List<Mession> messionList = messionService.selectMessionList(mession);
+        for (Mession mession1 : messionList) {
+            if(mession1.getMessionResourceId()==null){
+                mession1.setSite(siteService.selectSiteById(mession1.getMessionSiteId()));
+            }
+            mession1.setResource(resourceService.selectResourceById(mession1.getMessionResourceId()));
+        }
+        result.setCode(200);
+        result.setData(messionList);
+        return result;
+	}
+	 
 }

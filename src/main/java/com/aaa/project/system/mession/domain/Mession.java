@@ -1,5 +1,7 @@
 package com.aaa.project.system.mession.domain;
 
+import com.aaa.project.system.resource.domain.Resource;
+import com.aaa.project.system.site.domain.Site;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.aaa.framework.web.domain.BaseEntity;
@@ -37,8 +39,28 @@ public class Mession extends BaseEntity
 	private String messionLongitude;
 	/** 任务签到纬度 */
 	private String messionLatitude;
+	/** 站点*/
+	private Site site;
+	/**资源*/
+	private Resource resource;
 
-	public void setMessionId(Integer messionId) 
+	public Site getSite() {
+		return site;
+	}
+
+	public void setSite(Site site) {
+		this.site = site;
+	}
+
+	public Resource getResource() {
+		return resource;
+	}
+
+	public void setResource(Resource resource) {
+		this.resource = resource;
+	}
+
+	public void setMessionId(Integer messionId)
 	{
 		this.messionId = messionId;
 	}
