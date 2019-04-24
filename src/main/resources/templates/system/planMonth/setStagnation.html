@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body style="text-align: center">
+<div class="form-group" style="margin-top: 50px">
+    <form class="form-horizontal m" id="form-site-setStagnation">
+        <label class="label">请选择驻点</label><br>
+        <select id="city" name="city">
+            <option value=0>--请选择城市--</option>
+            <div th:each="city:${cities}">
+                <option th:value="${city.cityId}" th:text="${city.cityName}"></option>
+            </div>
+        </select>
+        <select id="area" name="area">
+            <option value=0>--请选择区县--</option>
+        </select>
+        <select id="stagantion" name="stagantion">
+            <option value=0>--请选择驻点--</option>
+        </select>
+    </form>
+</div>
+</body>
+<div th:include="include :: footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "system/planMonth"
+    $(function () {
+        /**
+         * 选择地市下拉框获取相应的区县和驻点
+         */
+        $("#city").change(function () {
+            getChild("city", "area", "city", "area", ctx + "system/city/getLocation");
+            getChild("city", "stagnation", "city", "stagantion", ctx + "system/city/getStagantion")
+        })
+        $("#area").change(function () {
+            getChild("area", "stagnation", "area", "stagantion", ctx + "system/city/getStagantion")
+        })
+
+        function getChild(level, getLevel, fatherNodeId, childNodeId, url) {
+            $("#" + childNodeId + " option:not(:first)").remove();
+            var address = $("#" + fatherNodeId).val();
+            var dataArr;
+            if (level == "area" && address == "0") {
+                address = $("#" + fatherNodeId).val();
+                level = "city"
+            }
+            dataArr = {
+                locationId: address,
+                areaLevel: level
+            }
+            $.post(url, dataArr, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var childId;
+                    var childName;
+                    if (getLevel == "area") {
+                        childId = data[i].areaId;
+                        childName = data[i].areaName;
+                    } else {
+                        childId = data[i].stagnationId;
+                        childName = data[i].stagnationPname;
+                    }
+                    $("#" + childNodeId).append("<option value='" + childId + "'>" + childName + "</option>");
+                }
+            })
+        }
+    })
+    $("#form-site-add").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        }
+    });
+
+    function submitHandler() {
+        var stagantion = $("#stagantion").val();
+        if (stagantion == 0) {
+            $.modal.alert("请选择驻点")
+        } else if ($.validate.form()) {
+            $.operate.save(prefix + "/list", $('#form-site-setStagnation').serialize());
+        }
+
+    }
+</script>
+</html>

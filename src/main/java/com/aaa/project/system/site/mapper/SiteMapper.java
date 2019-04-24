@@ -1,5 +1,6 @@
 package com.aaa.project.system.site.mapper;
 
+import com.aaa.project.system.resource.domain.Resource;
 import com.aaa.project.system.site.domain.Site;
 import java.util.List;	
 
@@ -26,6 +27,13 @@ public interface SiteMapper
      * @return 站点集合
      */
 	public List<Site> selectSiteList(Site site);
+
+	/**
+	 * 查询有驻点的站点列表
+	 * @param site 站点信息
+	 * @return 站点集合
+	 */
+	public List<Site> selectSiteListHasDis(Site site);
 	
 	/**
      * 新增站点
@@ -42,15 +50,15 @@ public interface SiteMapper
      * @return 结果
      */
 	public int updateSite(Site site);
-	
+
 	/**
-     * 删除站点
-     * 
-     * @param siteId 站点ID
-     * @return 结果
-     */
-	public int deleteSiteById(Long siteId);
+	 * 释放资源
+	 * @param site
+	 * @return
+	 */
+	public int cancelDistribute(Site site);
 	
+
 	/**
      * 批量删除站点
      * 

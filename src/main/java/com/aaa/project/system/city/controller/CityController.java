@@ -1,15 +1,16 @@
 package com.aaa.project.system.city.controller;
 
 import java.util.List;
+
+import com.aaa.project.system.area.domain.Area;
+import com.aaa.project.system.area.service.IAreaService;
+import com.aaa.project.system.stagnation.domain.Stagnation;
+import com.aaa.project.system.stagnation.service.IStagnationService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.aaa.framework.aspectj.lang.annotation.Log;
 import com.aaa.framework.aspectj.lang.enums.BusinessType;
 import com.aaa.project.system.city.domain.City;
@@ -30,98 +31,55 @@ import com.aaa.common.utils.poi.ExcelUtil;
 public class CityController extends BaseController
 {
     private String prefix = "system/city";
-	
+
 	@Autowired
 	private ICityService cityService;
-	
-	@RequiresPermissions("system:city:view")
-	@GetMapping()
-	public String city()
-	{
-	    return prefix + "/city";
-	}
-	
+
+	@Autowired
+	private IAreaService areaService;
+
+	@Autowired
+	private IStagnationService stagnationService;
+
 	/**
-	 * 查询市列表
+	 * 下拉列表获取市对应的县区
+	 *
+	 * @param locationId
+	 * @return
 	 */
-	@RequiresPermissions("system:city:list")
-	@PostMapping("/list")
+	@PostMapping("/getLocation")
 	@ResponseBody
-	public TableDataInfo list(City city)
-	{
-		startPage();
-        List<City> list = cityService.selectCityList(city);
-		return getDataTable(list);
-	}
-	
-	
-	/**
-	 * 导出市列表
-	 */
-	@RequiresPermissions("system:city:export")
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(City city)
-    {
-    	List<City> list = cityService.selectCityList(city);
-        ExcelUtil<City> util = new ExcelUtil<City>(City.class);
-        return util.exportExcel(list, "city");
-    }
-	
-	/**
-	 * 新增市
-	 */
-	@GetMapping("/add")
-	public String add()
-	{
-	    return prefix + "/add";
-	}
-	
-	/**
-	 * 新增保存市
-	 */
-	@RequiresPermissions("system:city:add")
-	@Log(title = "市", businessType = BusinessType.INSERT)
-	@PostMapping("/add")
-	@ResponseBody
-	public AjaxResult addSave(City city)
-	{		
-		return toAjax(cityService.insertCity(city));
+	public List getLocation(@RequestParam("areaLevel") String areaLevel, @RequestParam("locationId") Integer locationId) {
+		Area area = new Area();
+		area.setFather(locationId);
+		List<Area> data = areaService.selectAreaList(area);
+		System.out.println(locationId);
+		return data;
 	}
 
 	/**
-	 * 修改市
+	 * 下拉列表获取对应的驻点
+	 *
+	 * @param areaLevel
+	 * @param locationId
+	 * @return
 	 */
-	@GetMapping("/edit/{cityId}")
-	public String edit(@PathVariable("cityId") Integer cityId, ModelMap mmap)
-	{
-		City city = cityService.selectCityById(cityId);
-		mmap.put("city", city);
-	    return prefix + "/edit";
-	}
-	
-	/**
-	 * 修改保存市
-	 */
-	@RequiresPermissions("system:city:edit")
-	@Log(title = "市", businessType = BusinessType.UPDATE)
-	@PostMapping("/edit")
+	@PostMapping("/getStagantion")
 	@ResponseBody
-	public AjaxResult editSave(City city)
-	{		
-		return toAjax(cityService.updateCity(city));
-	}
-	
-	/**
-	 * 删除市
-	 */
-	@RequiresPermissions("system:city:remove")
-	@Log(title = "市", businessType = BusinessType.DELETE)
-	@PostMapping( "/remove")
-	@ResponseBody
-	public AjaxResult remove(String ids)
-	{		
-		return toAjax(cityService.deleteCityByIds(ids));
+	public List getStagantion(@RequestParam("areaLevel") String areaLevel, @RequestParam("locationId") Integer locationId) {
+		Stagnation stagnation = new Stagnation();
+		stagnation.setAddressId(locationId);
+		List<Stagnation> data = stagnationService.selectStagnationList(stagnation);
+		if ("city".equals(areaLevel)) {
+			Area area = new Area();
+			area.setFather(locationId);
+			List<Area> areas = areaService.selectAreaList(area);
+			for (Area area1 : areas) {
+				stagnation.setAddressId(area1.getAreaId());
+				data.addAll(stagnationService.selectStagnationList(stagnation));
+			}
+		}
+		return data;
 	}
 	
 }

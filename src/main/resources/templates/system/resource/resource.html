@@ -22,13 +22,13 @@
                         <tr>
                             <td>资源点名称：</td>
                             <td><input type="text" name="resourceName"/></td>
-                            <td>资源ID</td>
+                            <td>资源ID：</td>
                             <td>
                                 <input type="text" name="resourceId"/>
                             </td>
                         </tr>
                         <tr>
-                            <td>市</td>
+                            <td>地市：</td>
                             <td>
                                 <select name="resourceCity" id="city">
                                     <option value=0>--请选择--</option>
@@ -37,7 +37,7 @@
                                     </div>
                                 </select>
                             </td>
-                            <td>区县</td>
+                            <td>区县：</td>
                             <td>
                                 <select name="resourceArea" id="area">
                                     <option value=0>--请选择--</option>
@@ -45,15 +45,17 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>巡检周期</td>
+                            <td>巡检周期：</td>
                             <td>
                                 <input type="radio" name="resourceCycle" value="1"/>月
                                 <input type="radio" name="resourceCycle" value="2"/>季
                                 <input type="radio" name="resourceCycle" value="3"/>半年
                                 <input type="radio" name="resourceCycle" value="4"/>年
                             </td>
-                            <td></td>
-                            <td>
+                            <td>维护驻点</td>
+                            <td><select id="stagantion" name="stagantion">
+                                <option value=0>--请选择驻点--</option>
+                            </select>
                             </td>
                         </tr>
                     </table>
@@ -69,6 +71,7 @@
 
         <div id="stagnationResource" style="display: none">
             <button style="background-color: #E9F4FF;color: #2A70A7;" onclick="cancelDistribute()">释放关系</button>
+            <button onclick="setCycle()">设置巡检周期</button>
         </div>
         <div id="distributeResource">
             <label style="color: red;">分配到：</label>
@@ -81,10 +84,11 @@
             <select id="area2">
                 <option value=0>--请选择区县--</option>
             </select>
-            <select id="stagantion">
+            <select id="stagantion2">
                 <option value=0>--请选择驻点--</option>
             </select>
             <button style="background-color: #E9F4FF;color: #2A70A7;" onclick="distribute()">分配资源</button>
+            <button onclick="setCycle()">设置巡检周期</button>
         </div>
 
 
@@ -107,8 +111,8 @@
     var editFlag = [[${@permission.hasPermi('system:resource:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:resource:remove')}]];
     var prefix = ctx + "system/resource";
+
     $(function () {
-        console.log(ctx)
         if ([[${flag}]] == 0) {
             $("#distributeResource").show();
             $("#stagnationResource").hide();
@@ -129,6 +133,7 @@
                 {
                     field: 'resourceId',
                     title: '资源点编号',
+                    sortable: true,
                     visible: true
                 },
                 {
@@ -137,43 +142,43 @@
                     sortable: true
                 },
                 {
-                    field: 'resourceLongitude',
-                    title: '资源点经度',
-                    sortable: true,
-                    visible: false
-                },
-                {
-                    field: 'resourceLatitude',
-                    title: '资源点纬度',
-                    sortable: true,
-                    visible: false
-                },
-                {
                     field: 'areaName',
                     title: '地区',
                     sortable: true
                 },
                 {
-                    field: 'resourceAddress',
-                    title: '资源点地址'
+                    field: 'resourceLongitude',
+                    title: '资源点经度',
+                    sortable: true,
+                    visible: true
                 },
                 {
-                    field: 'resourceDotType',
-                    title: '资源点属性',
+                    field: 'resourceLatitude',
+                    title: '资源点纬度',
                     sortable: true,
-                    visible: false
-                },
-                {
-                    field: 'resourceStatus',
-                    title: '资源点状态(在网)',
-                    sortable: true,
-                    visible: false
+                    visible: true
                 },
                 {
                     field: 'resourceStartTime',
-                    title: '资源点开始时间',
+                    title: '资源点入网时间',
                     sortable: true,
-                    visible: false
+                    visible: true
+                },
+                {
+                    field: 'resourceDotType',
+                    title: '资源点类型',
+                    sortable: true,
+                    visible: true
+                },
+                {
+                    field: 'resourceStatus',
+                    title: '资源点状态',
+                    sortable: true,
+                    visible: true
+                },
+                {
+                    field: 'resourceAddress',
+                    title: '资源点地址'
                 },
                 {
                     field: 'resourceMaintainUnit',
@@ -248,104 +253,79 @@
             ]
         };
         $.table.init(options);
+
         /**
-         * 下拉框获取相应的区县
+         * 选择地市下拉框获取相应的区县和驻点
          */
         $("#city").change(function () {
-            $("#area option:not(:first)").remove();
-            var city = $(this).val();
-            if (city != "0") {
-                var url = ctx + "system/resource/getLocation";
-                $.post(url, {
-                    locationId: city
-                }, function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var areaId = data[i].areaId;
-                        var areaName = data[i].areaName;
-                        $("#area").append("<option value='" + areaId + "'>" + areaName + "</option>");
-                    }
-                })
-            }
+            getChild("city","area","city","area",ctx+"system/city/getLocation");
+            getChild("city","stagnation","city","stagantion",ctx+"system/city/getStagantion")
         })
-        /**
-         * 下拉框获取相应的区县
-         */
         $("#city2").change(function () {
-            $("#area2 option:not(:first)").remove();
-            $("#stagantion option:not(:first)").remove();
-            var city = $(this).val();
-            if (city != "0") {
-                var urlArea = ctx + "system/resource/getLocation";
-                var urlStagantion = ctx + "system/resource/getStagantion";
-                $.post(urlArea, {
-                    locationId: city
-                }, function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var areaId = data[i].areaId;
-                        var areaName = data[i].areaName;
-                        $("#area2").append("<option value='" + areaId + "'>" + areaName + "</option>");
-                    }
-                })
-                $.post(urlStagantion, {
-                    locationId: city,
-                    areaLevel: "city"
-                }, function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var stagnationId = data[i].stagnationId;
-                        var stagnationPname = data[i].stagnationPname;
-                        $("#stagantion").append("<option value='" + stagnationId + "'>" + stagnationPname + "</option>");
-                    }
-                })
-            }
+            getChild("city","area","city2","area2",ctx+"system/city/getLocation");
+            getChild("city","stagnation","city2","stagantion2",ctx+"system/city/getStagantion")
         })
-        /**
-         * 下拉框获取相应的驻点
-         */
+        $("#area").change(function () {
+            getChild("area","stagnation","area","stagantion",ctx+"system/city/getStagantion")
+        })
         $("#area2").change(function () {
-            $("#stagantion option:not(:first)").remove();
-            var area = $(this).val();
-            if (area == "0")
-                var dataarr = {
-                    locationId: $("#city2").val(),
-                    areaLevel: "city"
-                }
-            else
-                var dataarr = {
-                    locationId: area,
-                    areaLevel: "area"
-                }
-            var url = ctx + "system/resource/getStagantion";
-            $.post(url, dataarr, function (data) {
+            getChild("area","stagnation","area2","stagantion2",ctx+"system/city/getStagantion")
+        })
+
+        function getChild(level, getLevel, fatherNodeId, childNodeId, url) {
+            $("#" + childNodeId + " option:not(:first)").remove();
+            var address = $("#"+fatherNodeId).val();
+            var dataArr;
+            if (level == "area" && address == "0") {
+                address = $("#" + fatherNodeId).val();
+                level = "city"
+            }
+            dataArr = {
+                locationId: address,
+                areaLevel: level
+            }
+            $.post(url, dataArr, function (data) {
                 for (var i = 0; i < data.length; i++) {
-                    var stagnationId = data[i].stagnationId;
-                    var stagnationPname = data[i].stagnationPname;
-                    $("#stagantion").append("<option value='" + stagnationId + "'>" + stagnationPname + "</option>");
+                    var childId;
+                    var childName;
+                    if (getLevel == "area") {
+                        childId = data[i].areaId;
+                        childName = data[i].areaName;
+                    } else {
+                        childId = data[i].stagnationId;
+                        childName = data[i].stagnationPname;
+                    }
+                    $("#"+childNodeId).append("<option value='" + childId + "'>" + childName + "</option>");
                 }
             })
-        })
+        }
     });
 
     /**
      * 分配资源点
      */
     function distribute() {
-        var stagantion = $("#stagantion").val();
+        var stagantion = $("#stagantion2").val();
         if (stagantion == 0) {
             $.modal.alertWarning("请选择驻点");
         } else {
             var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-            $.modal.confirm("确认要分配选中的" + rows.length + "个资源点吗?", function () {
-                $.modal.loading("正在处理中，请稍后...");
-                $.ajax({
-                    url: ctx + "system/resource/distribute",
-                    type: "post",
-                    dataType: "json",
-                    data: {"ids": rows.join(), "stagantion": stagantion},
-                    success: function (result) {
-                        $.operate.ajaxSuccess(result);
-                    }
+            if (rows.length == 0) {
+                $.modal.alertWarning("请选择资源点");
+            } else {
+                $.modal.confirm("确认要分配选中的" + rows.length + "个资源点吗?", function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                    $.ajax({
+                        url: ctx + "system/resource/distribute",
+                        type: "post",
+                        dataType: "json",
+                        data: {"ids": rows.join(), "stagantion": stagantion},
+                        success: function (result) {
+                            $.operate.ajaxSuccess(result);
+                        }
+                    });
                 });
-            });
+            }
         }
     }
 
@@ -354,18 +334,33 @@
      */
     function cancelDistribute() {
         var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-        $.modal.confirm("确认要释放选中的" + rows.length + "个资源点吗?", function () {
-            $.modal.loading("正在处理中，请稍后...");
-            $.ajax({
-                url: ctx + "system/resource/cancelDistribute",
-                type: "post",
-                dataType: "json",
-                data: {"ids": rows.join()},
-                success: function (result) {
-                    $.operate.ajaxSuccess(result);
-                }
+        if (rows.length == 0) {
+            $.modal.alertWarning("请选择资源点");
+        } else {
+            $.modal.confirm("确认要释放选中的" + rows.length + "个资源点吗?", function () {
+                $.modal.loading("正在处理中，请稍后...");
+                $.ajax({
+                    url: ctx + "system/resource/cancelDistribute",
+                    type: "post",
+                    dataType: "json",
+                    data: {"ids": rows.join()},
+                    success: function (result) {
+                        $.operate.ajaxSuccess(result);
+                    }
+                });
             });
-        });
+        }
+    }
+    /**
+     * 批量设置巡检周期
+     */
+    function setCycle() {
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请选择站点");
+        } else {
+            $.modal.open("设置巡检周期", "/system/resource/toSetCycle?rows=" + rows,400,230);
+        }
     }
 </script>
 </body>

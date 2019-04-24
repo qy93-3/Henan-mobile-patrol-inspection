@@ -1,161 +1,173 @@
 <!DOCTYPE HTML>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <meta charset="utf-8">
+<link th:href="@{/css/select.css}" rel="stylesheet"/>
 <head th:include="include :: header"></head>
 <body class="gray-bg">
-    
-     <div class="container-div">
-		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="formId">
-					<div class="select-list">
-						<ul>
-							<li>
-								月计划名称：<input type="text" name="monthPlanName"/>
-							</li>
 
-							<li>
-								月计划类型：<input type="text" name="monthPlanType"/>
-							</li>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <table>
+                        <tr>
+                            <td>月计划年份：</td>
+                            <td><input type="text" name="monthPlanYear"/></td>
+                            <td>月计划状态：</td>
+                            <td>
+                                <input type="text" name="monthPlanStatus"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>驻点地市：</td>
+                            <td>
+                                <select name="resourceCity" id="city">
+                                    <option value=0>--请选择--</option>
+                                    <div th:each="city:${cities}">
+                                        <option th:value="${city.cityId}" th:text="${city.cityName}"></option>
+                                    </div>
+                                </select>
+                            </td>
+                            <td>驻点区县：</td>
+                            <td>
+                                <select name="resourceArea" id="area">
+                                    <option value=0>--请选择--</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>维护驻点</td>
+                            <td>
+                                <select id="stagantion" name="stagantion">
+                                    <option value=0>--请选择驻点--</option>
+                                </select>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <div align="center">
+                        <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                class="fa fa-refresh"></i>&nbsp;重置</a>
+                    </div>
+                </div>
+            </form>
+        </div>
 
-							<li>
-								月计划月份：<input type="text" name="monthPlanMonth"/>
-							</li>
+        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:planMonth:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:planMonth:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:planMonth:remove')}]];
+    var prefix = ctx + "system/planMonth";
 
-							<li>
-								月计划年份：<input type="text" name="monthPlanYear"/>
-							</li>
+    $(function () {
+        $.modal.open("设置驻点", "/system/planMonth/toSetStagnation", 450, 350);
+        var options = {
+            url: prefix + "/list",
+            updateUrl: prefix + "/edit/{id}",
+            exportUrl: prefix + "/export",
+            modalName: "巡检资源月计划",
+            search: false,
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'monthPlanId',
+                    title: '月计划编号',
+                    visible: false
+                },
+                {
+                    field: 'monthPlanName',
+                    title: '月计划名称',
+                    sortable: true
+                },
+                {
+                    field: 'month',
+                    title: '月计划月份'
+                },
+                {
+                    field: 'stagnationName',
+                    title: '代维驻点'
+                },
+                {
+                    field: 'monthPlanResources',
+                    title: '计划巡检资源数',
+                    sortable: true
+                },
+                {
+                    field: 'monthPlanStatus',
+                    title: '月计划状态',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        var month = row.monthPlanMonth;
+                        var year = row.monthPlanYear;
+                        var stagnation = row.monthPlanStagnation;
+                        actions.push('<a class="btn btn-info btn-xs " href="/system/planMonth/toPlanCalendar?year="+year+"&month="+month+"&stagnation="+stagnation ><i class="fa fa-book"></i>详情</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
 
-							<li>
-								月计划驻点编号：<input type="text" name="monthPlanStagnation"/>
-							</li>
+        $.table.init(options);
 
-							<li>
-								月计划计划资源数：<input type="text" name="monthPlanResources"/>
-							</li>
+        /**
+         * 选择地市下拉框获取相应的区县和驻点
+         */
+        $("#city").change(function () {
+            getChild("city","area","city","area",ctx+"system/city/getLocation");
+            getChild("city","stagnation","city","stagantion",ctx+"system/city/getStagantion")
+        })
+        $("#area").change(function () {
+            getChild("area","stagnation","area","stagantion",ctx+"system/city/getStagantion")
+        })
 
-							<li>
-								月计划状态：<input type="text" name="monthPlanStatus"/>
-							</li>
-
-							<li>
-								地域级别：<input type="text" name="areaLevel"/>
-							</li>
-
-							<li>
-								月计划已巡检资源数：<input type="text" name="monthRoutingResources"/>
-							</li>
-
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
-					</div>
-				</form>
-			</div>
-			
-	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:planMonth:add">
-					<i class="fa fa-plus"></i> 添加
-				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:planMonth:edit">
-					<i class="fa fa-edit"></i> 修改
-				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:planMonth:remove">
-					<i class="fa fa-remove"></i> 删除
-				</a>
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:planMonth:export">
-						<i class="fa fa-download"></i> 导出
-				 </a>
-			</div>
-			<div class="col-sm-12 select-table table-striped">
-				<table id="bootstrap-table" data-mobile-responsive="true"></table>
-			</div>
-		</div>
-	</div>
-    <div th:include="include :: footer"></div>
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:planMonth:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:planMonth:remove')}]];
-        var prefix = ctx + "system/planMonth";
-
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-				exportUrl: prefix + "/export",
-                modalName: "巡检资源月计划",
-				search: false,
-		        showExport: true,
-                columns: [{
-		            checkbox: true
-		        },
-				{
-					field : 'monthPlanId', 
-					title : '月计划编号',
-					visible: false
-				},
-				{
-					field : 'monthPlanName', 
-					title : '月计划名称',
-					sortable: true
-				},
-				{
-					field : 'monthPlanType', 
-					title : '月计划类型',
-					sortable: true
-				},
-				{
-					field : 'monthPlanMonth', 
-					title : '月计划月份',
-					sortable: true
-				},
-				{
-					field : 'monthPlanYear', 
-					title : '月计划年份',
-					sortable: true
-				},
-				{
-					field : 'monthPlanStagnation', 
-					title : '月计划驻点编号',
-					sortable: true
-				},
-				{
-					field : 'monthPlanResources', 
-					title : '月计划计划资源数',
-					sortable: true
-				},
-				{
-					field : 'monthPlanStatus', 
-					title : '月计划状态',
-					sortable: true
-				},
-				{
-					field : 'areaLevel', 
-					title : '地域级别',
-					sortable: true
-				},
-				{
-					field : 'monthRoutingResources', 
-					title : '月计划已巡检资源数',
-					sortable: true
-				},
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.monthPlanId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.monthPlanId + '\')"><i class="fa fa-remove"></i>删除</a>');
-						return actions.join('');
-		            }
-		        }]
-            };
-            $.table.init(options);
-        });
-    </script>
+        function getChild(level, getLevel, fatherNodeId, childNodeId, url) {
+            $("#" + childNodeId + " option:not(:first)").remove();
+            var address = $("#"+fatherNodeId).val();
+            var dataArr;
+            if (level == "area" && address == "0") {
+                address = $("#" + fatherNodeId).val();
+                level = "city"
+            }
+            dataArr = {
+                locationId: address,
+                areaLevel: level
+            }
+            $.post(url, dataArr, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var childId;
+                    var childName;
+                    if (getLevel == "area") {
+                        childId = data[i].areaId;
+                        childName = data[i].areaName;
+                    } else {
+                        childId = data[i].stagnationId;
+                        childName = data[i].stagnationPname;
+                    }
+                    $("#"+childNodeId).append("<option value='" + childId + "'>" + childName + "</option>");
+                }
+            })
+        }
+    });
+</script>
 </body>
 </html>

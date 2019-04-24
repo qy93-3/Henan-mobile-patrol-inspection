@@ -2,14 +2,26 @@ package com.aaa.project.common;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.aaa.project.system.area.domain.Area;
+import com.aaa.project.system.area.service.IAreaService;
+import com.aaa.project.system.city.service.ICityService;
+import com.aaa.project.system.stagnation.domain.Stagnation;
+import com.aaa.project.system.stagnation.service.IStagnationService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.aaa.common.utils.file.FileUtils;
 import com.aaa.framework.config.DouDouConfig;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 通用请求处理
@@ -71,4 +83,5 @@ public class CommonController
         }
         return filename;
     }
+
 }

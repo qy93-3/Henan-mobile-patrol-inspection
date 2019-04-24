@@ -12,10 +12,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="routingIdcard"    column="routing_idcard"    />
         <result property="stagnationId"    column="stagnation_id"    />
         <result property="routingPoint"    column="routing_point"    />
+        <result property="openId"    column="open_id"    />
     </resultMap>
 	
 	<sql id="selectRoutingPeopleVo">
-        select routing_id, routing_name, routing_username, routing_password, routing_idcard, stagnation_id, routing_point from tbl_routing_people
+        select routing_id, routing_name, routing_username, routing_password, routing_idcard, stagnation_id, routing_point, open_id from tbl_routing_people
     </sql>
 	
     <select id="selectRoutingPeopleList" parameterType="RoutingPeople" resultMap="RoutingPeopleResult">
@@ -28,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="routingIdcard != null  and routingIdcard != '' "> and routing_idcard = #{routingIdcard}</if>
              <if test="stagnationId != null "> and stagnation_id = #{stagnationId}</if>
              <if test="routingPoint != null "> and routing_point = #{routingPoint}</if>
+             <if test="openId != null  and openId != '' "> and open_id = #{openId}</if>
          </where>
     </select>
     
@@ -46,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="routingIdcard != null  and routingIdcard != ''  ">routing_idcard,</if>
 			<if test="stagnationId != null  ">stagnation_id,</if>
 			<if test="routingPoint != null  ">routing_point,</if>
+			<if test="openId != null  and openId != ''  ">open_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="routingId != null  ">#{routingId},</if>
@@ -55,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="routingIdcard != null  and routingIdcard != ''  ">#{routingIdcard},</if>
 			<if test="stagnationId != null  ">#{stagnationId},</if>
 			<if test="routingPoint != null  ">#{routingPoint},</if>
+			<if test="openId != null  and openId != ''  ">#{openId},</if>
          </trim>
     </insert>
 	 
@@ -67,6 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="routingIdcard != null  and routingIdcard != ''  ">routing_idcard = #{routingIdcard},</if>
             <if test="stagnationId != null  ">stagnation_id = #{stagnationId},</if>
             <if test="routingPoint != null  ">routing_point = #{routingPoint},</if>
+            <if test="openId != null  and openId != ''  ">open_id = #{openId},</if>
         </trim>
         where routing_id = #{routingId}
     </update>

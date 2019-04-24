@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSiteVo"/>
         <where>  
             <if test="siteId != null "> and site_id = #{siteId}</if>
-             <if test="siteName != null  and siteName != '' "> and site_name = #{siteName}</if>
+             <if test="siteName != null  and siteName != '' "> and site_name like "%"#{siteName}"%"</if>
              <if test="siteNameAbbreviate != null  and siteNameAbbreviate != '' "> and site_name_abbreviate = #{siteNameAbbreviate}</if>
              <if test="siteAreaId != null "> and site_area_id = #{siteAreaId}</if>
              <if test="siteLongitude != null  and siteLongitude != '' "> and site_longitude = #{siteLongitude}</if>
@@ -64,7 +64,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="resourceType != null  and resourceType != '' "> and resource_type = #{resourceType}</if>
          </where>
     </select>
-    
+
+    <select id="selectSiteListHasDis" parameterType="Site" resultMap="SiteResult">
+        <include refid="selectSiteVo"/>
+        <where>
+            <if test="siteId != null "> and site_id = #{siteId}</if>
+            <if test="siteAreaId != null "> and site_area_id = #{siteAreaId}</if>
+            <if test="siteName != null  and siteName != '' "> and site_name like "%"#{siteName}"%"</if>
+            <if test="siteCycle != null "> and site_cycle = #{siteCycle}</if>
+            <if test="siteStagantionCompany != null "> and site_stagantion_company = #{siteStagantionCompany}</if>
+            and site_stagantion_company is not null
+        </where>
+    </select>
+
     <select id="selectSiteById" parameterType="Long" resultMap="SiteResult">
         <include refid="selectSiteVo"/>
         where site_id = #{siteId}
@@ -154,6 +166,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="resourceType != null  and resourceType != ''  ">resource_type = #{resourceType},</if>
         </trim>
         where site_id = #{siteId}
+    </update>
+
+    <update id="cancelDistribute" parameterType="Site">
+        update tbl_site set site_stagantion_company = null where site_id = #{siteId}
     </update>
 
 	<delete id="deleteSiteById" parameterType="Long">

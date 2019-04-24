@@ -9,6 +9,7 @@ import com.aaa.project.system.city.domain.City;
 import com.aaa.project.system.city.service.ICityService;
 import com.aaa.project.system.resourcesCycleType.domain.ResourcesCycleType;
 import com.aaa.project.system.resourcesCycleType.service.IResourcesCycleTypeService;
+import com.aaa.project.system.site.domain.Site;
 import com.aaa.project.system.stagnation.domain.Stagnation;
 import com.aaa.project.system.stagnation.service.IStagnationService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -70,55 +71,14 @@ public class ResourceController extends BaseController {
     }
 
     /**
-     * 下拉列表获取市对应的县区
-     *
-     * @param locationId
-     * @return
-     */
-    @RequiresPermissions("system:resource:getLocation")
-    @PostMapping("/getLocation")
-    @ResponseBody
-    public List getLocation(@RequestParam("locationId") Integer locationId) {
-        Area area = new Area();
-        area.setFather(locationId);
-        List<Area> data = areaService.selectAreaList(area);
-        return data;
-    }
-
-    /**
-     * 下拉列表获取对应的驻点
-     *
-     * @param areaLevel
-     * @param locationId
-     * @return
-     */
-    @RequiresPermissions("system:resource:getStagantion")
-    @PostMapping("/getStagantion")
-    @ResponseBody
-    public List getStagantion(@RequestParam("areaLevel") String areaLevel, @RequestParam("locationId") Integer locationId) {
-        Stagnation stagnation = new Stagnation();
-        stagnation.setAddressId(locationId);
-        List<Stagnation> data = stagnationService.selectStagnationList(stagnation);
-        if ("city".equals(areaLevel)) {
-            Area area = new Area();
-            area.setFather(locationId);
-            List<Area> areas = areaService.selectAreaList(area);
-            for (Area area1 : areas) {
-                stagnation.setAddressId(area1.getAreaId());
-                data.addAll(stagnationService.selectStagnationList(stagnation));
-            }
-        }
-        return data;
-    }
-
-    /**
      * 查询资源点列表
      */
     @RequiresPermissions("system:resource:list")
     @PostMapping("/list/{flag}")
     @ResponseBody
     public TableDataInfo list(@PathVariable("flag") String flag, @RequestParam(required = false) Integer resourceCity,
-                              @RequestParam(required = false) Integer resourceArea, Resource resource, Map<String, Object> map) {
+                              @RequestParam(required = false) Integer resourceArea,Integer stagantion, Resource resource, Map<String, Object> map) {
+        startPage();
         List<Resource> list = null;
         //判断地区编号是市还是区县
         int step = 0;
@@ -131,6 +91,8 @@ public class ResourceController extends BaseController {
             }
         }
 
+        if (stagantion!=null&&stagantion!=0)
+            resource.setResourceStagantionCompany(stagantion);
         //判断所需的查询条件
         if ("{0}".equals(flag)) {
             startPage();
@@ -147,7 +109,13 @@ public class ResourceController extends BaseController {
             List<Area> areas = areaService.selectAreaList(area);
             for (Area area1 : areas) {
                 resource.setResourceAreaId(area1.getAreaId());
-                list.addAll(resourceService.selectResourceList(resource));
+                if ("{0}".equals(flag)) {
+                    startPage();
+                    list.addAll(resourceService.selectResourceListHasDis(resource));
+                } else {
+                    startPage();
+                    list.addAll(resourceService.selectResourceList(resource));
+                }
             }
         }
 
@@ -222,8 +190,6 @@ public class ResourceController extends BaseController {
             Area area = areaService.selectAreaById(resourceAreaId);
             mmap.put("resourceArea",area.getAreaName());
             mmap.put("resourceCity",cityService.selectCityById(area.getFather()).getCityName());
-            System.out.println(area.getAreaName());
-            System.out.println(cityService.selectCityById(area.getFather()).getCityName());
         }else{
             mmap.put("resourceCity",cityService.selectCityById(resourceAreaId).getCityName());
         }
@@ -269,7 +235,7 @@ public class ResourceController extends BaseController {
         return toAjax(i);
     }
     /**
-     * 分配资源点
+     * 释放资源点
      */
     @RequiresPermissions("system:resource:cancelDistribute")
     @Log(title = "资源点", businessType = BusinessType.DELETE)
@@ -284,4 +250,21 @@ public class ResourceController extends BaseController {
         return toAjax(i);
     }
 
+    @GetMapping("/toSetCycle")
+    public String toSetCycle(@RequestParam Object rows,Map<String,Object> map){
+        map.put("rows",rows);
+        return prefix + "/setCycle";
+    }
+    @RequiresPermissions("system:resource:setCycle")
+    @PostMapping("/setCycle")
+    @ResponseBody
+    public AjaxResult setCycle(int cycle,String ids){
+        int i = 0;
+        for (String id : ids.split(",")) {
+            Resource resource= resourceService.selectResourceById(Long.valueOf(id).longValue());
+            resource.setResourceCycle(cycle);
+            i += resourceService.updateResource(resource);
+        }
+        return toAjax(i);
+    }
 }

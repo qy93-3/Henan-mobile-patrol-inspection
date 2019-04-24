@@ -1,287 +1,393 @@
 <!DOCTYPE HTML>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <meta charset="utf-8">
+<link th:href="@{/css/select.css}" rel="stylesheet"/>
 <head th:include="include :: header"></head>
 <body class="gray-bg">
-    
-     <div class="container-div">
-		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="formId">
-					<div class="select-list">
-						<ul>
-							<li>
-								站点名称：<input type="text" name="siteName"/>
-							</li>
 
-							<li>
-								站点名称缩写：<input type="text" name="siteNameAbbreviate"/>
-							</li>
+<div class="container-div">
+    <div class="row">
+        <div class="btn-group" role="group">
+            <a class="btn" style="background-color: #CBDCED;color: #0033AB;border: 1px solid #0033AB"
+               href="/system/site/0">站点分配
+            </a>
+            <a class="btn" style="background-color: #CBDCED;color: #0033AB;border: 1px solid #0033AB"
+               href="/system/site/1">驻点资源
+            </a>
+        </div>
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <table>
+                        <tr>
+                            <td>站点名称：</td>
+                            <td><input type="text" name="siteName"/></td>
+                            <td>站点ID：</td>
+                            <td>
+                                <input type="text" name="siteId"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>地市：</td>
+                            <td>
+                                <select name="siteCity" id="city">
+                                    <option value=0>--请选择--</option>
+                                    <div th:each="city:${cities}">
+                                        <option th:value="${city.cityId}" th:text="${city.cityName}"></option>
+                                    </div>
+                                </select>
+                            </td>
+                            <td>区县：</td>
+                            <td>
+                                <select name="siteArea" id="area">
+                                    <option value=0>--请选择--</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>巡检周期：</td>
+                            <td>
+                                <input type="radio" name="siteCycle" value="1"/>月
+                                <input type="radio" name="siteCycle" value="2"/>季
+                                <input type="radio" name="siteCycle" value="3"/>半年
+                                <input type="radio" name="siteCycle" value="4"/>年
+                            </td>
+                            <td>维护驻点</td>
+                            <td><select id="stagantion" name="stagantion">
+                                <option value=0>--请选择驻点--</option>
+                            </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <div align="center">
+                        <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                class="fa fa-refresh"></i>&nbsp;重置</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="stagnationSite" style="display: none">
+            <button style="background-color: #E9F4FF;color: #2A70A7;" onclick="cancelDistribute()">释放关系</button>
+            <button onclick="setCycle()">设置巡检周期</button>
+        </div>
+        <div id="distributeSite">
+            <label style="color: red;">分配到：</label>
+            <select id="city2">
+                <option value=0>--请选择城市--</option>
+                <div th:each="city:${cities}">
+                    <option th:value="${city.cityId}" th:text="${city.cityName}"></option>
+                </div>
+            </select>
+            <select id="area2">
+                <option value=0>--请选择区县--</option>
+            </select>
+            <select id="stagantion2">
+                <option value=0>--请选择驻点--</option>
+            </select>
+            <button style="background-color: #E9F4FF;color: #2A70A7;" onclick="distribute()">分配资源</button>
+            <button onclick="setCycle()">设置巡检周期</button>
+        </div>
 
-							<li>
-								站点地区编号：<input type="text" name="siteAreaId"/>
-							</li>
+        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:site:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:site:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:site:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:site:remove')}]];
+    var prefix = ctx + "system/site";
 
-							<li>
-								站点经度：<input type="text" name="siteLongitude"/>
-							</li>
+    $(function () {
+        if ([[${flag}]] == 0) {
+            $("#distributeSite").show();
+            $("#stagnationSite").hide();
+        } else {
+            $("#stagnationSite").show();
+            $("#distributeSite").hide();
+        }
+        console.log([[${flag}]])
+        var options = {
+            url: prefix + "/list/{" + [[${flag}]] + "}",
+            updateUrl: prefix + "/edit/{id}",
+            exportUrl: prefix + "/export",
+            modalName: "站点",
+            search: false,
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'siteId',
+                    title: '站点编号',
+                    sortable: true,
+                    visible: true
+                },
+                {
+                    field: 'siteName',
+                    title: '站点名称',
+                    sortable: true,
+                    visible: true
+                },
+                {
+                    field: 'siteNameAbbreviate',
+                    title: '站点名称缩写',
+                    sortable: true,
+                    visible: false
+                },
+                {
+                    field: 'areaName',
+                    title: '地区',
+                    sortable: true
+                },
+                {
+                    field: 'siteLongitude',
+                    title: '站点经度',
+                    sortable: true
+                },
+                {
+                    field: 'siteLatitude',
+                    title: '站点维度',
+                    sortable: true
+                },
+                {
+                    field: 'siteInnetDate',
+                    title: '站点入网时间',
+                    sortable: true
+                },
+                {
+                    field: 'siteType',
+                    title: '站点类型',
+                    sortable: true
+                },
+                {
+                    field: 'siteServiceLevel',
+                    title: '站点传输业务级别',
+                    sortable: true
+                },
+                {
+                    field: 'siteStatus',
+                    title: '站点生命周期状态',
+                    sortable: true
+                },
+                {
+                    field: 'siteAddress',
+                    title: '站点地址',
+                    sortable: true
+                },
+                {
+                    field: 'siteFloorCount',
+                    title: '站点总层数',
+                    sortable: true,
+                    visible: false
+                },
+                {
+                    field: 'sitePropertyDepartment',
+                    title: '站点产权单位',
+                    sortable: true,
+                    visible: false
+                },
+                {
+                    field: 'siteProperty',
+                    title: '站点产权性质',
+                    sortable: true,
+                    visible: false
+                },
+                {
+                    field: 'siteUserDepartment',
+                    title: '站点使用单位',
+                    sortable: true,
+                    visible: false
+                },
+                {
+                    field: 'siteContacts',
+                    title: '站点物业联系人',
+                    sortable: true,
+                    visible: false
+                },
+                {
+                    field: 'siteContactsMobile',
+                    title: '站点物业联系电话',
+                    sortable: true,
+                    visible: false
+                },
+                {
+                    field: 'siteOverlayType',
+                    title: '站点覆盖类型',
+                    sortable: true,
+                    visible: false
+                },
+                {
+                    field: 'siteDeleted',
+                    title: '站点删除状态',
+                    sortable: true,
+                    visible: false
+                },
+                {
+                    field: 'sitePlanDay',
+                    title: '站点计划日',
+                    sortable: true,
+                    visible: false
+                },
+                {
+                    field: 'cycleName',
+                    title: '站点巡检周期'
+                },
+                {
+                    field: 'siteLastDate',
+                    title: '上次巡检日期',
+                    sortable: true
+                },
+                {
+                    field: 'stagantionCompanyName',
+                    title: '维护驻点',
+                    sortable: true
+                },
+                {
+                    field: 'resourceType',
+                    title: '资源类型',
+                    sortable: true,
+                    visible: false
+                },
+                {
+                    field: 'distributeStatus',
+                    title: '分配状态',
+                    visible: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.siteId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
 
-							<li>
-								站点维度：<input type="text" name="siteLatitude"/>
-							</li>
+        /**
+         * 选择地市下拉框获取相应的区县和驻点
+         */
+        $("#city").change(function () {
+            getChild("city","area","city","area",ctx+"system/city/getLocation");
+            getChild("city","stagnation","city","stagantion",ctx+"system/city/getStagantion")
+        })
+        $("#city2").change(function () {
+            getChild("city","area","city2","area2",ctx+"system/city/getLocation");
+            getChild("city","stagnation","city2","stagantion2",ctx+"system/city/getStagantion")
+        })
+        $("#area").change(function () {
+            getChild("area","stagnation","area","stagantion",ctx+"system/city/getStagantion")
+        })
+        $("#area2").change(function () {
+            getChild("area","stagnation","area2","stagantion2",ctx+"system/city/getStagantion")
+        })
 
-							<li>
-								站点类型：<input type="text" name="siteType"/>
-							</li>
+        function getChild(level, getLevel, fatherNodeId, childNodeId, url) {
+            $("#" + childNodeId + " option:not(:first)").remove();
+            var address = $("#"+fatherNodeId).val();
+            var dataArr;
+            if (level == "area" && address == "0") {
+                address = $("#" + fatherNodeId).val();
+                level = "city"
+            }
+            dataArr = {
+                locationId: address,
+                areaLevel: level
+            }
+            $.post(url, dataArr, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var childId;
+                    var childName;
+                    if (getLevel == "area") {
+                        childId = data[i].areaId;
+                        childName = data[i].areaName;
+                    } else {
+                        childId = data[i].stagnationId;
+                        childName = data[i].stagnationPname;
+                    }
+                    $("#"+childNodeId).append("<option value='" + childId + "'>" + childName + "</option>");
+                }
+            })
+        }
+    });
 
-							<li>
-								站点地址：<input type="text" name="siteAddress"/>
-							</li>
+    /**
+     * 分配站点
+     */
+    function distribute() {
+        var stagantion = $("#stagantion2").val();
+        if (stagantion == 0) {
+            $.modal.alertWarning("请选择驻点");
+        } else {
+            var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+            if (rows.length == 0) {
+                $.modal.alertWarning("请选择站点");
+            } else {
+                $.modal.confirm("确认要分配选中的" + rows.length + "个站点吗?", function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                    $.ajax({
+                        url: ctx + "system/site/distribute",
+                        type: "post",
+                        dataType: "json",
+                        data: {"ids": rows.join(), "stagantion": stagantion},
+                        success: function (result) {
+                            $.operate.ajaxSuccess(result);
+                        }
+                    });
+                });
+            }
+        }
+    }
 
-							<li>
-								站点传输业务级别：<input type="text" name="siteServiceLevel"/>
-							</li>
+    /**
+     * 释放站点
+     */
+    function cancelDistribute() {
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请选择站点");
+        } else {
+            $.modal.confirm("确认要释放选中的" + rows.length + "个站点吗?", function () {
+                $.modal.loading("正在处理中，请稍后...");
+                $.ajax({
+                    url: ctx + "system/site/cancelDistribute",
+                    type: "post",
+                    dataType: "json",
+                    data: {"ids": rows.join()},
+                    success: function (result) {
+                        $.operate.ajaxSuccess(result);
+                    }
+                });
+            });
+        }
+    }
 
-							<li>
-								站点生命周期状态：<input type="text" name="siteStatus"/>
-							</li>
+    /**
+     * 批量设置巡检周期
+     */
+    function setCycle() {
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请选择站点");
+        } else {
+            $.modal.open("设置巡检周期", "/system/site/toSetCycle?rows=" + rows, 400, 230);
+        }
+    }
 
-							<li>
-								站点入网时间：<input type="text" name="siteInnetDate"/>
-							</li>
-
-							<li>
-								站点总层数：<input type="text" name="siteFloorCount"/>
-							</li>
-
-							<li>
-								站点产权单位：<input type="text" name="sitePropertyDepartment"/>
-							</li>
-
-							<li>
-								站点产权性质：<input type="text" name="siteProperty"/>
-							</li>
-
-							<li>
-								站点使用单位：<input type="text" name="siteUserDepartment"/>
-							</li>
-
-							<li>
-								站点物业联系人：<input type="text" name="siteContacts"/>
-							</li>
-
-							<li>
-								站点物业联系电话：<input type="text" name="siteContactsMobile"/>
-							</li>
-
-							<li>
-								站点覆盖类型：<input type="text" name="siteOverlayType"/>
-							</li>
-
-							<li>
-								站点删除状态：<input type="text" name="siteDeleted"/>
-							</li>
-
-							<li>
-								站点计划日：<input type="text" name="sitePlanDay"/>
-							</li>
-
-							<li>
-								站点巡检周期：<input type="text" name="siteCycle"/>
-							</li>
-
-							<li>
-								站点代维公司：<input type="text" name="siteStagantionCompany"/>
-							</li>
-
-							<li>
-								上次巡检日期：<input type="text" name="siteLastDate"/>
-							</li>
-
-							<li>
-								资源类型：<input type="text" name="resourceType"/>
-							</li>
-
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
-					</div>
-				</form>
-			</div>
-			
-	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:site:add">
-					<i class="fa fa-plus"></i> 添加
-				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:site:edit">
-					<i class="fa fa-edit"></i> 修改
-				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:site:remove">
-					<i class="fa fa-remove"></i> 删除
-				</a>
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:site:export">
-						<i class="fa fa-download"></i> 导出
-				 </a>
-			</div>
-			<div class="col-sm-12 select-table table-striped">
-				<table id="bootstrap-table" data-mobile-responsive="true"></table>
-			</div>
-		</div>
-	</div>
-    <div th:include="include :: footer"></div>
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:site:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:site:remove')}]];
-        var prefix = ctx + "system/site";
-
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-				exportUrl: prefix + "/export",
-                modalName: "站点",
-				search: false,
-		        showExport: true,
-                columns: [{
-		            checkbox: true
-		        },
-				{
-					field : 'siteId', 
-					title : '站点编号',
-					visible: false
-				},
-				{
-					field : 'siteName', 
-					title : '站点名称',
-					sortable: true
-				},
-				{
-					field : 'siteNameAbbreviate', 
-					title : '站点名称缩写',
-					sortable: true
-				},
-				{
-					field : 'siteAreaId', 
-					title : '站点地区编号',
-					sortable: true
-				},
-				{
-					field : 'siteLongitude', 
-					title : '站点经度',
-					sortable: true
-				},
-				{
-					field : 'siteLatitude', 
-					title : '站点维度',
-					sortable: true
-				},
-				{
-					field : 'siteType', 
-					title : '站点类型',
-					sortable: true
-				},
-				{
-					field : 'siteAddress', 
-					title : '站点地址',
-					sortable: true
-				},
-				{
-					field : 'siteServiceLevel', 
-					title : '站点传输业务级别',
-					sortable: true
-				},
-				{
-					field : 'siteStatus', 
-					title : '站点生命周期状态',
-					sortable: true
-				},
-				{
-					field : 'siteInnetDate', 
-					title : '站点入网时间',
-					sortable: true
-				},
-				{
-					field : 'siteFloorCount', 
-					title : '站点总层数',
-					sortable: true
-				},
-				{
-					field : 'sitePropertyDepartment', 
-					title : '站点产权单位',
-					sortable: true
-				},
-				{
-					field : 'siteProperty', 
-					title : '站点产权性质',
-					sortable: true
-				},
-				{
-					field : 'siteUserDepartment', 
-					title : '站点使用单位',
-					sortable: true
-				},
-				{
-					field : 'siteContacts', 
-					title : '站点物业联系人',
-					sortable: true
-				},
-				{
-					field : 'siteContactsMobile', 
-					title : '站点物业联系电话',
-					sortable: true
-				},
-				{
-					field : 'siteOverlayType', 
-					title : '站点覆盖类型',
-					sortable: true
-				},
-				{
-					field : 'siteDeleted', 
-					title : '站点删除状态',
-					sortable: true
-				},
-				{
-					field : 'sitePlanDay', 
-					title : '站点计划日',
-					sortable: true
-				},
-				{
-					field : 'siteCycle', 
-					title : '站点巡检周期',
-					sortable: true
-				},
-				{
-					field : 'siteStagantionCompany', 
-					title : '站点代维公司',
-					sortable: true
-				},
-				{
-					field : 'siteLastDate', 
-					title : '上次巡检日期',
-					sortable: true
-				},
-				{
-					field : 'resourceType', 
-					title : '资源类型',
-					sortable: true
-				},
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.siteId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.siteId + '\')"><i class="fa fa-remove"></i>删除</a>');
-						return actions.join('');
-		            }
-		        }]
-            };
-            $.table.init(options);
-        });
-    </script>
+</script>
 </body>
 </html>

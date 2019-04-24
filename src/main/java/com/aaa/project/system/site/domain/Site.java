@@ -9,7 +9,7 @@ import java.util.Date;
  * 站点表 tbl_site
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-23
  */
 public class Site extends BaseEntity
 {
@@ -64,7 +64,51 @@ public class Site extends BaseEntity
 	/** 资源类型 */
 	private String resourceType;
 
-	public void setSiteId(Long siteId) 
+	/** 分配状态 */
+	private String distributeStatus;
+
+	/** 驻点名称 */
+	private String stagantionCompanyName;
+
+	/** 地区 */
+	private String areaName;
+
+	/** 周期名称 */
+	private String cycleName;
+
+	public String getDistributeStatus() {
+		return distributeStatus;
+	}
+
+	public void setDistributeStatus(String distributeStatus) {
+		this.distributeStatus = distributeStatus;
+	}
+
+	public String getStagantionCompanyName() {
+		return stagantionCompanyName;
+	}
+
+	public void setStagantionCompanyName(String stagantionCompanyName) {
+		this.stagantionCompanyName = stagantionCompanyName;
+	}
+
+	public String getAreaName() {
+		return areaName;
+	}
+
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
+	}
+
+	public String getCycleName() {
+		return cycleName;
+	}
+
+	public void setCycleName(String cycleName) {
+		this.cycleName = cycleName;
+	}
+
+	public void setSiteId(Long siteId)
 	{
 		this.siteId = siteId;
 	}

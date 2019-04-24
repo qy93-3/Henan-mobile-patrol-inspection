@@ -35,6 +35,11 @@ public class PlanMonth extends BaseEntity
 	/** 月计划已巡检资源数 */
 	private Integer monthRoutingResources;
 
+	/** 代维驻点 */
+	private String stagnationName;
+
+	private String month;
+
 	public void setMonthPlanId(Integer monthPlanId) 
 	{
 		this.monthPlanId = monthPlanId;

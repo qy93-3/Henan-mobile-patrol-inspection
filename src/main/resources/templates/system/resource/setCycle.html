@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body style="text-align: center">
+<div class="form-group" style="margin-top: 50px">
+    <form class="form-horizontal m" id="form-site-setCycle">
+        <input th:value="${rows}" type="hidden" name="ids">
+        <label class="label">请选择巡检周期</label><br>
+        <select class="form-control" name="cycle">
+            <option value="1">月</option>
+            <option value="2">季</option>
+            <option value="3">半年</option>
+            <option value="4">年</option>
+        </select></form>
+</div>
+</body>
+<div th:include="include :: footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "system/resource"
+    $("#form-site-add").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        }
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/setCycle", $('#form-site-setCycle').serialize());
+        }
+    }
+</script>
+</html>
