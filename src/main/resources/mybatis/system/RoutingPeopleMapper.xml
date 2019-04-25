@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectRoutingPeopleLogin"  resultMap="RoutingPeopleResult">
         <include refid="selectRoutingPeopleVo"/>
-        where routing_username = #{routingUsername} and  routing_password = #{routingPassword} and open_id = #{openId}
+        where routing_username = #{routingUsername} and  routing_password = #{routingPassword}
     </select>
 
 
@@ -80,7 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="routingPoint != null  ">routing_point = #{routingPoint},</if>
             <if test="openId != null  and openId != ''  ">open_id = #{openId},</if>
         </trim>
-        where routing_id = #{routingId}
+          where routing_id = #{routingId}
     </update>
 
 	<delete id="deleteRoutingPeopleById" parameterType="Integer">
