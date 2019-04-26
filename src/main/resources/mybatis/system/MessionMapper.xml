@@ -1,79 +1,82 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aaa.project.system.mession.mapper.MessionMapper">
-    
+
     <resultMap type="Mession" id="MessionResult">
-        <result property="messionId"    column="mession_id"    />
-        <result property="messionRoutingId"    column="mession_routing_id"    />
-        <result property="messionDayId"    column="mession_day_id"    />
-        <result property="messionSiteId"    column="mession_site_id"    />
-        <result property="messionResourceId"    column="mession_resource_id"    />
-        <result property="messionDate"    column="mession_date"    />
-        <result property="messionStatus"    column="mession_status"    />
-        <result property="messionCheckStatus"    column="mession_check_status"    />
-        <result property="messionStagnationId"    column="mession_stagnation_id"    />
-        <result property="messionLongitude"    column="mession_longitude"    />
-        <result property="messionLatitude"    column="mession_latitude"    />
+        <result property="messionId" column="mession_id"/>
+        <result property="messionRoutingId" column="mession_routing_id"/>
+        <result property="messionDayId" column="mession_day_id"/>
+        <result property="messionSiteId" column="mession_site_id"/>
+        <result property="messionResourceId" column="mession_resource_id"/>
+        <result property="messionDate" column="mession_date"/>
+        <result property="messionStatus" column="mession_status"/>
+        <result property="messionCheckStatus" column="mession_check_status"/>
+        <result property="messionStagnationId" column="mession_stagnation_id"/>
+        <result property="messionLongitude" column="mession_longitude"/>
+        <result property="messionLatitude" column="mession_latitude"/>
     </resultMap>
-	
-	<sql id="selectMessionVo">
+
+    <sql id="selectMessionVo">
         select mession_id, mession_routing_id, mession_day_id, mession_site_id, mession_resource_id, mession_date, mession_status, mession_check_status, mession_stagnation_id, mession_longitude, mession_latitude from tbl_mession
     </sql>
-	
+
     <select id="selectMessionList" parameterType="Mession" resultMap="MessionResult">
         <include refid="selectMessionVo"/>
-        <where>  
-            <if test="messionId != null "> and mession_id = #{messionId}</if>
-             <if test="messionRoutingId != null "> and mession_routing_id = #{messionRoutingId}</if>
-             <if test="messionDayId != null "> and mession_day_id = #{messionDayId}</if>
-             <if test="messionSiteId != null "> and mession_site_id = #{messionSiteId}</if>
-             <if test="messionResourceId != null "> and mession_resource_id = #{messionResourceId}</if>
-             <if test="messionDate != null "> and mession_date = #{messionDate}</if>
-             <if test="messionStatus != null "> and mession_status = #{messionStatus}</if>
-             <if test="messionCheckStatus != null "> and mession_check_status = #{messionCheckStatus}</if>
-             <if test="messionStagnationId != null "> and mession_stagnation_id = #{messionStagnationId}</if>
-             <if test="messionLongitude != null  and messionLongitude != '' "> and mession_longitude = #{messionLongitude}</if>
-             <if test="messionLatitude != null  and messionLatitude != '' "> and mession_latitude = #{messionLatitude}</if>
-         </where>
+        <where>
+            <if test="messionId != null ">and mession_id = #{messionId}</if>
+            <if test="messionRoutingId != null ">and mession_routing_id = #{messionRoutingId}</if>
+            <if test="messionDayId != null ">and mession_day_id = #{messionDayId}</if>
+            <if test="messionSiteId != null ">and mession_site_id = #{messionSiteId}</if>
+            <if test="messionResourceId != null ">and mession_resource_id = #{messionResourceId}</if>
+            <if test="messionDate != null ">and mession_date = #{messionDate}</if>
+            <if test="messionStatus != null ">and mession_status = #{messionStatus}</if>
+            <if test="messionCheckStatus != null ">and mession_check_status = #{messionCheckStatus}</if>
+            <if test="messionStagnationId != null ">and mession_stagnation_id = #{messionStagnationId}</if>
+            <if test="messionLongitude != null  and messionLongitude != '' ">and mession_longitude =
+                #{messionLongitude}
+            </if>
+            <if test="messionLatitude != null  and messionLatitude != '' ">and mession_latitude = #{messionLatitude}
+            </if>
+        </where>
     </select>
-    
+
     <select id="selectMessionById" parameterType="Integer" resultMap="MessionResult">
         <include refid="selectMessionVo"/>
         where mession_id = #{messionId}
     </select>
-        
+
     <insert id="insertMession" parameterType="Mession">
         insert into tbl_mession
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="messionId != null  ">mession_id,</if>
-			<if test="messionRoutingId != null  ">mession_routing_id,</if>
-			<if test="messionDayId != null  ">mession_day_id,</if>
-			<if test="messionSiteId != null  ">mession_site_id,</if>
-			<if test="messionResourceId != null  ">mession_resource_id,</if>
-			<if test="messionDate != null  ">mession_date,</if>
-			<if test="messionStatus != null  ">mession_status,</if>
-			<if test="messionCheckStatus != null  ">mession_check_status,</if>
-			<if test="messionStagnationId != null  ">mession_stagnation_id,</if>
-			<if test="messionLongitude != null  and messionLongitude != ''  ">mession_longitude,</if>
-			<if test="messionLatitude != null  and messionLatitude != ''  ">mession_latitude,</if>
-         </trim>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="messionId != null  ">mession_id,</if>
+            <if test="messionRoutingId != null  ">mession_routing_id,</if>
+            <if test="messionDayId != null  ">mession_day_id,</if>
+            <if test="messionSiteId != null  ">mession_site_id,</if>
+            <if test="messionResourceId != null  ">mession_resource_id,</if>
+            <if test="messionDate != null  ">mession_date,</if>
+            <if test="messionStatus != null  ">mession_status,</if>
+            <if test="messionCheckStatus != null  ">mession_check_status,</if>
+            <if test="messionStagnationId != null  ">mession_stagnation_id,</if>
+            <if test="messionLongitude != null  and messionLongitude != ''  ">mession_longitude,</if>
+            <if test="messionLatitude != null  and messionLatitude != ''  ">mession_latitude,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="messionId != null  ">#{messionId},</if>
-			<if test="messionRoutingId != null  ">#{messionRoutingId},</if>
-			<if test="messionDayId != null  ">#{messionDayId},</if>
-			<if test="messionSiteId != null  ">#{messionSiteId},</if>
-			<if test="messionResourceId != null  ">#{messionResourceId},</if>
-			<if test="messionDate != null  ">#{messionDate},</if>
-			<if test="messionStatus != null  ">#{messionStatus},</if>
-			<if test="messionCheckStatus != null  ">#{messionCheckStatus},</if>
-			<if test="messionStagnationId != null  ">#{messionStagnationId},</if>
-			<if test="messionLongitude != null  and messionLongitude != ''  ">#{messionLongitude},</if>
-			<if test="messionLatitude != null  and messionLatitude != ''  ">#{messionLatitude},</if>
-         </trim>
+            <if test="messionId != null  ">#{messionId},</if>
+            <if test="messionRoutingId != null  ">#{messionRoutingId},</if>
+            <if test="messionDayId != null  ">#{messionDayId},</if>
+            <if test="messionSiteId != null  ">#{messionSiteId},</if>
+            <if test="messionResourceId != null  ">#{messionResourceId},</if>
+            <if test="messionDate != null  ">#{messionDate},</if>
+            <if test="messionStatus != null  ">#{messionStatus},</if>
+            <if test="messionCheckStatus != null  ">#{messionCheckStatus},</if>
+            <if test="messionStagnationId != null  ">#{messionStagnationId},</if>
+            <if test="messionLongitude != null  and messionLongitude != ''  ">#{messionLongitude},</if>
+            <if test="messionLatitude != null  and messionLatitude != ''  ">#{messionLatitude},</if>
+        </trim>
     </insert>
-	 
+
     <update id="updateMession" parameterType="Mession">
         update tbl_mession
         <trim prefix="SET" suffixOverrides=",">
@@ -85,21 +88,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="messionStatus != null  ">mession_status = #{messionStatus},</if>
             <if test="messionCheckStatus != null  ">mession_check_status = #{messionCheckStatus},</if>
             <if test="messionStagnationId != null  ">mession_stagnation_id = #{messionStagnationId},</if>
-            <if test="messionLongitude != null  and messionLongitude != ''  ">mession_longitude = #{messionLongitude},</if>
+            <if test="messionLongitude != null  and messionLongitude != ''  ">mession_longitude = #{messionLongitude},
+            </if>
             <if test="messionLatitude != null  and messionLatitude != ''  ">mession_latitude = #{messionLatitude},</if>
         </trim>
         where mession_id = #{messionId}
     </update>
 
-	<delete id="deleteMessionById" parameterType="Integer">
+    <delete id="deleteMessionById" parameterType="Integer">
         delete from tbl_mession where mession_id = #{messionId}
     </delete>
-	
+
     <delete id="deleteMessionByIds" parameterType="String">
-        delete from tbl_mession where mession_id in 
+        delete from tbl_mession where mession_id in
         <foreach item="messionId" collection="array" open="(" separator="," close=")">
             #{messionId}
         </foreach>
     </delete>
-    
+
 </mapper>

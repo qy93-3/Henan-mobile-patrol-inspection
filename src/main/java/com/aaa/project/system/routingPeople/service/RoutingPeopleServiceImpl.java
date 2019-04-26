@@ -48,8 +48,13 @@ public class RoutingPeopleServiceImpl implements IRoutingPeopleService
 	{
 		return routingPeopleMapper.selectRoutingPeopleLogin(routingPeople);
 	}
-	
-    /**
+
+	@Override
+	public RoutingPeople selectRoutingPeople(RoutingPeople routingPeople) {
+		return routingPeopleMapper.selectRoutingPeople(routingPeople);
+	}
+
+	/**
      * 新增巡检人员
      * 
      * @param routingPeople 巡检人员信息

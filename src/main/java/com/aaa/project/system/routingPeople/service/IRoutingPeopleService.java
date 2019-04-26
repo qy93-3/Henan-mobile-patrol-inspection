@@ -19,6 +19,7 @@ public interface IRoutingPeopleService
      */
 	public RoutingPeople selectRoutingPeopleById(Integer routingId);
 	public RoutingPeople selectRoutingPeopleLogin(RoutingPeople routingPeople);
+	public RoutingPeople selectRoutingPeople(RoutingPeople routingPeople);
 	/**
      * 查询巡检人员列表
      * 
