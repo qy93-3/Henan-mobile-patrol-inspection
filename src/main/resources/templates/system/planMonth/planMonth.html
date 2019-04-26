@@ -38,16 +38,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>驻点地市：</td>
-                            <td>
-
-                            </td>
-                            <td>驻点区县：</td>
-                            <td>
-
-                            </td>
-                        </tr>
-                        <tr>
                             <td>维护驻点</td>
                             <td colspan="3"><select name="resourceCity" id="city">
                                 <option value=0>--请选择--</option>
@@ -88,6 +78,7 @@
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('system:planMonth:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:planMonth:remove')}]];
+    var showDetailFlag = [[${@permission.hasPermi('system:planMonth:showDetail')}]];
     var showDetailFlag = [[${@permission.hasPermi('system:planMonth:showDetail')}]];
     var useLastPlan = [[${@permission.hasPermi('system:planMonth:useLastPlan')}]];
     var from = [[${from}]];

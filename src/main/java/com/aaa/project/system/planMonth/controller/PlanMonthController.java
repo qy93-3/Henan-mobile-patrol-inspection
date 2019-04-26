@@ -103,14 +103,13 @@ public class PlanMonthController extends BaseController {
         List<PlanMonthStatus> statusList = planMonthStatusService.selectPlanMonthStatusList(null);
         map.put("statusList", statusList);
         map.put("cities", cities);
-        map.put("from","month");
+        map.put("from", "month");
         return prefix + "/planMonth";
     }
 
     /**
      * 查询巡检资源月计划列表
      */
-    @RequiresPermissions("system:planMonth:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(@RequestParam(required = false) Integer planYear, @RequestParam(required = false) Integer planStatus, @RequestParam(required = false) Integer stagantion, PlanMonth planMonth) {
@@ -179,7 +178,7 @@ public class PlanMonthController extends BaseController {
      */
     @GetMapping("/toPlanCalendar")
     @RequiresPermissions("system:planMonth:showDetail")
-    public String toPlanCalendar(@RequestParam(name = "id") Integer id,@RequestParam(name = "from") String from, Map<String, Object> map) {
+    public String toPlanCalendar(@RequestParam(name = "id") Integer id, @RequestParam(name = "from") String from, Map<String, Object> map) {
         PlanMonth planMonth = planMonthService.selectPlanMonthById(id);
         PlanCalendar planCalendar = new PlanCalendar();
         planCalendar.setCalendarYear(planMonth.getMonthPlanYear());
@@ -205,15 +204,17 @@ public class PlanMonthController extends BaseController {
         }
         if (dateStr.length() != 0)
             dateStr = dateStr.substring(0, dateStr.length() - 1);
-        String sta="";
-        if (planMonth.getMonthPlanStatus()==null)
-            sta = "not";
-        else if(planMonth.getMonthPlanStatus()==1)
-            sta = "ing";
-        else if(planMonth.getMonthPlanStatus()==2)
-            sta = "wait";
-        else
-            sta = "checked";
+        String sta = "";
+        if (planMonth.getMonthPlanStatus() != null) {
+            if (planMonth.getMonthPlanStatus() == 1)
+                sta = "ing";
+            else if (planMonth.getMonthPlanStatus() == 2)
+                sta = "wait";
+            else if(planMonth.getMonthPlanStatus() == 3)
+                sta = "checked";
+            else if(planMonth.getMonthPlanStatus() == 0)
+                sta = "not";
+        }
         map.put("planMonth", planMonth);
         map.put("dateStr", dateStr);
         map.put("from", from);
@@ -301,7 +302,7 @@ public class PlanMonthController extends BaseController {
      * @return
      */
     @GetMapping("/toDayDetile")
-    public String toDayDetile(@RequestParam(required = false) String date,@RequestParam(required = false) String from,@RequestParam(required = false) String sta, @RequestParam(required = false) Integer planMonthId, Map<String, Object> map) {
+    public String toDayDetile(@RequestParam(required = false) String date, @RequestParam(required = false) String from, @RequestParam(required = false) String sta, @RequestParam(required = false) Integer planMonthId, Map<String, Object> map) {
         map.put("date", date);
         map.put("from", from);
         map.put("sta", sta);
@@ -419,6 +420,7 @@ public class PlanMonthController extends BaseController {
      * @return
      */
     @PostMapping("/setResources")
+    @RequiresPermissions("system:resource:distribute")
     @ResponseBody
     @Transactional
     public AjaxResult setSite(@RequestParam(required = false) String ids, @RequestParam(required = false) String type, @RequestParam(required = false) String dateStr, @RequestParam(required = false) Integer planMonthId) {
