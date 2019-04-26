@@ -1,5 +1,6 @@
 package com.aaa.project.system.mession.domain;
 
+import com.aaa.project.system.messionStatus.domain.MessionStatus;
 import com.aaa.project.system.resource.domain.Resource;
 import com.aaa.project.system.site.domain.Site;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -43,6 +44,8 @@ public class Mession extends BaseEntity
 	private Site site;
 	/**资源*/
 	private Resource resource;
+
+	private MessionStatus tblMessionStatus;
 
 	public Site getSite() {
 		return site;
@@ -175,4 +178,16 @@ public class Mession extends BaseEntity
             .append("messionLatitude", getMessionLatitude())
             .toString();
     }
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public MessionStatus getTblMessionStatus() {
+		return tblMessionStatus;
+	}
+
+	public void setTblMessionStatus(MessionStatus tblMessionStatus) {
+		this.tblMessionStatus = tblMessionStatus;
+	}
 }

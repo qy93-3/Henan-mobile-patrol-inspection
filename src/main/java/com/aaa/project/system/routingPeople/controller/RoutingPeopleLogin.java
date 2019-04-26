@@ -37,12 +37,13 @@ private IRoutingPeopleService iRoutingPeopleService;
         response.setHeader("Access-Control-Allow-Methods", "GET,POST");
         String user=request.getParameter("user");
         String psd=request.getParameter("psd");
+        System.out.println(user);
         String code=request.getParameter("code");
 
         //小程序唯一标识   (在微信小程序管理后台获取)
-        String wxspAppid = "wx459988e0025e1372";
+        String wxspAppid = "wx99dc57bef6ee0275";
         //小程序的 app secret (在微信小程序管理后台获取)
-       String wxspSecret = "ac8e317f9cfb60e3d5526e925433369c";
+       String wxspSecret = "bad25c8ffbdd9c4c5345017bdc8af2f4";
 //
 //
 //        //////////////// 1、向微信服务器 使用登录凭证 code 获取 session_key 和 openid ////////////////
@@ -60,14 +61,14 @@ private IRoutingPeopleService iRoutingPeopleService;
 
         routingPeople.setRoutingUsername(user);
         routingPeople.setRoutingPassword(psd);
-
+        session.setAttribute("openId",openid);
 
 
 
         RoutingPeople people = iRoutingPeopleService.selectRoutingPeopleLogin(routingPeople);
         Integer routingId=people.getRoutingId();
 
-                RoutingPeople people1 = iRoutingPeopleService.selectRoutingPeopleById(routingId);
+        RoutingPeople people1 = iRoutingPeopleService.selectRoutingPeopleById(routingId);
         people1.setOpenId(openid);
 
         iRoutingPeopleService.updateRoutingPeople(people1);

@@ -58,5 +58,14 @@ public interface DangerMapper
      * @return 结果
      */
 	public int deleteDangerByIds(String[] dangerIds);
+
+	/**
+	 * @Author ryy
+	 * @Description 根据巡检人员id查询所对应的隐患提交信息
+	 * @Date 2019/4/23 14:35
+	 * @Param [routingPersonId] 巡检人员id
+	 * @return java.util.List<com.aaa.project.system.danger.domain.Danger>
+	 **/
+	List<Danger> selectDangerByPersonId(Integer routingPersonId);
 	
 }

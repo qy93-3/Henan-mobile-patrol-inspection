@@ -1,5 +1,12 @@
 package com.aaa.project.system.danger.domain;
 
+import com.aaa.project.system.dangerLevel.domain.DangerLevel;
+import com.aaa.project.system.dangerStatus.domain.DangerStatus;
+import com.aaa.project.system.mession.domain.Mession;
+import com.aaa.project.system.resource.domain.Resource;
+import com.aaa.project.system.routingPeople.domain.RoutingPeople;
+import com.aaa.project.system.routingProject.domain.RoutingProject;
+import com.aaa.project.system.site.domain.Site;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.aaa.framework.web.domain.BaseEntity;
@@ -43,6 +50,13 @@ public class Danger extends BaseEntity
 	private String dangerPicture;
 	/** 提交巡检人员编号 */
 	private Integer routingPersonId;
+
+	private Mession tmession;
+	private Site tsite;
+	private DangerLevel tdangerLevel;
+	private DangerStatus tdangerStatus;
+	private RoutingPeople troutingPeople;
+
 
 	public void setDangerId(Integer dangerId) 
 	{
@@ -189,4 +203,48 @@ public class Danger extends BaseEntity
             .append("routingPersonId", getRoutingPersonId())
             .toString();
     }
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public Mession getTmession() {
+		return tmession;
+	}
+
+	public void setTmession(Mession tmession) {
+		this.tmession = tmession;
+	}
+
+	public Site getTsite() {
+		return tsite;
+	}
+
+	public void setTsite(Site tsite) {
+		this.tsite = tsite;
+	}
+
+	public DangerLevel getTdangerLevel() {
+		return tdangerLevel;
+	}
+
+	public void setTdangerLevel(DangerLevel tdangerLevel) {
+		this.tdangerLevel = tdangerLevel;
+	}
+
+	public DangerStatus getTdangerStatus() {
+		return tdangerStatus;
+	}
+
+	public void setTdangerStatus(DangerStatus tdangerStatus) {
+		this.tdangerStatus = tdangerStatus;
+	}
+
+	public RoutingPeople getTroutingPeople() {
+		return troutingPeople;
+	}
+
+	public void setTroutingPeople(RoutingPeople troutingPeople) {
+		this.troutingPeople = troutingPeople;
+	}
 }

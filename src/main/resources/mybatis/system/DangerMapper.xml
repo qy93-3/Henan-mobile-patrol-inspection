@@ -49,7 +49,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectDangerVo"/>
         where danger_id = #{dangerId}
     </select>
-        
+
+    <!--根据提交巡检人员编号查询-->
+    <select id="selectDangerByPersonId" parameterType="Integer" resultMap="DangerResult">
+        <include refid="selectDangerVo"/>
+        where routing_person_id = #{routingPersonId}
+    </select>
+
     <insert id="insertDanger" parameterType="Danger">
         insert into tbl_danger
 		<trim prefix="(" suffix=")" suffixOverrides=",">

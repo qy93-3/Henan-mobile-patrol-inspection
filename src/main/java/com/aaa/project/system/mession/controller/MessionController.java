@@ -5,8 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.aaa.project.system.mession.results.Result;
+import com.aaa.project.system.messionStatus.domain.MessionStatus;
+import com.aaa.project.system.messionStatus.service.IMessionStatusService;
 import com.aaa.project.system.resource.service.IResourceService;
+import com.aaa.project.system.site.domain.Site;
 import com.aaa.project.system.site.service.ISiteService;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +45,9 @@ public class MessionController extends BaseController
     private IResourceService resourceService;
 	@Autowired
     private ISiteService siteService;
+	@Autowired
+	private IMessionStatusService messionStatusService;
+
 	@RequiresPermissions("system:mession:view")
 	@GetMapping()
 	public String mession()
@@ -154,6 +162,38 @@ public class MessionController extends BaseController
         result.setCode(200);
         result.setData(messionList);
         return result;
+	}
+	/**
+	 * @Author ryy
+	 * @Description 
+	 * @Date 2019/4/26 17:50
+	 * @Param [routingPeople]
+	 * @return java.util.List<com.aaa.project.system.mession.domain.Mession>
+	 **/
+	@RequestMapping("/empMessionList")
+	@ResponseBody
+	public List<Mession> empMessionList(@RequestParam String routingPeople){
+		if (routingPeople!=null||routingPeople!=""){
+			JSONObject parse = (JSONObject) JSON.parse(routingPeople);
+			Integer routingId = Integer.parseInt(parse.getString("routingId"));
+
+			Mession mession = new Mession();
+			mession.setMessionRoutingId(routingId);
+
+			List<Mession> messionList = messionService.selectMessionList(mession);
+			for (Mession tmession : messionList) {
+				//获取巡检站点信息
+				Site site = siteService.selectSiteById(tmession.getMessionSiteId());
+				tmession.setSite(site);
+				//获取巡检任务状态信息
+
+				MessionStatus messionStatus = messionStatusService.selectMessionStatusById(tmession.getMessionStatus());
+				tmession.setTblMessionStatus(messionStatus);
+			}
+			return  messionList;
+		}
+
+		return null;
 	}
 	 
 }

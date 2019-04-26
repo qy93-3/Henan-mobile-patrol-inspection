@@ -1,15 +1,24 @@
 package com.aaa.project.system.danger.controller;
 
 import java.util.List;
+
+import com.aaa.project.system.dangerLevel.domain.DangerLevel;
+import com.aaa.project.system.dangerLevel.service.IDangerLevelService;
+import com.aaa.project.system.dangerStatus.domain.DangerStatus;
+import com.aaa.project.system.dangerStatus.service.IDangerStatusService;
+import com.aaa.project.system.mession.domain.Mession;
+import com.aaa.project.system.mession.service.IMessionService;
+import com.aaa.project.system.routingPeople.domain.RoutingPeople;
+import com.aaa.project.system.routingPeople.service.IRoutingPeopleService;
+import com.aaa.project.system.site.domain.Site;
+import com.aaa.project.system.site.service.ISiteService;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.aaa.framework.aspectj.lang.annotation.Log;
 import com.aaa.framework.aspectj.lang.enums.BusinessType;
 import com.aaa.project.system.danger.domain.Danger;
@@ -18,6 +27,8 @@ import com.aaa.framework.web.controller.BaseController;
 import com.aaa.framework.web.page.TableDataInfo;
 import com.aaa.framework.web.domain.AjaxResult;
 import com.aaa.common.utils.poi.ExcelUtil;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * 巡检资源隐患 信息操作处理
@@ -33,7 +44,16 @@ public class DangerController extends BaseController
 	
 	@Autowired
 	private IDangerService dangerService;
-	
+	@Autowired
+	private IMessionService messionService;
+	@Autowired
+	private ISiteService siteService;
+	@Autowired
+	private IDangerLevelService dangerLevelService;
+	@Autowired
+	private IDangerStatusService dangerStatusService;
+	@Autowired
+	private IRoutingPeopleService routingPeopleService;
 	@RequiresPermissions("system:danger:view")
 	@GetMapping()
 	public String danger()
@@ -122,6 +142,43 @@ public class DangerController extends BaseController
 	public AjaxResult remove(String ids)
 	{		
 		return toAjax(dangerService.deleteDangerByIds(ids));
+	}
+
+	/**
+	 * @Author ryy
+	 * @Description 获取巡检人员对应的提交的隐患信息
+	 * @Date 2019/4/23 16:23
+	 * @Param []
+	 * @return java.util.List<com.aaa.project.system.danger.domain.Danger>
+	 **/
+	@RequestMapping("/empDangerList")
+	@ResponseBody
+	public List<Danger> empDangerList(@RequestParam String routingPeople){
+		if (routingPeople!=null||routingPeople!=""){
+			JSONObject parse = (JSONObject)JSON.parse(routingPeople);
+			Integer routingId = Integer.parseInt(parse.getString("routingId"));
+			List<Danger> dangerList = dangerService.selectDangerByPersonId(routingId);
+			for (Danger danger : dangerList) {
+				//获取巡检任务信息
+				Mession mession = messionService.selectMessionById(danger.getMessionId());
+				danger.setTmession(mession);
+				//获取隐患站点信息
+				Site site = siteService.selectSiteById(danger.getDangerSiteId());
+				danger.setTsite(site);
+				//获取隐患等级信息
+				DangerLevel dangerLevel = dangerLevelService.selectDangerLevelById(danger.getDangerId());
+				danger.setTdangerLevel(dangerLevel);
+				//获取隐患状态信息
+				DangerStatus dangerStatus = dangerStatusService.selectDangerStatusById(danger.getDangerStatus());
+				danger.setTdangerStatus(dangerStatus);
+				//获取隐患提交人信息
+				RoutingPeople tRoutingPeople = routingPeopleService.selectRoutingPeopleById(routingId);
+				danger.setTroutingPeople(tRoutingPeople);
+			}
+			return  dangerList;
+		}
+
+		return null;
 	}
 	
 }

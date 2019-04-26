@@ -79,5 +79,17 @@ public class DangerServiceImpl implements IDangerService
 	{
 		return dangerMapper.deleteDangerByIds(Convert.toStrArray(ids));
 	}
+
+	/**
+	 * @Author ryy
+	 * @Description 根据巡检人员id查询所对应的隐患提交信息
+	 * @Date 2019/4/23 14:37
+	 * @Param [routingPersonId]
+	 * @return java.util.List<com.aaa.project.system.danger.domain.Danger>
+	 **/
+	@Override
+	public List<Danger> selectDangerByPersonId(Integer routingPersonId) {
+		return dangerMapper.selectDangerByPersonId(routingPersonId);
+	}
 	
 }
