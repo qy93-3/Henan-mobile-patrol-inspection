@@ -38,9 +38,37 @@ public class PlanMonth extends BaseEntity
 	/** 代维驻点 */
 	private String stagnationName;
 
+	/** 表格显示的月份 */
 	private String month;
 
-	public void setMonthPlanId(Integer monthPlanId) 
+	/** 表格显示的月计划状态 */
+	private String statusName;
+
+	public String getStatusName() {
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+
+	public String getStagnationName() {
+        return stagnationName;
+    }
+
+    public void setStagnationName(String stagnationName) {
+        this.stagnationName = stagnationName;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public void setMonthPlanId(Integer monthPlanId)
 	{
 		this.monthPlanId = monthPlanId;
 	}

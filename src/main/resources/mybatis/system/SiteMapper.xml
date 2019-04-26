@@ -1,78 +1,80 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aaa.project.system.site.mapper.SiteMapper">
-    
+
     <resultMap type="Site" id="SiteResult">
-        <result property="siteId"    column="site_id"    />
-        <result property="siteName"    column="site_name"    />
-        <result property="siteNameAbbreviate"    column="site_name_abbreviate"    />
-        <result property="siteAreaId"    column="site_area_id"    />
-        <result property="siteLongitude"    column="site_longitude"    />
-        <result property="siteLatitude"    column="site_latitude"    />
-        <result property="siteType"    column="site_type"    />
-        <result property="siteAddress"    column="site_address"    />
-        <result property="siteServiceLevel"    column="site_service_level"    />
-        <result property="siteStatus"    column="site_status"    />
-        <result property="siteInnetDate"    column="site_innet_date"    />
-        <result property="siteFloorCount"    column="site_floor_count"    />
-        <result property="sitePropertyDepartment"    column="site_property_department"    />
-        <result property="siteProperty"    column="site_property"    />
-        <result property="siteUserDepartment"    column="site_user_department"    />
-        <result property="siteContacts"    column="site_contacts"    />
-        <result property="siteContactsMobile"    column="site_contacts_mobile"    />
-        <result property="siteOverlayType"    column="site_overlay_type"    />
-        <result property="siteDeleted"    column="site_deleted"    />
-        <result property="sitePlanDay"    column="site_plan_day"    />
-        <result property="siteCycle"    column="site_cycle"    />
-        <result property="siteStagantionCompany"    column="site_stagantion_company"    />
-        <result property="siteLastDate"    column="site_last_date"    />
-        <result property="resourceType"    column="resource_type"    />
+        <result property="siteId" column="site_id"/>
+        <result property="siteName" column="site_name"/>
+        <result property="siteNameAbbreviate" column="site_name_abbreviate"/>
+        <result property="siteAreaId" column="site_area_id"/>
+        <result property="siteLongitude" column="site_longitude"/>
+        <result property="siteLatitude" column="site_latitude"/>
+        <result property="siteType" column="site_type"/>
+        <result property="siteAddress" column="site_address"/>
+        <result property="siteServiceLevel" column="site_service_level"/>
+        <result property="siteStatus" column="site_status"/>
+        <result property="siteInnetDate" column="site_innet_date"/>
+        <result property="siteFloorCount" column="site_floor_count"/>
+        <result property="sitePropertyDepartment" column="site_property_department"/>
+        <result property="siteProperty" column="site_property"/>
+        <result property="siteUserDepartment" column="site_user_department"/>
+        <result property="siteContacts" column="site_contacts"/>
+        <result property="siteContactsMobile" column="site_contacts_mobile"/>
+        <result property="siteOverlayType" column="site_overlay_type"/>
+        <result property="siteDeleted" column="site_deleted"/>
+        <result property="sitePlanDay" column="site_plan_day"/>
+        <result property="siteCycle" column="site_cycle"/>
+        <result property="siteStagantionCompany" column="site_stagantion_company"/>
+        <result property="siteLastDate" column="site_last_date"/>
+        <result property="resourceType" column="resource_type"/>
+        <result property="siteLastedDate"    column="site_lasted_date"    />
     </resultMap>
-	
-	<sql id="selectSiteVo">
-        select site_id, site_name, site_name_abbreviate, site_area_id, site_longitude, site_latitude, site_type, site_address, site_service_level, site_status, site_innet_date, site_floor_count, site_property_department, site_property, site_user_department, site_contacts, site_contacts_mobile, site_overlay_type, site_deleted, site_plan_day, site_cycle, site_stagantion_company, site_last_date, resource_type from tbl_site
+
+    <sql id="selectSiteVo">
+        select site_id, site_name, site_name_abbreviate, site_area_id, site_longitude, site_latitude, site_type, site_address, site_service_level, site_status, site_innet_date, site_floor_count, site_property_department, site_property, site_user_department, site_contacts, site_contacts_mobile, site_overlay_type, site_deleted, site_plan_day, site_cycle, site_stagantion_company, site_last_date, resource_type, site_lasted_date from tbl_site
     </sql>
-	
+
     <select id="selectSiteList" parameterType="Site" resultMap="SiteResult">
         <include refid="selectSiteVo"/>
-        <where>  
+        <where>
             <if test="siteId != null "> and site_id = #{siteId}</if>
-             <if test="siteName != null  and siteName != '' "> and site_name like "%"#{siteName}"%"</if>
-             <if test="siteNameAbbreviate != null  and siteNameAbbreviate != '' "> and site_name_abbreviate = #{siteNameAbbreviate}</if>
-             <if test="siteAreaId != null "> and site_area_id = #{siteAreaId}</if>
-             <if test="siteLongitude != null  and siteLongitude != '' "> and site_longitude = #{siteLongitude}</if>
-             <if test="siteLatitude != null  and siteLatitude != '' "> and site_latitude = #{siteLatitude}</if>
-             <if test="siteType != null  and siteType != '' "> and site_type = #{siteType}</if>
-             <if test="siteAddress != null  and siteAddress != '' "> and site_address = #{siteAddress}</if>
-             <if test="siteServiceLevel != null  and siteServiceLevel != '' "> and site_service_level = #{siteServiceLevel}</if>
-             <if test="siteStatus != null  and siteStatus != '' "> and site_status = #{siteStatus}</if>
-             <if test="siteInnetDate != null "> and site_innet_date = #{siteInnetDate}</if>
-             <if test="siteFloorCount != null  and siteFloorCount != '' "> and site_floor_count = #{siteFloorCount}</if>
-             <if test="sitePropertyDepartment != null  and sitePropertyDepartment != '' "> and site_property_department = #{sitePropertyDepartment}</if>
-             <if test="siteProperty != null  and siteProperty != '' "> and site_property = #{siteProperty}</if>
-             <if test="siteUserDepartment != null  and siteUserDepartment != '' "> and site_user_department = #{siteUserDepartment}</if>
-             <if test="siteContacts != null  and siteContacts != '' "> and site_contacts = #{siteContacts}</if>
-             <if test="siteContactsMobile != null  and siteContactsMobile != '' "> and site_contacts_mobile = #{siteContactsMobile}</if>
-             <if test="siteOverlayType != null  and siteOverlayType != '' "> and site_overlay_type = #{siteOverlayType}</if>
-             <if test="siteDeleted != null "> and site_deleted = #{siteDeleted}</if>
-             <if test="sitePlanDay != null "> and site_plan_day = #{sitePlanDay}</if>
-             <if test="siteCycle != null "> and site_cycle = #{siteCycle}</if>
-             <if test="siteStagantionCompany != null "> and site_stagantion_company = #{siteStagantionCompany}</if>
-             <if test="siteLastDate != null "> and site_last_date = #{siteLastDate}</if>
-             <if test="resourceType != null  and resourceType != '' "> and resource_type = #{resourceType}</if>
-         </where>
+            <if test="siteName != null  and siteName != '' "> and site_name = #{siteName}</if>
+            <if test="siteNameAbbreviate != null  and siteNameAbbreviate != '' "> and site_name_abbreviate = #{siteNameAbbreviate}</if>
+            <if test="siteAreaId != null "> and site_area_id = #{siteAreaId}</if>
+            <if test="siteLongitude != null  and siteLongitude != '' "> and site_longitude = #{siteLongitude}</if>
+            <if test="siteLatitude != null  and siteLatitude != '' "> and site_latitude = #{siteLatitude}</if>
+            <if test="siteType != null  and siteType != '' "> and site_type = #{siteType}</if>
+            <if test="siteAddress != null  and siteAddress != '' "> and site_address = #{siteAddress}</if>
+            <if test="siteServiceLevel != null  and siteServiceLevel != '' "> and site_service_level = #{siteServiceLevel}</if>
+            <if test="siteStatus != null  and siteStatus != '' "> and site_status = #{siteStatus}</if>
+            <if test="siteInnetDate != null "> and site_innet_date = #{siteInnetDate}</if>
+            <if test="siteFloorCount != null  and siteFloorCount != '' "> and site_floor_count = #{siteFloorCount}</if>
+            <if test="sitePropertyDepartment != null  and sitePropertyDepartment != '' "> and site_property_department = #{sitePropertyDepartment}</if>
+            <if test="siteProperty != null  and siteProperty != '' "> and site_property = #{siteProperty}</if>
+            <if test="siteUserDepartment != null  and siteUserDepartment != '' "> and site_user_department = #{siteUserDepartment}</if>
+            <if test="siteContacts != null  and siteContacts != '' "> and site_contacts = #{siteContacts}</if>
+            <if test="siteContactsMobile != null  and siteContactsMobile != '' "> and site_contacts_mobile = #{siteContactsMobile}</if>
+            <if test="siteOverlayType != null  and siteOverlayType != '' "> and site_overlay_type = #{siteOverlayType}</if>
+            <if test="siteDeleted != null "> and site_deleted = #{siteDeleted}</if>
+            <if test="sitePlanDay != null "> and site_plan_day = #{sitePlanDay}</if>
+            <if test="siteCycle != null "> and site_cycle = #{siteCycle}</if>
+            <if test="siteStagantionCompany != null "> and site_stagantion_company = #{siteStagantionCompany}</if>
+            <if test="siteLastDate != null "> and site_last_date = #{siteLastDate}</if>
+            <if test="resourceType != null  and resourceType != '' "> and resource_type = #{resourceType}</if>
+            <if test="siteLastedDate != null "> and site_lasted_date = #{siteLastedDate}</if>
+        </where>
     </select>
 
     <select id="selectSiteListHasDis" parameterType="Site" resultMap="SiteResult">
         <include refid="selectSiteVo"/>
         <where>
-            <if test="siteId != null "> and site_id = #{siteId}</if>
-            <if test="siteAreaId != null "> and site_area_id = #{siteAreaId}</if>
-            <if test="siteName != null  and siteName != '' "> and site_name like "%"#{siteName}"%"</if>
-            <if test="siteCycle != null "> and site_cycle = #{siteCycle}</if>
-            <if test="siteStagantionCompany != null "> and site_stagantion_company = #{siteStagantionCompany}</if>
+            <if test="siteId != null ">and site_id = #{siteId}</if>
+            <if test="siteAreaId != null ">and site_area_id = #{siteAreaId}</if>
+            <if test="siteName != null  and siteName != '' ">and site_name like "%"#{siteName}"%"</if>
+            <if test="siteCycle != null ">and site_cycle = #{siteCycle}</if>
+            <if test="siteStagantionCompany != null ">and site_stagantion_company = #{siteStagantionCompany}</if>
             and site_stagantion_company is not null
         </where>
     </select>
@@ -81,63 +83,73 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSiteVo"/>
         where site_id = #{siteId}
     </select>
-        
+
+    <select id="selectSiteHasDate" resultMap="SiteResult">
+        <include refid="selectSiteVo"/>
+        <where>
+            <if test="siteStagantionCompany != null ">and site_stagantion_company = #{siteStagantionCompany}</if>
+             and (#{nowDate} > site_lasted_date or site_lasted_date is null)
+        </where>
+    </select>
+
     <insert id="insertSite" parameterType="Site">
         insert into tbl_site
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="siteId != null  ">site_id,</if>
-			<if test="siteName != null  and siteName != ''  ">site_name,</if>
-			<if test="siteNameAbbreviate != null  and siteNameAbbreviate != ''  ">site_name_abbreviate,</if>
-			<if test="siteAreaId != null  ">site_area_id,</if>
-			<if test="siteLongitude != null  and siteLongitude != ''  ">site_longitude,</if>
-			<if test="siteLatitude != null  and siteLatitude != ''  ">site_latitude,</if>
-			<if test="siteType != null  and siteType != ''  ">site_type,</if>
-			<if test="siteAddress != null  and siteAddress != ''  ">site_address,</if>
-			<if test="siteServiceLevel != null  and siteServiceLevel != ''  ">site_service_level,</if>
-			<if test="siteStatus != null  and siteStatus != ''  ">site_status,</if>
-			<if test="siteInnetDate != null  ">site_innet_date,</if>
-			<if test="siteFloorCount != null  and siteFloorCount != ''  ">site_floor_count,</if>
-			<if test="sitePropertyDepartment != null  and sitePropertyDepartment != ''  ">site_property_department,</if>
-			<if test="siteProperty != null  and siteProperty != ''  ">site_property,</if>
-			<if test="siteUserDepartment != null  and siteUserDepartment != ''  ">site_user_department,</if>
-			<if test="siteContacts != null  and siteContacts != ''  ">site_contacts,</if>
-			<if test="siteContactsMobile != null  and siteContactsMobile != ''  ">site_contacts_mobile,</if>
-			<if test="siteOverlayType != null  and siteOverlayType != ''  ">site_overlay_type,</if>
-			<if test="siteDeleted != null  ">site_deleted,</if>
-			<if test="sitePlanDay != null  ">site_plan_day,</if>
-			<if test="siteCycle != null  ">site_cycle,</if>
-			<if test="siteStagantionCompany != null  ">site_stagantion_company,</if>
-			<if test="siteLastDate != null  ">site_last_date,</if>
-			<if test="resourceType != null  and resourceType != ''  ">resource_type,</if>
-         </trim>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="siteId != null  ">site_id,</if>
+            <if test="siteName != null  and siteName != ''  ">site_name,</if>
+            <if test="siteNameAbbreviate != null  and siteNameAbbreviate != ''  ">site_name_abbreviate,</if>
+            <if test="siteAreaId != null  ">site_area_id,</if>
+            <if test="siteLongitude != null  and siteLongitude != ''  ">site_longitude,</if>
+            <if test="siteLatitude != null  and siteLatitude != ''  ">site_latitude,</if>
+            <if test="siteType != null  and siteType != ''  ">site_type,</if>
+            <if test="siteAddress != null  and siteAddress != ''  ">site_address,</if>
+            <if test="siteServiceLevel != null  and siteServiceLevel != ''  ">site_service_level,</if>
+            <if test="siteStatus != null  and siteStatus != ''  ">site_status,</if>
+            <if test="siteInnetDate != null  ">site_innet_date,</if>
+            <if test="siteFloorCount != null  and siteFloorCount != ''  ">site_floor_count,</if>
+            <if test="sitePropertyDepartment != null  and sitePropertyDepartment != ''  ">site_property_department,</if>
+            <if test="siteProperty != null  and siteProperty != ''  ">site_property,</if>
+            <if test="siteUserDepartment != null  and siteUserDepartment != ''  ">site_user_department,</if>
+            <if test="siteContacts != null  and siteContacts != ''  ">site_contacts,</if>
+            <if test="siteContactsMobile != null  and siteContactsMobile != ''  ">site_contacts_mobile,</if>
+            <if test="siteOverlayType != null  and siteOverlayType != ''  ">site_overlay_type,</if>
+            <if test="siteDeleted != null  ">site_deleted,</if>
+            <if test="sitePlanDay != null  ">site_plan_day,</if>
+            <if test="siteCycle != null  ">site_cycle,</if>
+            <if test="siteStagantionCompany != null  ">site_stagantion_company,</if>
+            <if test="siteLastDate != null  ">site_last_date,</if>
+            <if test="resourceType != null  and resourceType != ''  ">resource_type,</if>
+            <if test="siteLastedDate != null  ">site_lasted_date,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="siteId != null  ">#{siteId},</if>
-			<if test="siteName != null  and siteName != ''  ">#{siteName},</if>
-			<if test="siteNameAbbreviate != null  and siteNameAbbreviate != ''  ">#{siteNameAbbreviate},</if>
-			<if test="siteAreaId != null  ">#{siteAreaId},</if>
-			<if test="siteLongitude != null  and siteLongitude != ''  ">#{siteLongitude},</if>
-			<if test="siteLatitude != null  and siteLatitude != ''  ">#{siteLatitude},</if>
-			<if test="siteType != null  and siteType != ''  ">#{siteType},</if>
-			<if test="siteAddress != null  and siteAddress != ''  ">#{siteAddress},</if>
-			<if test="siteServiceLevel != null  and siteServiceLevel != ''  ">#{siteServiceLevel},</if>
-			<if test="siteStatus != null  and siteStatus != ''  ">#{siteStatus},</if>
-			<if test="siteInnetDate != null  ">#{siteInnetDate},</if>
-			<if test="siteFloorCount != null  and siteFloorCount != ''  ">#{siteFloorCount},</if>
-			<if test="sitePropertyDepartment != null  and sitePropertyDepartment != ''  ">#{sitePropertyDepartment},</if>
-			<if test="siteProperty != null  and siteProperty != ''  ">#{siteProperty},</if>
-			<if test="siteUserDepartment != null  and siteUserDepartment != ''  ">#{siteUserDepartment},</if>
-			<if test="siteContacts != null  and siteContacts != ''  ">#{siteContacts},</if>
-			<if test="siteContactsMobile != null  and siteContactsMobile != ''  ">#{siteContactsMobile},</if>
-			<if test="siteOverlayType != null  and siteOverlayType != ''  ">#{siteOverlayType},</if>
-			<if test="siteDeleted != null  ">#{siteDeleted},</if>
-			<if test="sitePlanDay != null  ">#{sitePlanDay},</if>
-			<if test="siteCycle != null  ">#{siteCycle},</if>
-			<if test="siteStagantionCompany != null  ">#{siteStagantionCompany},</if>
-			<if test="siteLastDate != null  ">#{siteLastDate},</if>
-			<if test="resourceType != null  and resourceType != ''  ">#{resourceType},</if>
-         </trim>
+            <if test="siteId != null  ">#{siteId},</if>
+            <if test="siteName != null  and siteName != ''  ">#{siteName},</if>
+            <if test="siteNameAbbreviate != null  and siteNameAbbreviate != ''  ">#{siteNameAbbreviate},</if>
+            <if test="siteAreaId != null  ">#{siteAreaId},</if>
+            <if test="siteLongitude != null  and siteLongitude != ''  ">#{siteLongitude},</if>
+            <if test="siteLatitude != null  and siteLatitude != ''  ">#{siteLatitude},</if>
+            <if test="siteType != null  and siteType != ''  ">#{siteType},</if>
+            <if test="siteAddress != null  and siteAddress != ''  ">#{siteAddress},</if>
+            <if test="siteServiceLevel != null  and siteServiceLevel != ''  ">#{siteServiceLevel},</if>
+            <if test="siteStatus != null  and siteStatus != ''  ">#{siteStatus},</if>
+            <if test="siteInnetDate != null  ">#{siteInnetDate},</if>
+            <if test="siteFloorCount != null  and siteFloorCount != ''  ">#{siteFloorCount},</if>
+            <if test="sitePropertyDepartment != null  and sitePropertyDepartment != ''  ">#{sitePropertyDepartment},</if>
+            <if test="siteProperty != null  and siteProperty != ''  ">#{siteProperty},</if>
+            <if test="siteUserDepartment != null  and siteUserDepartment != ''  ">#{siteUserDepartment},</if>
+            <if test="siteContacts != null  and siteContacts != ''  ">#{siteContacts},</if>
+            <if test="siteContactsMobile != null  and siteContactsMobile != ''  ">#{siteContactsMobile},</if>
+            <if test="siteOverlayType != null  and siteOverlayType != ''  ">#{siteOverlayType},</if>
+            <if test="siteDeleted != null  ">#{siteDeleted},</if>
+            <if test="sitePlanDay != null  ">#{sitePlanDay},</if>
+            <if test="siteCycle != null  ">#{siteCycle},</if>
+            <if test="siteStagantionCompany != null  ">#{siteStagantionCompany},</if>
+            <if test="siteLastDate != null  ">#{siteLastDate},</if>
+            <if test="resourceType != null  and resourceType != ''  ">#{resourceType},</if>
+            <if test="siteLastedDate != null  ">#{siteLastedDate},</if>
+        </trim>
     </insert>
-	 
+
     <update id="updateSite" parameterType="Site">
         update tbl_site
         <trim prefix="SET" suffixOverrides=",">
@@ -164,6 +176,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="siteStagantionCompany != null  ">site_stagantion_company = #{siteStagantionCompany},</if>
             <if test="siteLastDate != null  ">site_last_date = #{siteLastDate},</if>
             <if test="resourceType != null  and resourceType != ''  ">resource_type = #{resourceType},</if>
+            <if test="siteLastedDate != null  ">site_lasted_date = #{siteLastedDate},</if>
         </trim>
         where site_id = #{siteId}
     </update>
@@ -172,15 +185,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update tbl_site set site_stagantion_company = null where site_id = #{siteId}
     </update>
 
-	<delete id="deleteSiteById" parameterType="Long">
+    <delete id="deleteSiteById" parameterType="Long">
         delete from tbl_site where site_id = #{siteId}
     </delete>
-	
+
     <delete id="deleteSiteByIds" parameterType="String">
-        delete from tbl_site where site_id in 
+        delete from tbl_site where site_id in
         <foreach item="siteId" collection="array" open="(" separator="," close=")">
             #{siteId}
         </foreach>
     </delete>
-    
+
+    <update id="relaseResources" parameterType="Site">
+        update tbl_site set site_last_date = null,site_lasted_date=null where site_id = #{siteId}
+    </update>
+
+
 </mapper>

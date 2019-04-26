@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<link th:href="@{/css/select.css}" rel="stylesheet"/>
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+        <div>
+            <a class="btn" style="background-color: #E9F4FF;color: #2A70A7;" onclick="distributeSite()"
+               th:text="分配站点"></a>
+            <a class="btn" style="background-color: #E9F4FF;color: #2A70A7;" th:href="@{/system/planMonth/toDayDetile(date=${date},planMonthId=${planMonthId},from='month',sta='ing')}"
+               th:text="返回计划列表"></a>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "system/planMonth";
+    $(function () {
+        var optionsSite = {
+            url: prefix + "/siteList?planMonthId=" + [[${planMonthId}]] + "&dateStr=" + [[${date}]],
+            modalName: "站点",
+            search: false,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showExport: false,
+            showColumns: false,
+            columns: [{
+                checkbox: true
+            }, {
+                field: 'siteId',
+                title: '站点编号',
+                sortable: true,
+                visible: true
+            },
+                {
+                    field: 'siteName',
+                    title: '站点名称',
+                    sortable: true,
+                    visible: true
+                },
+                {
+                    field: 'siteLongitude',
+                    title: '经度',
+                    sortable: true
+                },
+                {
+                    field: 'siteLatitude',
+                    title: '维度',
+                    sortable: true
+                },
+                {
+                    field: 'siteAddress',
+                    title: '地址',
+                    sortable: true
+                },
+                {
+                    field: 'cycleName',
+                    title: '巡检周期'
+                },
+                {
+                    field: 'siteLastDate',
+                    title: '上次巡检日期',
+                    sortable: true
+                },
+                {
+                    field: 'resourceType',
+                    title: '资源类型',
+                    sortable: true,
+                    visible: true
+                }]
+        };
+        $.table.init(optionsSite);
+    });
+    function distributeSite() {
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录")
+        } else {
+            $.ajax({
+                url: ctx + "system/planMonth/setResources",
+                type: "post",
+                dataType: "json",
+                data: {"ids": rows.join(),"type":"site", "dateStr": [[${date}]], "planMonthId": [[${planMonthId}]]},
+                success: function (result) {
+                    $.operate.ajaxSuccess(result);
+                    location.href = "/system/planMonth/toDayDetile?date=" + [[${date}]] + "&planMonthId=" + [[${planMonthId}]]+"&from=month&sta=ing";
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

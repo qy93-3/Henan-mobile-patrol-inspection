@@ -13,38 +13,55 @@
                     <table>
                         <tr>
                             <td>月计划年份：</td>
-                            <td><input type="text" name="monthPlanYear"/></td>
+                            <td>
+                                <select name="planYear">
+                                    <option value=0>--请选择--</option>
+                                    <option value="2015">2015</option>
+                                    <option value="2016">2016</option>
+                                    <option value="2017">2017</option>
+                                    <option value="2018">2018</option>
+                                    <option value="2019">2019</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2023">2023</option>
+                                </select>
+                            </td>
                             <td>月计划状态：</td>
                             <td>
-                                <input type="text" name="monthPlanStatus"/>
+                                <select name="planStatus">
+                                    <option value=0>--请选择--</option>
+                                    <div th:each="status:${statusList}">
+                                        <option th:value="${status.monthStatusId}" th:text="${status.monthStatusName}"></option>
+                                    </div>
+                                </select>
                             </td>
                         </tr>
                         <tr>
                             <td>驻点地市：</td>
                             <td>
-                                <select name="resourceCity" id="city">
-                                    <option value=0>--请选择--</option>
-                                    <div th:each="city:${cities}">
-                                        <option th:value="${city.cityId}" th:text="${city.cityName}"></option>
-                                    </div>
-                                </select>
+
                             </td>
                             <td>驻点区县：</td>
                             <td>
-                                <select name="resourceArea" id="area">
-                                    <option value=0>--请选择--</option>
-                                </select>
+
                             </td>
                         </tr>
                         <tr>
                             <td>维护驻点</td>
-                            <td>
+                            <td colspan="3"><select name="resourceCity" id="city">
+                                <option value=0>--请选择--</option>
+                                <div th:each="city:${cities}">
+                                    <option th:value="${city.cityId}" th:text="${city.cityName}"></option>
+                                </div>
+                            </select>
+                                <select name="resourceArea" id="area">
+                                    <option value=0>--请选择--</option>
+                                </select>
                                 <select id="stagantion" name="stagantion">
                                     <option value=0>--请选择驻点--</option>
                                 </select>
                             </td>
-                            <td></td>
-                            <td></td>
                         </tr>
                     </table>
                     <div align="center">
@@ -71,14 +88,19 @@
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('system:planMonth:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:planMonth:remove')}]];
+    var showDetailFlag = [[${@permission.hasPermi('system:planMonth:showDetail')}]];
+    var useLastPlan = [[${@permission.hasPermi('system:planMonth:useLastPlan')}]];
+    var from = [[${from}]];
     var prefix = ctx + "system/planMonth";
-
     $(function () {
-        $.modal.open("设置驻点", "/system/planMonth/toSetStagnation", 450, 350);
+        if (from=="month") 
+            $.modal.open("设置驻点", "/system/planMonth/toSetStagnation", 450, 450);
         var options = {
             url: prefix + "/list",
             updateUrl: prefix + "/edit/{id}",
             exportUrl: prefix + "/export",
+            showUrl: prefix + "/toPlanCalendar{id}",
+            useLastMonthUrl: prefix + "/useLastMonth/{id}",
             modalName: "巡检资源月计划",
             search: false,
             showExport: true,
@@ -88,12 +110,23 @@
                 {
                     field: 'monthPlanId',
                     title: '月计划编号',
-                    visible: false
+                    visible: true,
+                    sortable: true
                 },
                 {
                     field: 'monthPlanName',
                     title: '月计划名称',
                     sortable: true
+                },
+                {
+                    field: 'monthPlanMonth',
+                    title: '月份',
+                    visible: false,
+                },
+                {
+                    field: 'monthPlanStatus',
+                    title: '状态',
+                    visible: false,
                 },
                 {
                     field: 'month',
@@ -109,19 +142,19 @@
                     sortable: true
                 },
                 {
-                    field: 'monthPlanStatus',
+                    field: 'statusName',
                     title: '月计划状态',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        var month = row.monthPlanMonth;
-                        var year = row.monthPlanYear;
-                        var stagnation = row.monthPlanStagnation;
-                        actions.push('<a class="btn btn-info btn-xs " href="/system/planMonth/toPlanCalendar?year="+year+"&month="+month+"&stagnation="+stagnation ><i class="fa fa-book"></i>详情</a> ');
+                        actions.push('<a class="btn btn-info btn-xs ' + showDetailFlag + '" href="#" onclick="$.operate.showDetail(\'' + row.monthPlanId + '\',\'' + from + '\')"><i class="fa fa-book"></i>详情</a>');
+                        if (from=="month") 
+                            actions.push('<a class="btn btn-info btn-xs ' + useLastPlan + '" href="#" onclick="useLastMonthPlan(\'' + row.monthPlanId + '\',\'' + row.monthPlanMonth + '\',\'' + row.monthPlanStatus + '\')"><i class="fa fa-edit"></i>沿用上期计划</a>');
+
                         return actions.join('');
                     }
                 }]
@@ -133,16 +166,16 @@
          * 选择地市下拉框获取相应的区县和驻点
          */
         $("#city").change(function () {
-            getChild("city","area","city","area",ctx+"system/city/getLocation");
-            getChild("city","stagnation","city","stagantion",ctx+"system/city/getStagantion")
+            getChild("city", "area", "city", "city", "area", ctx + "system/city/getLocation");
+            getChild("city", "stagnation", "city", "city", "stagantion", ctx + "system/city/getStagantion")
         })
         $("#area").change(function () {
-            getChild("area","stagnation","area","stagantion",ctx+"system/city/getStagantion")
+            getChild("area", "stagnation", "city", "area", "stagantion", ctx + "system/city/getStagantion")
         })
 
-        function getChild(level, getLevel, fatherNodeId, childNodeId, url) {
+        function getChild(level, getLevel, fatherNodeId, nowNodeId, childNodeId, url) {
             $("#" + childNodeId + " option:not(:first)").remove();
-            var address = $("#"+fatherNodeId).val();
+            var address = $("#" + nowNodeId).val();
             var dataArr;
             if (level == "area" && address == "0") {
                 address = $("#" + fatherNodeId).val();
@@ -163,11 +196,20 @@
                         childId = data[i].stagnationId;
                         childName = data[i].stagnationPname;
                     }
-                    $("#"+childNodeId).append("<option value='" + childId + "'>" + childName + "</option>");
+                    $("#" + childNodeId).append("<option value='" + childId + "'>" + childName + "</option>");
                 }
             })
         }
     });
+
+    function useLastMonthPlan(id, month, status) {
+        if (month == 1) {
+            $.modal.alertWarning("一月份无法延用上月计划")
+        } else if (status != 1 && status !=0) {
+            $.modal.alertWarning("制定中的才能延用上期计划")
+        } else
+            $.operate.useLastMonth(id);
+    }
 </script>
 </body>
 </html>

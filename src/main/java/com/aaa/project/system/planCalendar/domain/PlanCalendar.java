@@ -9,9 +9,9 @@ import java.util.Date;
  * 每日计划分配(显示日历)表 tbl_plan_calendar
  * 
  * @author aaa
- * @date 2019-04-20
+ * @date 2019-04-24
  */
-public class PlanCalendar extends BaseEntity
+public class PlanCalendar extends BaseEntity implements Cloneable
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -24,7 +24,7 @@ public class PlanCalendar extends BaseEntity
 	/** 日历年 */
 	private Integer calendarYear;
 	/** 日历天 */
-	private String calendarDay;
+	private Integer calendarDay;
 	/** 每日日期 */
 	private Date calendarDate;
 	/** 月计划编号 */
@@ -68,12 +68,12 @@ public class PlanCalendar extends BaseEntity
 	{
 		return calendarYear;
 	}
-	public void setCalendarDay(String calendarDay) 
+	public void setCalendarDay(Integer calendarDay) 
 	{
 		this.calendarDay = calendarDay;
 	}
 
-	public String getCalendarDay() 
+	public Integer getCalendarDay() 
 	{
 		return calendarDay;
 	}
@@ -117,4 +117,28 @@ public class PlanCalendar extends BaseEntity
             .append("calendarDayResources", getCalendarDayResources())
             .toString();
     }
+
+	public PlanCalendar(Integer calendarMonth, Integer calendarStatus, Integer calendarYear, Integer calendarDay, Date calendarDate, Integer monthPlanId, Integer calendarDayResources) {
+		this.calendarMonth = calendarMonth;
+		this.calendarStatus = calendarStatus;
+		this.calendarYear = calendarYear;
+		this.calendarDay = calendarDay;
+		this.calendarDate = calendarDate;
+		this.monthPlanId = monthPlanId;
+		this.calendarDayResources = calendarDayResources;
+	}
+
+	public PlanCalendar() {
+	}
+
+	@Override
+	public Object clone() {
+		PlanCalendar planCalendar = null;
+		try {
+			planCalendar = (PlanCalendar) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return planCalendar;
+	}
 }

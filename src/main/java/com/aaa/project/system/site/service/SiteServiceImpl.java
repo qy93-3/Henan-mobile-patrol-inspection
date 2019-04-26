@@ -6,6 +6,7 @@ import com.aaa.project.system.site.mapper.SiteMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -85,6 +86,11 @@ public class SiteServiceImpl implements ISiteService {
         return siteMapper.cancelDistribute(site);
     }
 
+    @Override
+    public int relaseResources(Site site) {
+        return siteMapper.relaseResources(site);
+    }
+
     /**
      * 删除站点对象
      *
@@ -95,5 +101,11 @@ public class SiteServiceImpl implements ISiteService {
     public int deleteSiteByIds(String ids) {
         return siteMapper.deleteSiteByIds(Convert.toStrArray(ids));
     }
+
+    @Override
+    public List<Site> selectSiteHasDate(Date nowDate, int stagnationId) {
+        return siteMapper.selectSiteHasDate(nowDate, stagnationId);
+    }
+
 
 }

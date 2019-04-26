@@ -2,6 +2,9 @@ package com.aaa.project.system.site.service;
 
 import com.aaa.project.system.resource.domain.Resource;
 import com.aaa.project.system.site.domain.Site;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,7 +61,14 @@ public interface ISiteService
 	 * @return
 	 */
 	public int cancelDistribute(Site site);
-		
+
+	/**
+	 * 释放日计划资源
+	 * @param site
+	 * @return
+	 */
+	public int relaseResources(Site site);
+
 	/**
      * 删除站点信息
      * 
@@ -66,5 +76,13 @@ public interface ISiteService
      * @return 结果
      */
 	public int deleteSiteByIds(String ids);
-	
+
+	/**
+	 * 查询有驻点并且日期差大于周期的站点
+	 * @param nowDate
+	 * @param stagnationId
+	 * @return
+	 */
+	public List<Site> selectSiteHasDate(@Param("nowDate") Date nowDate, @Param("siteStagantionCompany")int stagnationId);
+
 }

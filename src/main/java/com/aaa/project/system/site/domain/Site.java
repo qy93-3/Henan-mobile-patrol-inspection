@@ -64,6 +64,9 @@ public class Site extends BaseEntity
 	/** 资源类型 */
 	private String resourceType;
 
+	/** 可以巡检的最早日期 */
+	private Date siteLastedDate;
+
 	/** 分配状态 */
 	private String distributeStatus;
 
@@ -75,6 +78,14 @@ public class Site extends BaseEntity
 
 	/** 周期名称 */
 	private String cycleName;
+
+	public Date getSiteLastedDate() {
+		return siteLastedDate;
+	}
+
+	public void setSiteLastedDate(Date siteLastedDate) {
+		this.siteLastedDate = siteLastedDate;
+	}
 
 	public String getDistributeStatus() {
 		return distributeStatus;
@@ -325,32 +336,38 @@ public class Site extends BaseEntity
 		return resourceType;
 	}
 
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("siteId", getSiteId())
-            .append("siteName", getSiteName())
-            .append("siteNameAbbreviate", getSiteNameAbbreviate())
-            .append("siteAreaId", getSiteAreaId())
-            .append("siteLongitude", getSiteLongitude())
-            .append("siteLatitude", getSiteLatitude())
-            .append("siteType", getSiteType())
-            .append("siteAddress", getSiteAddress())
-            .append("siteServiceLevel", getSiteServiceLevel())
-            .append("siteStatus", getSiteStatus())
-            .append("siteInnetDate", getSiteInnetDate())
-            .append("siteFloorCount", getSiteFloorCount())
-            .append("sitePropertyDepartment", getSitePropertyDepartment())
-            .append("siteProperty", getSiteProperty())
-            .append("siteUserDepartment", getSiteUserDepartment())
-            .append("siteContacts", getSiteContacts())
-            .append("siteContactsMobile", getSiteContactsMobile())
-            .append("siteOverlayType", getSiteOverlayType())
-            .append("siteDeleted", getSiteDeleted())
-            .append("sitePlanDay", getSitePlanDay())
-            .append("siteCycle", getSiteCycle())
-            .append("siteStagantionCompany", getSiteStagantionCompany())
-            .append("siteLastDate", getSiteLastDate())
-            .append("resourceType", getResourceType())
-            .toString();
-    }
+	@Override
+	public String toString() {
+		return "Site{" +
+				"siteId=" + siteId +
+				", siteName='" + siteName + '\'' +
+				", siteNameAbbreviate='" + siteNameAbbreviate + '\'' +
+				", siteAreaId=" + siteAreaId +
+				", siteLongitude='" + siteLongitude + '\'' +
+				", siteLatitude='" + siteLatitude + '\'' +
+				", siteType='" + siteType + '\'' +
+				", siteAddress='" + siteAddress + '\'' +
+				", siteServiceLevel='" + siteServiceLevel + '\'' +
+				", siteStatus='" + siteStatus + '\'' +
+				", siteInnetDate=" + siteInnetDate +
+				", siteFloorCount='" + siteFloorCount + '\'' +
+				", sitePropertyDepartment='" + sitePropertyDepartment + '\'' +
+				", siteProperty='" + siteProperty + '\'' +
+				", siteUserDepartment='" + siteUserDepartment + '\'' +
+				", siteContacts='" + siteContacts + '\'' +
+				", siteContactsMobile='" + siteContactsMobile + '\'' +
+				", siteOverlayType='" + siteOverlayType + '\'' +
+				", siteDeleted=" + siteDeleted +
+				", sitePlanDay=" + sitePlanDay +
+				", siteCycle=" + siteCycle +
+				", siteStagantionCompany=" + siteStagantionCompany +
+				", siteLastDate=" + siteLastDate +
+				", resourceType='" + resourceType + '\'' +
+				", siteLastedDate=" + siteLastedDate +
+				", distributeStatus='" + distributeStatus + '\'' +
+				", stagantionCompanyName='" + stagantionCompanyName + '\'' +
+				", areaName='" + areaName + '\'' +
+				", cycleName='" + cycleName + '\'' +
+				'}';
+	}
 }

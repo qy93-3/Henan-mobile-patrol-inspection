@@ -1,7 +1,11 @@
 package com.aaa.project.system.resource.mapper;
 
 import com.aaa.project.system.resource.domain.Resource;
-import java.util.List;	
+import com.aaa.project.system.site.domain.Site;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 资源点 数据层
@@ -58,6 +62,12 @@ public interface ResourceMapper
 	 */
 	public int cancelDistribute(Resource resource);
 
+	/**
+	 * 释放日计划资源
+	 * @param resource
+	 * @return
+	 */
+	public int relaseResources(Resource resource);
 
 	/**
      * 批量删除资源点
@@ -66,5 +76,13 @@ public interface ResourceMapper
      * @return 结果
      */
 	public int deleteResourceByIds(String[] resourceIds);
+
+	/**
+	 * 查询有驻点并且日期差大于周期的资源点
+	 * @param nowDate
+	 * @param stagnationId
+	 * @return
+	 */
+	public List<Resource> selectResourceHasDate(@Param("nowDate") Date nowDate, @Param("resourceStagantionCompany")int stagnationId);
 
 }

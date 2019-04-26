@@ -462,6 +462,19 @@
 	            	$.operate.submit(url, "post", "json", data);
             	});
             },
+            //查看详细信息
+			showDetail :function(id,from){
+				var url = $.common.isEmpty(id) ? $.table._option.showUrl : $.table._option.showUrl.replace("{id}", "?id="+id+"&from="+from);
+				location.href=url;
+			},
+            //沿用上期计划
+			useLastMonth :function(id){
+				$.modal.confirm("确定要沿用上期计划吗？", function() {
+					var url = $.common.isEmpty(id) ? $.table._option.useLastMonthUrl : $.table._option.useLastMonthUrl.replace("{id}", id);
+					var data = { "id": id };
+					$.operate.submit(url, "post", "json", data);
+				});
+			},
             // 批量删除信息
             removeAll: function() {
         		var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+
+<div class="container-div">
+    <span id="showResources" th:if="${flag eq 1}">
+        <!--<a class="btn"style="background-color: #E9F4FF;color: #2A70A7;" onclick="addDaySite()">添加站点</a>-->
+        <a class="btn"style="background-color: #E9F4FF;color: #2A70A7;" th:href="@{/system/planMonth/toSiteList(date=${date},planMonthId=${planMonthId})}">添加站点</a>
+        <a class="btn"style="background-color: #E9F4FF;color: #2A70A7;" th:href="@{/system/planMonth/toResourceList(date=${date},planMonthId=${planMonthId})}">添加资源点</a>
+        <a class="btn btn-info" href="#" onclick="releaseResource()">释放资源点</a>
+    </span>
+    <div class="row">
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var date = [[${date}]];
+    var prefix = ctx + "system/planMonth";
+    $(function () {
+        var optionsPlan = {
+            url: prefix + "/dayPlanList?date="+[[${date}]]+"&planMonthId="+[[${planMonthId}]],
+            modalName: "巡检资源日计划",
+            search: false,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showExport: false,
+            showColumns: false,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'dayPlanId',
+                    title: '日计划编号',
+                    visible: true
+                },
+                {
+                    field: 'resourcesName',
+                    title: '日计划资源名称',
+                    sortable: true
+                },
+                {
+                    field: 'dayPlanType',
+                    title: '日计划资源类型',
+                    sortable: true
+                },
+            ]
+        };
+        $.table.init(optionsPlan);
+    });
+    function releaseResource(){
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录")
+        } else {
+            $.ajax({
+                url: ctx + "system/planMonth/releaseResource",
+                type: "post",
+                dataType: "json",
+                data: {"ids": rows.join()},
+                success: function (result) {
+                    $.operate.ajaxSuccess(result);
+                    location.href = "/system/planMonth/toDayDetile?date=" + [[${date}]] + "&planMonthId=" + [[${planMonthId}]];
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>
