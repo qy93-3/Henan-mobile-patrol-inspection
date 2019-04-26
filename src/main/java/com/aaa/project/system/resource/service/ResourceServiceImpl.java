@@ -1,5 +1,6 @@
 package com.aaa.project.system.resource.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +87,11 @@ public class ResourceServiceImpl implements IResourceService {
         return resourceMapper.cancelDistribute(resource);
     }
 
+    @Override
+    public int relaseResources(Resource resource) {
+        return resourceMapper.relaseResources(resource);
+    }
+
     /**
      * 删除资源点对象
      *
@@ -95,5 +101,10 @@ public class ResourceServiceImpl implements IResourceService {
     @Override
     public int deleteResourceByIds(String ids) {
         return resourceMapper.deleteResourceByIds(Convert.toStrArray(ids));
+    }
+
+    @Override
+    public List<Resource> selectResourceHasDate(Date nowDate, int stagnationId) {
+        return resourceMapper.selectResourceHasDate(nowDate, stagnationId);
     }
 }

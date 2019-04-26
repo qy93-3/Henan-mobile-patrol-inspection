@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aaa.project.system.resource.mapper.ResourceMapper">
-    
+
     <resultMap type="Resource" id="ResourceResult">
         <result property="resourceId"    column="resource_id"    />
         <result property="resourceAreaId"    column="resource_area_id"    />
@@ -24,35 +24,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="resourceStagantionCompany"    column="resource_stagantion_company"    />
         <result property="resourceLastDate"    column="resource_last_date"    />
         <result property="resourceType"    column="resource_type"    />
+        <result property="resourceLastedDate"    column="resource_lasted_date"    />
     </resultMap>
-	
-	<sql id="selectResourceVo">
-        select resource_id, resource_area_id, resource_name, resource_longitude, resource_latitude, resource_address, resource_dot_type, resource_status, resource_start_time, resource_maintain_unit, resource_maintain_unit_tel, resource_maintain_unit_name, resource_sadegrare_man_tel, resource_deleted, resource_plan_day, resource_cycle, resource_stagantion_company, resource_last_date, resource_type from tbl_resource
+
+    <sql id="selectResourceVo">
+        select resource_id, resource_area_id, resource_name, resource_longitude, resource_latitude, resource_address, resource_dot_type, resource_status, resource_start_time, resource_maintain_unit, resource_maintain_unit_tel, resource_maintain_unit_name, resource_sadegrare_man_tel, resource_deleted, resource_plan_day, resource_cycle, resource_stagantion_company, resource_last_date, resource_type, resource_lasted_date from tbl_resource
     </sql>
-	
+
     <select id="selectResourceList" parameterType="Resource" resultMap="ResourceResult">
         <include refid="selectResourceVo"/>
-        <where>  
+        <where>
             <if test="resourceId != null "> and resource_id = #{resourceId}</if>
-             <if test="resourceAreaId != null "> and resource_area_id = #{resourceAreaId}</if>
-             <if test="resourceName != null  and resourceName != '' "> and resource_name like "%"#{resourceName}"%"</if>
-             <if test="resourceLongitude != null  and resourceLongitude != '' "> and resource_longitude = #{resourceLongitude}</if>
-             <if test="resourceLatitude != null  and resourceLatitude != '' "> and resource_latitude = #{resourceLatitude}</if>
-             <if test="resourceAddress != null  and resourceAddress != '' "> and resource_address = #{resourceAddress}</if>
-             <if test="resourceDotType != null  and resourceDotType != '' "> and resource_dot_type = #{resourceDotType}</if>
-             <if test="resourceStatus != null  and resourceStatus != '' "> and resource_status = #{resourceStatus}</if>
-             <if test="resourceStartTime != null "> and resource_start_time = #{resourceStartTime}</if>
-             <if test="resourceMaintainUnit != null  and resourceMaintainUnit != '' "> and resource_maintain_unit = #{resourceMaintainUnit}</if>
-             <if test="resourceMaintainUnitTel != null  and resourceMaintainUnitTel != '' "> and resource_maintain_unit_tel = #{resourceMaintainUnitTel}</if>
-             <if test="resourceMaintainUnitName != null  and resourceMaintainUnitName != '' "> and resource_maintain_unit_name = #{resourceMaintainUnitName}</if>
-             <if test="resourceSadegrareManTel != null  and resourceSadegrareManTel != '' "> and resource_sadegrare_man_tel = #{resourceSadegrareManTel}</if>
-             <if test="resourceDeleted != null "> and resource_deleted = #{resourceDeleted}</if>
-             <if test="resourcePlanDay != null "> and resource_plan_day = #{resourcePlanDay}</if>
-             <if test="resourceCycle != null "> and resource_cycle = #{resourceCycle}</if>
-             <if test="resourceStagantionCompany != null "> and resource_stagantion_company = #{resourceStagantionCompany}</if>
-             <if test="resourceLastDate != null "> and resource_last_date = #{resourceLastDate}</if>
-             <if test="resourceType != null  and resourceType != '' "> and resource_type = #{resourceType}</if>
-         </where>
+            <if test="resourceAreaId != null "> and resource_area_id = #{resourceAreaId}</if>
+            <if test="resourceName != null  and resourceName != '' "> and resource_name = #{resourceName}</if>
+            <if test="resourceLongitude != null  and resourceLongitude != '' "> and resource_longitude = #{resourceLongitude}</if>
+            <if test="resourceLatitude != null  and resourceLatitude != '' "> and resource_latitude = #{resourceLatitude}</if>
+            <if test="resourceAddress != null  and resourceAddress != '' "> and resource_address = #{resourceAddress}</if>
+            <if test="resourceDotType != null  and resourceDotType != '' "> and resource_dot_type = #{resourceDotType}</if>
+            <if test="resourceStatus != null  and resourceStatus != '' "> and resource_status = #{resourceStatus}</if>
+            <if test="resourceStartTime != null "> and resource_start_time = #{resourceStartTime}</if>
+            <if test="resourceMaintainUnit != null  and resourceMaintainUnit != '' "> and resource_maintain_unit = #{resourceMaintainUnit}</if>
+            <if test="resourceMaintainUnitTel != null  and resourceMaintainUnitTel != '' "> and resource_maintain_unit_tel = #{resourceMaintainUnitTel}</if>
+            <if test="resourceMaintainUnitName != null  and resourceMaintainUnitName != '' "> and resource_maintain_unit_name = #{resourceMaintainUnitName}</if>
+            <if test="resourceSadegrareManTel != null  and resourceSadegrareManTel != '' "> and resource_sadegrare_man_tel = #{resourceSadegrareManTel}</if>
+            <if test="resourceDeleted != null "> and resource_deleted = #{resourceDeleted}</if>
+            <if test="resourcePlanDay != null "> and resource_plan_day = #{resourcePlanDay}</if>
+            <if test="resourceCycle != null "> and resource_cycle = #{resourceCycle}</if>
+            <if test="resourceStagantionCompany != null "> and resource_stagantion_company = #{resourceStagantionCompany}</if>
+            <if test="resourceLastDate != null "> and resource_last_date = #{resourceLastDate}</if>
+            <if test="resourceType != null  and resourceType != '' "> and resource_type = #{resourceType}</if>
+            <if test="resourceLastedDate != null "> and resource_lasted_date = #{resourceLastedDate}</if>
+        </where>
     </select>
 
     <select id="selectResourceListHasDis" parameterType="Resource" resultMap="ResourceResult">
@@ -66,57 +68,67 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </where>
     </select>
 
+    <select id="selectResourceHasDate" resultMap="ResourceResult">
+        <include refid="selectResourceVo"/>
+        <where>
+            <if test="resourceStagantionCompany != null ">and resource_stagantion_company = #{resourceStagantionCompany}</if>
+            and (#{nowDate} > resource_lasted_date or resource_lasted_date is null)
+        </where>
+    </select>
+
     <select id="selectResourceById" parameterType="Long" resultMap="ResourceResult">
         <include refid="selectResourceVo"/>
         where resource_id = #{resourceId}
     </select>
-        
+
     <insert id="insertResource" parameterType="Resource">
         insert into tbl_resource
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="resourceId != null  ">resource_id,</if>
-			<if test="resourceAreaId != null  ">resource_area_id,</if>
-			<if test="resourceName != null  and resourceName != ''  ">resource_name,</if>
-			<if test="resourceLongitude != null  and resourceLongitude != ''  ">resource_longitude,</if>
-			<if test="resourceLatitude != null  and resourceLatitude != ''  ">resource_latitude,</if>
-			<if test="resourceAddress != null  and resourceAddress != ''  ">resource_address,</if>
-			<if test="resourceDotType != null  and resourceDotType != ''  ">resource_dot_type,</if>
-			<if test="resourceStatus != null  and resourceStatus != ''  ">resource_status,</if>
-			<if test="resourceStartTime != null  ">resource_start_time,</if>
-			<if test="resourceMaintainUnit != null  and resourceMaintainUnit != ''  ">resource_maintain_unit,</if>
-			<if test="resourceMaintainUnitTel != null  and resourceMaintainUnitTel != ''  ">resource_maintain_unit_tel,</if>
-			<if test="resourceMaintainUnitName != null  and resourceMaintainUnitName != ''  ">resource_maintain_unit_name,</if>
-			<if test="resourceSadegrareManTel != null  and resourceSadegrareManTel != ''  ">resource_sadegrare_man_tel,</if>
-			<if test="resourceDeleted != null  ">resource_deleted,</if>
-			<if test="resourcePlanDay != null  ">resource_plan_day,</if>
-			<if test="resourceCycle != null  ">resource_cycle,</if>
-			<if test="resourceStagantionCompany != null  ">resource_stagantion_company,</if>
-			<if test="resourceLastDate != null  ">resource_last_date,</if>
-			<if test="resourceType != null  and resourceType != ''  ">resource_type,</if>
-         </trim>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resourceId != null  ">resource_id,</if>
+            <if test="resourceAreaId != null  ">resource_area_id,</if>
+            <if test="resourceName != null  and resourceName != ''  ">resource_name,</if>
+            <if test="resourceLongitude != null  and resourceLongitude != ''  ">resource_longitude,</if>
+            <if test="resourceLatitude != null  and resourceLatitude != ''  ">resource_latitude,</if>
+            <if test="resourceAddress != null  and resourceAddress != ''  ">resource_address,</if>
+            <if test="resourceDotType != null  and resourceDotType != ''  ">resource_dot_type,</if>
+            <if test="resourceStatus != null  and resourceStatus != ''  ">resource_status,</if>
+            <if test="resourceStartTime != null  ">resource_start_time,</if>
+            <if test="resourceMaintainUnit != null  and resourceMaintainUnit != ''  ">resource_maintain_unit,</if>
+            <if test="resourceMaintainUnitTel != null  and resourceMaintainUnitTel != ''  ">resource_maintain_unit_tel,</if>
+            <if test="resourceMaintainUnitName != null  and resourceMaintainUnitName != ''  ">resource_maintain_unit_name,</if>
+            <if test="resourceSadegrareManTel != null  and resourceSadegrareManTel != ''  ">resource_sadegrare_man_tel,</if>
+            <if test="resourceDeleted != null  ">resource_deleted,</if>
+            <if test="resourcePlanDay != null  ">resource_plan_day,</if>
+            <if test="resourceCycle != null  ">resource_cycle,</if>
+            <if test="resourceStagantionCompany != null  ">resource_stagantion_company,</if>
+            <if test="resourceLastDate != null  ">resource_last_date,</if>
+            <if test="resourceType != null  and resourceType != ''  ">resource_type,</if>
+            <if test="resourceLastedDate != null  ">resource_lasted_date,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="resourceId != null  ">#{resourceId},</if>
-			<if test="resourceAreaId != null  ">#{resourceAreaId},</if>
-			<if test="resourceName != null  and resourceName != ''  ">#{resourceName},</if>
-			<if test="resourceLongitude != null  and resourceLongitude != ''  ">#{resourceLongitude},</if>
-			<if test="resourceLatitude != null  and resourceLatitude != ''  ">#{resourceLatitude},</if>
-			<if test="resourceAddress != null  and resourceAddress != ''  ">#{resourceAddress},</if>
-			<if test="resourceDotType != null  and resourceDotType != ''  ">#{resourceDotType},</if>
-			<if test="resourceStatus != null  and resourceStatus != ''  ">#{resourceStatus},</if>
-			<if test="resourceStartTime != null  ">#{resourceStartTime},</if>
-			<if test="resourceMaintainUnit != null  and resourceMaintainUnit != ''  ">#{resourceMaintainUnit},</if>
-			<if test="resourceMaintainUnitTel != null  and resourceMaintainUnitTel != ''  ">#{resourceMaintainUnitTel},</if>
-			<if test="resourceMaintainUnitName != null  and resourceMaintainUnitName != ''  ">#{resourceMaintainUnitName},</if>
-			<if test="resourceSadegrareManTel != null  and resourceSadegrareManTel != ''  ">#{resourceSadegrareManTel},</if>
-			<if test="resourceDeleted != null  ">#{resourceDeleted},</if>
-			<if test="resourcePlanDay != null  ">#{resourcePlanDay},</if>
-			<if test="resourceCycle != null  ">#{resourceCycle},</if>
-			<if test="resourceStagantionCompany != null  ">#{resourceStagantionCompany},</if>
-			<if test="resourceLastDate != null  ">#{resourceLastDate},</if>
-			<if test="resourceType != null  and resourceType != ''  ">#{resourceType},</if>
-         </trim>
+            <if test="resourceId != null  ">#{resourceId},</if>
+            <if test="resourceAreaId != null  ">#{resourceAreaId},</if>
+            <if test="resourceName != null  and resourceName != ''  ">#{resourceName},</if>
+            <if test="resourceLongitude != null  and resourceLongitude != ''  ">#{resourceLongitude},</if>
+            <if test="resourceLatitude != null  and resourceLatitude != ''  ">#{resourceLatitude},</if>
+            <if test="resourceAddress != null  and resourceAddress != ''  ">#{resourceAddress},</if>
+            <if test="resourceDotType != null  and resourceDotType != ''  ">#{resourceDotType},</if>
+            <if test="resourceStatus != null  and resourceStatus != ''  ">#{resourceStatus},</if>
+            <if test="resourceStartTime != null  ">#{resourceStartTime},</if>
+            <if test="resourceMaintainUnit != null  and resourceMaintainUnit != ''  ">#{resourceMaintainUnit},</if>
+            <if test="resourceMaintainUnitTel != null  and resourceMaintainUnitTel != ''  ">#{resourceMaintainUnitTel},</if>
+            <if test="resourceMaintainUnitName != null  and resourceMaintainUnitName != ''  ">#{resourceMaintainUnitName},</if>
+            <if test="resourceSadegrareManTel != null  and resourceSadegrareManTel != ''  ">#{resourceSadegrareManTel},</if>
+            <if test="resourceDeleted != null  ">#{resourceDeleted},</if>
+            <if test="resourcePlanDay != null  ">#{resourcePlanDay},</if>
+            <if test="resourceCycle != null  ">#{resourceCycle},</if>
+            <if test="resourceStagantionCompany != null  ">#{resourceStagantionCompany},</if>
+            <if test="resourceLastDate != null  ">#{resourceLastDate},</if>
+            <if test="resourceType != null  and resourceType != ''  ">#{resourceType},</if>
+            <if test="resourceLastedDate != null  ">#{resourceLastedDate},</if>
+        </trim>
     </insert>
-	 
+
     <update id="updateResource" parameterType="Resource">
         update tbl_resource
         <trim prefix="SET" suffixOverrides=",">
@@ -138,6 +150,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="resourceStagantionCompany != null  ">resource_stagantion_company = #{resourceStagantionCompany},</if>
             <if test="resourceLastDate != null  ">resource_last_date = #{resourceLastDate},</if>
             <if test="resourceType != null  and resourceType != ''  ">resource_type = #{resourceType},</if>
+            <if test="resourceLastedDate != null  ">resource_lasted_date = #{resourceLastedDate},</if>
         </trim>
         where resource_id = #{resourceId}
     </update>
@@ -156,5 +169,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{resourceId}
         </foreach>
     </delete>
+
+    <update id="relaseResources" parameterType="Site">
+        update tbl_resource set resource_last_date = null,resource_lasted_date=null where resource_id = #{resourceId}
+    </update>
     
 </mapper>

@@ -33,16 +33,16 @@
          * 选择地市下拉框获取相应的区县和驻点
          */
         $("#city").change(function () {
-            getChild("city", "area", "city", "area", ctx + "system/city/getLocation");
-            getChild("city", "stagnation", "city", "stagantion", ctx + "system/city/getStagantion")
+            getChild("city", "area", "city","city", "area", ctx + "system/city/getLocation");
+            getChild("city", "stagnation", "city","city", "stagantion", ctx + "system/city/getStagantion")
         })
         $("#area").change(function () {
-            getChild("area", "stagnation", "area", "stagantion", ctx + "system/city/getStagantion")
+            getChild("area", "stagnation", "city","area", "stagantion", ctx + "system/city/getStagantion")
         })
 
-        function getChild(level, getLevel, fatherNodeId, childNodeId, url) {
+        function getChild(level, getLevel, fatherNodeId,nowNodeId, childNodeId, url) {
             $("#" + childNodeId + " option:not(:first)").remove();
-            var address = $("#" + fatherNodeId).val();
+            var address = $("#" + nowNodeId).val();
             var dataArr;
             if (level == "area" && address == "0") {
                 address = $("#" + fatherNodeId).val();

@@ -70,8 +70,8 @@
         </div>
 
         <div id="stagnationResource" style="display: none">
-            <button style="background-color: #E9F4FF;color: #2A70A7;" onclick="cancelDistribute()">释放关系</button>
-            <button onclick="setCycle()">设置巡检周期</button>
+            <button style="background-color: #E9F4FF;color: #2A70A7;" onclick="cancelDistribute()"shiro:hasPermission="system:site:relase">释放关系</button>
+            <button onclick="setCycle()"shiro:hasPermission="system:site:setCycle">设置巡检周期</button>
         </div>
         <div id="distributeResource">
             <label style="color: red;">分配到：</label>
@@ -87,11 +87,9 @@
             <select id="stagantion2">
                 <option value=0>--请选择驻点--</option>
             </select>
-            <button style="background-color: #E9F4FF;color: #2A70A7;" onclick="distribute()">分配资源</button>
-            <button onclick="setCycle()">设置巡检周期</button>
+            <button style="background-color: #E9F4FF;color: #2A70A7;" onclick="distribute()"shiro:hasPermission="system:site:distribute">分配资源</button>
+            <button onclick="setCycle()"shiro:hasPermission="system:site:setCycle">设置巡检周期</button>
         </div>
-
-
         <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
                shiro:hasPermission="system:resource:edit">
@@ -111,7 +109,6 @@
     var editFlag = [[${@permission.hasPermi('system:resource:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:resource:remove')}]];
     var prefix = ctx + "system/resource";
-
     $(function () {
         if ([[${flag}]] == 0) {
             $("#distributeResource").show();
@@ -253,28 +250,27 @@
             ]
         };
         $.table.init(options);
-
         /**
          * 选择地市下拉框获取相应的区县和驻点
          */
         $("#city").change(function () {
-            getChild("city","area","city","area",ctx+"system/city/getLocation");
-            getChild("city","stagnation","city","stagantion",ctx+"system/city/getStagantion")
+            getChild("city","area","city","city","area",ctx+"system/city/getLocation");
+            getChild("city","stagnation","city","city","stagantion",ctx+"system/city/getStagantion")
         })
         $("#city2").change(function () {
-            getChild("city","area","city2","area2",ctx+"system/city/getLocation");
-            getChild("city","stagnation","city2","stagantion2",ctx+"system/city/getStagantion")
+            getChild("city","area","city2","city2","area2",ctx+"system/city/getLocation");
+            getChild("city","stagnation","city2","city2","stagantion2",ctx+"system/city/getStagantion")
         })
         $("#area").change(function () {
-            getChild("area","stagnation","area","stagantion",ctx+"system/city/getStagantion")
+            getChild("area","stagnation","city","area","stagantion",ctx+"system/city/getStagantion")
         })
         $("#area2").change(function () {
-            getChild("area","stagnation","area2","stagantion2",ctx+"system/city/getStagantion")
+            getChild("area","stagnation","city2","area2","stagantion2",ctx+"system/city/getStagantion")
         })
 
-        function getChild(level, getLevel, fatherNodeId, childNodeId, url) {
+        function getChild(level, getLevel, fatherNodeId,nowNodeId, childNodeId, url) {
             $("#" + childNodeId + " option:not(:first)").remove();
-            var address = $("#"+fatherNodeId).val();
+            var address = $("#" + nowNodeId).val();
             var dataArr;
             if (level == "area" && address == "0") {
                 address = $("#" + fatherNodeId).val();
@@ -295,7 +291,7 @@
                         childId = data[i].stagnationId;
                         childName = data[i].stagnationPname;
                     }
-                    $("#"+childNodeId).append("<option value='" + childId + "'>" + childName + "</option>");
+                    $("#" + childNodeId).append("<option value='" + childId + "'>" + childName + "</option>");
                 }
             })
         }

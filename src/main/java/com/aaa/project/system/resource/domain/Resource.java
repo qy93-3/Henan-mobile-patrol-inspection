@@ -55,6 +55,9 @@ public class Resource extends BaseEntity
 	/** 资源类型 */
 	private String resourceType;
 
+	/** 可以巡检的最早日期 */
+	private Date resourceLastedDate;
+
 	/** 分配状态 */
 	private String distributeStatus;
 
@@ -67,7 +70,45 @@ public class Resource extends BaseEntity
 	/** 周期名称 */
 	private String cycleName;
 
-    public String getCycleName() {
+	public Date getResourceLastedDate() {
+		return resourceLastedDate;
+	}
+
+	public void setResourceLastedDate(Date resourceLastedDate) {
+		this.resourceLastedDate = resourceLastedDate;
+	}
+
+	@Override
+	public String toString() {
+		return "Resource{" +
+				"resourceId=" + resourceId +
+				", resourceAreaId=" + resourceAreaId +
+				", resourceName='" + resourceName + '\'' +
+				", resourceLongitude='" + resourceLongitude + '\'' +
+				", resourceLatitude='" + resourceLatitude + '\'' +
+				", resourceAddress='" + resourceAddress + '\'' +
+				", resourceDotType='" + resourceDotType + '\'' +
+				", resourceStatus='" + resourceStatus + '\'' +
+				", resourceStartTime=" + resourceStartTime +
+				", resourceMaintainUnit='" + resourceMaintainUnit + '\'' +
+				", resourceMaintainUnitTel='" + resourceMaintainUnitTel + '\'' +
+				", resourceMaintainUnitName='" + resourceMaintainUnitName + '\'' +
+				", resourceSadegrareManTel='" + resourceSadegrareManTel + '\'' +
+				", resourceDeleted=" + resourceDeleted +
+				", resourcePlanDay=" + resourcePlanDay +
+				", resourceCycle=" + resourceCycle +
+				", resourceStagantionCompany=" + resourceStagantionCompany +
+				", resourceLastDate=" + resourceLastDate +
+				", resourceType='" + resourceType + '\'' +
+				", resourceLastedDate=" + resourceLastedDate +
+				", distributeStatus='" + distributeStatus + '\'' +
+				", stagantionCompanyName='" + stagantionCompanyName + '\'' +
+				", areaName='" + areaName + '\'' +
+				", cycleName='" + cycleName + '\'' +
+				'}';
+	}
+
+	public String getCycleName() {
         return cycleName;
     }
 
@@ -271,27 +312,4 @@ public class Resource extends BaseEntity
 		return resourceType;
 	}
 
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("resourceId", getResourceId())
-            .append("resourceAreaId", getResourceAreaId())
-            .append("resourceName", getResourceName())
-            .append("resourceLongitude", getResourceLongitude())
-            .append("resourceLatitude", getResourceLatitude())
-            .append("resourceAddress", getResourceAddress())
-            .append("resourceDotType", getResourceDotType())
-            .append("resourceStatus", getResourceStatus())
-            .append("resourceStartTime", getResourceStartTime())
-            .append("resourceMaintainUnit", getResourceMaintainUnit())
-            .append("resourceMaintainUnitTel", getResourceMaintainUnitTel())
-            .append("resourceMaintainUnitName", getResourceMaintainUnitName())
-            .append("resourceSadegrareManTel", getResourceSadegrareManTel())
-            .append("resourceDeleted", getResourceDeleted())
-            .append("resourcePlanDay", getResourcePlanDay())
-            .append("resourceCycle", getResourceCycle())
-            .append("resourceStagantionCompany", getResourceStagantionCompany())
-            .append("resourceLastDate", getResourceLastDate())
-            .append("resourceType", getResourceType())
-            .toString();
-    }
 }

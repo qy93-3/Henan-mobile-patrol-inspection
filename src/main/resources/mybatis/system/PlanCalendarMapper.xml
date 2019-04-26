@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="calendarMonth != null "> and calendar_month = #{calendarMonth}</if>
              <if test="calendarStatus != null "> and calendar_status = #{calendarStatus}</if>
              <if test="calendarYear != null "> and calendar_year = #{calendarYear}</if>
-             <if test="calendarDay != null  and calendarDay != '' "> and calendar_day = #{calendarDay}</if>
+             <if test="calendarDay != null "> and calendar_day = #{calendarDay}</if>
              <if test="calendarDate != null "> and calendar_date = #{calendarDate}</if>
              <if test="monthPlanId != null "> and month_plan_id = #{monthPlanId}</if>
              <if test="calendarDayResources != null "> and calendar_day_resources = #{calendarDayResources}</if>
@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="calendarMonth != null  ">calendar_month,</if>
 			<if test="calendarStatus != null  ">calendar_status,</if>
 			<if test="calendarYear != null  ">calendar_year,</if>
-			<if test="calendarDay != null  and calendarDay != ''  ">calendar_day,</if>
+			<if test="calendarDay != null  ">calendar_day,</if>
 			<if test="calendarDate != null  ">calendar_date,</if>
 			<if test="monthPlanId != null  ">month_plan_id,</if>
 			<if test="calendarDayResources != null  ">calendar_day_resources,</if>
@@ -55,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="calendarMonth != null  ">#{calendarMonth},</if>
 			<if test="calendarStatus != null  ">#{calendarStatus},</if>
 			<if test="calendarYear != null  ">#{calendarYear},</if>
-			<if test="calendarDay != null  and calendarDay != ''  ">#{calendarDay},</if>
+			<if test="calendarDay != null  ">#{calendarDay},</if>
 			<if test="calendarDate != null  ">#{calendarDate},</if>
 			<if test="monthPlanId != null  ">#{monthPlanId},</if>
 			<if test="calendarDayResources != null  ">#{calendarDayResources},</if>
@@ -68,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="calendarMonth != null  ">calendar_month = #{calendarMonth},</if>
             <if test="calendarStatus != null  ">calendar_status = #{calendarStatus},</if>
             <if test="calendarYear != null  ">calendar_year = #{calendarYear},</if>
-            <if test="calendarDay != null  and calendarDay != ''  ">calendar_day = #{calendarDay},</if>
+            <if test="calendarDay != null  ">calendar_day = #{calendarDay},</if>
             <if test="calendarDate != null  ">calendar_date = #{calendarDate},</if>
             <if test="monthPlanId != null  ">month_plan_id = #{monthPlanId},</if>
             <if test="calendarDayResources != null  ">calendar_day_resources = #{calendarDayResources},</if>

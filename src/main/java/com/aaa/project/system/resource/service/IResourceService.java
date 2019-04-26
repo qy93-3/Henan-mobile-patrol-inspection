@@ -1,6 +1,10 @@
 package com.aaa.project.system.resource.service;
 
 import com.aaa.project.system.resource.domain.Resource;
+import com.aaa.project.system.site.domain.Site;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,11 +63,26 @@ public interface IResourceService
 	public int cancelDistribute(Resource resource);
 
 	/**
+	 * 释放日计划资源
+	 * @param resource
+	 * @return
+	 */
+	public int relaseResources(Resource resource);
+
+	/**
      * 删除资源点信息
      * 
      * @param ids 需要删除的数据ID
      * @return 结果
      */
 	public int deleteResourceByIds(String ids);
+
+	/**
+	 * 查询有驻点并且日期差大于周期的资源点
+	 * @param nowDate
+	 * @param stagnationId
+	 * @return
+	 */
+	public List<Resource> selectResourceHasDate(@Param("nowDate") Date nowDate, @Param("resourceStagantionCompany")int stagnationId);
 
 }

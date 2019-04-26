@@ -2,7 +2,10 @@ package com.aaa.project.system.site.mapper;
 
 import com.aaa.project.system.resource.domain.Resource;
 import com.aaa.project.system.site.domain.Site;
-import java.util.List;	
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 站点 数据层
@@ -52,6 +55,13 @@ public interface SiteMapper
 	public int updateSite(Site site);
 
 	/**
+	 * 释放日计划资源
+	 * @param site
+	 * @return
+	 */
+	public int relaseResources(Site site);
+
+	/**
 	 * 释放资源
 	 * @param site
 	 * @return
@@ -66,5 +76,13 @@ public interface SiteMapper
      * @return 结果
      */
 	public int deleteSiteByIds(String[] siteIds);
+
+	/**
+	 * 查询有驻点并且日期差大于周期的站点
+	 * @param nowDate
+	 * @param stagnationId
+	 * @return
+	 */
+	public List<Site> selectSiteHasDate(@Param("nowDate")Date nowDate,@Param("siteStagantionCompany")int stagnationId);
 	
 }
