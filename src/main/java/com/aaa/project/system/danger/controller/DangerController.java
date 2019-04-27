@@ -174,6 +174,7 @@ public class DangerController extends BaseController
 				//获取隐患提交人信息
 				RoutingPeople tRoutingPeople = routingPeopleService.selectRoutingPeopleById(routingId);
 				danger.setTroutingPeople(tRoutingPeople);
+
 			}
 			return  dangerList;
 		}
