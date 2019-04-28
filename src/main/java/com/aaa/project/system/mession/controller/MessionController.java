@@ -2,7 +2,6 @@ package com.aaa.project.system.mession.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +14,8 @@ import com.aaa.project.system.messionStatus.domain.MessionStatus;
 import com.aaa.project.system.messionStatus.service.IMessionStatusService;
 import com.aaa.project.system.planCalendar.domain.PlanCalendar;
 import com.aaa.project.system.planCalendar.service.IPlanCalendarService;
+import com.aaa.project.system.planDay.domain.PlanDay;
+import com.aaa.project.system.planDay.service.IPlanDayService;
 import com.aaa.project.system.planMonth.domain.PlanMonth;
 import com.aaa.project.system.planMonth.service.IPlanMonthService;
 import com.aaa.project.system.reply.domain.Reply;
@@ -78,6 +79,8 @@ public class MessionController extends BaseController
 	private IPlanMonthService planMonthService;
 	@Autowired
 	private IPlanCalendarService planCalendarService;
+	@Autowired
+    private IPlanDayService planDayService;
 	@RequiresPermissions("system:mession:view")
 	@GetMapping()
 	public String mession()
@@ -178,14 +181,15 @@ public class MessionController extends BaseController
      */
 	@PostMapping("/wxmessioonlist")
     @ResponseBody
-	public  Result<Mession>  wxmessionlist(Mession mession,RoutingPeople routingPeople, @RequestBody Map<String,String> data){
+	public  Result<Mession>  wxmessionlist(Mession mession, PlanDay planDay, @RequestBody Map<String,Integer> data){
 
-		routingPeople.setOpenId(data.get("openid"));
-		System.out.println(data.get("openid"));
-        RoutingPeople routingPeople1 = routingPeopleService.selectRoutingPeople(routingPeople);
-        int p=Integer.parseInt(data.get("messionStatus"));
-		mession.setMessionRoutingId(routingPeople1.getRoutingId());
-		mession.setMessionStatus(p);
+		planDay.setCalendarPlanId(data.get("calendarId"));
+		System.out.println("calendarId"+data.get("calendarId"));
+        List<PlanDay> planDayList = planDayService.selectPlanDayList(planDay);
+        for (PlanDay day : planDayList) {
+            
+        }
+		mession.setMessionStatus(data.get("messionStatus"));
 		Result<Mession> result=new Result();
         List<Mession> messionList = messionService.selectMessionList(mession);
         for (Mession mession1 : messionList) {
@@ -366,6 +370,12 @@ public class MessionController extends BaseController
 		messionService.updateMession(mession);
 		return result;
 	}
+
+    /**
+     * 每月计划
+     * @param map
+     * @return
+     */
 	@RequestMapping("/wxplan")
 	@ResponseBody
 	public Result wxplan(@RequestBody Map<String,String> map){
@@ -376,15 +386,14 @@ public class MessionController extends BaseController
 		RoutingPeople routingPeople = new RoutingPeople();
 		routingPeople.setOpenId(map.get("openId"));
 		RoutingPeople routingPeople1 = routingPeopleService.selectRoutingPeople(routingPeople);
-
+        System.out.println(routingPeople1.getStagnationId());
 		planMonth.setMonthPlanStagnation(routingPeople1.getStagnationId());
 		planMonth.setMonthPlanMonth(Integer.parseInt(map.get("month")));
 		planMonth.setMonthPlanYear(Integer.parseInt(map.get("year")));
 		List<PlanMonth> planMonths = planMonthService.selectPlanMonthList(planMonth);
-		for (PlanMonth month : planMonths) {
-			planCalendar.setCalendarMonth(month.getMonthPlanId());
-		}
-		List<PlanCalendar> planCalendarsLsit = planCalendarService.selectPlanCalendarList(planCalendar);
+        PlanMonth planMonth1 = planMonths.get(0);
+        planCalendar.setMonthPlanId(planMonth1.getMonthPlanId());
+        List<PlanCalendar> planCalendarsLsit = planCalendarService.selectPlanCalendarList(planCalendar);
 		result.setData(planCalendarsLsit);
 		return  result;
 	}

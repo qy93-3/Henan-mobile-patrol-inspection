@@ -1,8 +1,11 @@
 package com.aaa.project.system.planCalendar.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.aaa.framework.web.domain.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -26,6 +29,8 @@ public class PlanCalendar extends BaseEntity implements Cloneable
 	/** 日历天 */
 	private Integer calendarDay;
 	/** 每日日期 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
 	private Date calendarDate;
 	/** 月计划编号 */
 	private Integer monthPlanId;
