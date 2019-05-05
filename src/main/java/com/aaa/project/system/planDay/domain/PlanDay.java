@@ -1,5 +1,7 @@
 package com.aaa.project.system.planDay.domain;
 
+import com.aaa.project.system.resource.domain.Resource;
+import com.aaa.project.system.site.domain.Site;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.aaa.framework.web.domain.BaseEntity;
@@ -57,6 +59,26 @@ public class PlanDay extends BaseEntity implements Cloneable {
     private Integer dayPlanStatus;
 
     private String resourcesName;
+
+    private Site site;
+
+    private Resource resource;
+
+    public Site getSite() {
+        return site;
+    }
+
+    public void setSite(Site site) {
+        this.site = site;
+    }
+
+    public Resource getResource() {
+        return resource;
+    }
+
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
 
     public String getResourcesName() {
         return resourcesName;

@@ -26,6 +26,8 @@ public interface MessionMapper
      * @return 日计划分配任务集合
      */
 	public List<Mession> selectMessionList(Mession mession);
+
+	public Mession selectMession(Mession mession);
 	
 	/**
      * 新增日计划分配任务

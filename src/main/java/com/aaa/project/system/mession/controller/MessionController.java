@@ -29,6 +29,7 @@ import com.aaa.project.system.site.domain.Site;
 import com.aaa.project.system.site.service.ISiteService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.sun.jna.platform.unix.solaris.LibKstat;
 import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,24 +183,27 @@ public class MessionController extends BaseController
 	@PostMapping("/wxmessioonlist")
     @ResponseBody
 	public  Result<Mession>  wxmessionlist(Mession mession, PlanDay planDay, @RequestBody Map<String,Integer> data){
-
+		ArrayList list = new ArrayList();
 		planDay.setCalendarPlanId(data.get("calendarId"));
 		System.out.println("calendarId"+data.get("calendarId"));
         List<PlanDay> planDayList = planDayService.selectPlanDayList(planDay);
         for (PlanDay day : planDayList) {
-            
-        }
-		mession.setMessionStatus(data.get("messionStatus"));
+			mession.setMessionStatus(data.get("messionStatus"));
+			mession.setMessionDayId(day.getDayPlanId());
+			Mession mession1 = messionService.selectMession(mession);
+			if(mession1!=null){
+				if(mession1.getMessionResourceId()==null){
+					mession1.setSite(siteService.selectSiteById(mession1.getMessionSiteId()));
+				}else {
+					mession1.setResource(resourceService.selectResourceById(mession1.getMessionResourceId()));
+				}
+				list.add(mession1);
+			}
+		}
+
 		Result<Mession> result=new Result();
-        List<Mession> messionList = messionService.selectMessionList(mession);
-        for (Mession mession1 : messionList) {
-            if(mession1.getMessionResourceId()==null){
-                mession1.setSite(siteService.selectSiteById(mession1.getMessionSiteId()));
-            }
-            mession1.setResource(resourceService.selectResourceById(mession1.getMessionResourceId()));
-        }
         result.setCode(200);
-        result.setData(messionList);
+        result.setData(list);
         return result;
 	}
 	/**
@@ -225,7 +229,6 @@ public class MessionController extends BaseController
 				Site site = siteService.selectSiteById(tmession.getMessionSiteId());
 				tmession.setSite(site);
 				//获取巡检任务状态信息
-
 				MessionStatus messionStatus = messionStatusService.selectMessionStatusById(tmession.getMessionStatus());
 				tmession.setTblMessionStatus(messionStatus);
 			}
@@ -397,4 +400,57 @@ public class MessionController extends BaseController
 		result.setData(planCalendarsLsit);
 		return  result;
 	}
+
+	/**
+	 * 认领
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/wxclaim")
+	@ResponseBody
+	public Result wxclaim(@RequestBody Map<String,Integer> map){
+		Result result = new Result();
+		Mession mession = messionService.selectMessionById(map.get("messionId"));
+		mession.setMessionStatus(1);
+		messionService.updateMession(mession);
+		result.setCode(200);
+		return result;
+	}
+
+	/**
+	 * 任务详情
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/wxdetails")
+	@ResponseBody
+	public Result wxdetails(@RequestBody Map<String,Long> map,PlanDay planDay){
+		Result result = new Result();
+		if(map.get("resourceId")==null){
+			planDay.setDayPlanSite(map.get("siteId"));
+		} else {
+			planDay.setDayPlanResource(map.get("resourceId"));
+		}
+		int calendarId = Integer.parseInt(Long.toString(map.get("calendarId")));
+		PlanCalendar planCalendar = planCalendarService.selectPlanCalendarById(calendarId);
+		planDay.setMonthPlanId(planCalendar.getMonthPlanId());
+		System.out.println(planDay.getDayPlanSite());
+		System.out.println(planDay.getDayPlanResource());
+		List<PlanDay> planDayList = planDayService.selectPlanDayList(planDay);
+		for (PlanDay day : planDayList) {
+			if(day.getDayPlanResource()==null){
+				day.setSite(siteService.selectSiteById(day.getDayPlanSite()));
+			} else {
+				day.setResource(resourceService.selectResourceById(day.getDayPlanResource()));
+			}
+		}
+		for (PlanDay day : planDayList) {
+			System.out.println(day.getDayPlanId());
+		}
+
+		result.setData(planDayList);
+		result.setCode(200);
+		return result;
+	}
+
 }

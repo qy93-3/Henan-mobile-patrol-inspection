@@ -43,8 +43,13 @@ public class MessionServiceImpl implements IMessionService
 	{
 	    return messionMapper.selectMessionList(mession);
 	}
-	
-    /**
+
+	@Override
+	public Mession selectMession(Mession mession) {
+		return messionMapper.selectMession(mession);
+	}
+
+	/**
      * 新增日计划分配任务
      * 
      * @param mession 日计划分配任务信息

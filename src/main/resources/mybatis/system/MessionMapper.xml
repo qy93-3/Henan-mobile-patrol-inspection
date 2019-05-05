@@ -42,6 +42,27 @@
         </where>
     </select>
 
+    <select id="selectMession" parameterType="Mession" resultMap="MessionResult">
+        <include refid="selectMessionVo"/>
+        <where>
+            <if test="messionId != null ">and mession_id = #{messionId}</if>
+            <if test="messionRoutingId != null ">and mession_routing_id = #{messionRoutingId}</if>
+            <if test="messionDayId != null ">and mession_day_id = #{messionDayId}</if>
+            <if test="messionSiteId != null ">and mession_site_id = #{messionSiteId}</if>
+            <if test="messionResourceId != null ">and mession_resource_id = #{messionResourceId}</if>
+            <if test="messionDate != null ">and mession_date = #{messionDate}</if>
+            <if test="messionStatus != null ">and mession_status = #{messionStatus}</if>
+            <if test="messionCheckStatus != null ">and mession_check_status = #{messionCheckStatus}</if>
+            <if test="messionStagnationId != null ">and mession_stagnation_id = #{messionStagnationId}</if>
+            <if test="messionLongitude != null  and messionLongitude != '' ">and mession_longitude =
+                #{messionLongitude}
+            </if>
+            <if test="messionLatitude != null  and messionLatitude != '' ">and mession_latitude = #{messionLatitude}
+            </if>
+        </where>
+    </select>
+
+
     <select id="selectMessionById" parameterType="Integer" resultMap="MessionResult">
         <include refid="selectMessionVo"/>
         where mession_id = #{messionId}
