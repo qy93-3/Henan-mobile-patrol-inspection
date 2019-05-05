@@ -2,10 +2,15 @@ package com.aaa.project.system.user.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.aaa.common.utils.security.ShiroUtils;
+import com.aaa.project.system.user.domain.User;
+import com.aaa.project.system.user.service.IUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +28,9 @@ import com.aaa.framework.web.domain.AjaxResult;
 @Controller
 public class LoginController extends BaseController
 {
+    @Autowired
+    private IUserService userService;
+
     @GetMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response)
     {
@@ -44,6 +52,12 @@ public class LoginController extends BaseController
         try
         {
             subject.login(token);
+            //根据登录用户名和密码来获取用户，并将该用户放到session中
+            User user = new User();
+            user.setUserName(username);
+            user.setPassword(password);
+            User user1 = userService.selectUserList(user).get(0);
+            ShiroUtils.setSysUser(user1);
             return success();
         }
         catch (AuthenticationException e)

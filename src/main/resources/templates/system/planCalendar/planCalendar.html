@@ -140,7 +140,10 @@
                 ,
                 btnAlign: 'c'
                 ,
-                content: ['/system/planMonth/toDayDetile?date=' + obj_date + "&planMonthId=" + planMonthId +"&sta="+sta+ "&from=" + from, 'no']
+                content: ['/system/planMonth/toDayDetile?date=' + obj_date + "&planMonthId=" + planMonthId +"&sta="+sta+ "&from=" + from],
+                end: function () {
+                    location.reload();
+                }
             });
         }
 

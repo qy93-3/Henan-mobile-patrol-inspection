@@ -12,21 +12,6 @@
                 <div class="select-list">
                     <table>
                         <tr>
-                            <td>月计划年份：</td>
-                            <td>
-                                <select name="planYear">
-                                    <option value=0>--请选择--</option>
-                                    <option value="2015">2015</option>
-                                    <option value="2016">2016</option>
-                                    <option value="2017">2017</option>
-                                    <option value="2018">2018</option>
-                                    <option value="2019">2019</option>
-                                    <option value="2020">2020</option>
-                                    <option value="2021">2021</option>
-                                    <option value="2022">2022</option>
-                                    <option value="2023">2023</option>
-                                </select>
-                            </td>
                             <td>月计划状态：</td>
                             <td>
                                 <select name="planStatus">
@@ -39,14 +24,14 @@
                         </tr>
                         <tr>
                             <td>维护驻点</td>
-                            <td colspan="3"><select name="resourceCity" id="city">
-                                <option value=0>--请选择--</option>
+                            <td><select name="resourceCity" id="city">
+                                <option value=0>--请选择市--</option>
                                 <div th:each="city:${cities}">
                                     <option th:value="${city.cityId}" th:text="${city.cityName}"></option>
                                 </div>
                             </select>
                                 <select name="resourceArea" id="area">
-                                    <option value=0>--请选择--</option>
+                                    <option value=0>--请选择县--</option>
                                 </select>
                                 <select id="stagantion" name="stagantion">
                                     <option value=0>--请选择驻点--</option>
@@ -84,8 +69,8 @@
     var from = [[${from}]];
     var prefix = ctx + "system/planMonth";
     $(function () {
-        if (from=="month") 
-            $.modal.open("设置驻点", "/system/planMonth/toSetStagnation", 450, 450);
+        // if (from=="month")
+        //     $.modal.open("设置驻点", "/system/planMonth/toSetStagnation", 450, 450);
         var options = {
             url: prefix + "/list",
             updateUrl: prefix + "/edit/{id}",
@@ -102,7 +87,7 @@
                     field: 'monthPlanId',
                     title: '月计划编号',
                     visible: true,
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'monthPlanName',

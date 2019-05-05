@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <meta charset="utf-8">
+<link th:href="@{/css/select.css}" rel="stylesheet"/>
 <head th:include="include :: header"></head>
 <body class="gray-bg">
     
@@ -9,54 +10,30 @@
 			<div class="col-sm-12 search-collapse">
 				<form id="formId">
 					<div class="select-list">
-						<ul>
-							<li>
-								任务编号：<input type="text" name="messionId"/>
-							</li>
-
-							<li>
-								巡检项目编号：<input type="text" name="routingProjectId"/>
-							</li>
-
-							<li>
-								是否有安全隐患：<input type="text" name="potentialSafetyHazard"/>
-							</li>
-
-							<li>
-								回复站点编号：<input type="text" name="replySiteId"/>
-							</li>
-
-							<li>
-								回复资源点编号：<input type="text" name="replyResourceId"/>
-							</li>
-
-							<li>
-								上传图片：<input type="text" name="picture"/>
-							</li>
-
-							<li>
-								巡检人员编号：<input type="text" name="routingPersonId"/>
-							</li>
-
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
+						<table>
+							<tr>
+								<td>任务编号：</td>
+								<td>
+									<input type="text" name="messionId"/>
+								</td>
+							</tr>
+							<tr>
+								<td>巡检人员编号：</td>
+								<td><input type="text" name="routingPersonId"/>
+								</td>
+							</tr>
+						</table>
+						<div align="center">
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+									class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+									class="fa fa-refresh"></i>&nbsp;重置</a>
+						</div>
 					</div>
 				</form>
 			</div>
 			
 	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:reply:add">
-					<i class="fa fa-plus"></i> 添加
-				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:reply:edit">
-					<i class="fa fa-edit"></i> 修改
-				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:reply:remove">
-					<i class="fa fa-remove"></i> 删除
-				</a>
 				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:reply:export">
 						<i class="fa fa-download"></i> 导出
 				 </a>
@@ -101,9 +78,9 @@
 					sortable: true
 				},
 				{
-					field : 'potentialSafetyHazard', 
+					field : 'safety',
 					title : '是否有安全隐患',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'replySiteId', 

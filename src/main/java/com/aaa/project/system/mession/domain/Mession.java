@@ -47,6 +47,46 @@ public class Mession extends BaseEntity
 
 	private MessionStatus tblMessionStatus;
 
+	private String resourcesName;
+
+	private String resourcesType;
+
+	private String statusName;
+
+	private String stagnationName;
+
+	public String getStagnationName() {
+		return stagnationName;
+	}
+
+	public void setStagnationName(String stagnationName) {
+		this.stagnationName = stagnationName;
+	}
+
+	public String getStatusName() {
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+
+	public String getResourcesType() {
+		return resourcesType;
+	}
+
+	public void setResourcesType(String resourcesType) {
+		this.resourcesType = resourcesType;
+	}
+
+	public String getResourcesName() {
+		return resourcesName;
+	}
+
+	public void setResourcesName(String resourcesName) {
+		this.resourcesName = resourcesName;
+	}
+
 	public Site getSite() {
 		return site;
 	}

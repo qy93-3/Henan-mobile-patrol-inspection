@@ -57,7 +57,7 @@ public class ResourceController extends BaseController {
     /**
      * 表格显示页面
      *
-     * @param flag
+     * @param flag 判断选项卡选择的是'资源点分配'还是'驻点资源'，默认是前者
      * @param map
      * @return
      */
@@ -72,6 +72,13 @@ public class ResourceController extends BaseController {
 
     /**
      * 查询资源点列表
+     * @param flag 判断选项卡选择的是'资源点分配'还是'驻点资源'，默认是前者
+     * @param resourceCity 下拉框选择的城市
+     * @param resourceArea 下拉框选择的地区
+     * @param stagantion 下拉框选择的驻点
+     * @param resource
+     * @param map
+     * @return
      */
     @RequiresPermissions("system:resource:list")
     @PostMapping("/list/{flag}")
@@ -81,18 +88,16 @@ public class ResourceController extends BaseController {
         startPage();
         List<Resource> list = null;
         //判断地区编号是市还是区县
-        int step = 0;
         if (resourceArea != null) {
             if (resourceArea != 0)
-                resource.setResourceAreaId(resourceArea);
+                resource.setResourceAreaId(resourceArea);//如果Area不为空且不为0('请选择')，则设置查询条件中resourceAreaId为Area
             else if (resourceCity != 0) {
-                resource.setResourceAreaId(resourceCity);
-                step = 1;
+                resource.setResourceAreaId(resourceCity);//如果Area为0但City不为0('请选择')，则设置查询条件中resourceAreaId为City
             }
         }
 
         if (stagantion!=null&&stagantion!=0)
-            resource.setResourceStagantionCompany(stagantion);
+            resource.setResourceStagantionCompany(stagantion);//如果驻点不为空且不为0('请选择')，则设置为查询条件
         //判断所需的查询条件
         if ("{0}".equals(flag)) {
             startPage();
@@ -101,29 +106,15 @@ public class ResourceController extends BaseController {
             startPage();
             list = resourceService.selectResourceListHasDis(resource);
         }
-
-        if (step == 1) {
-            //地区编号是市，则列表中再添加所有该市下县和区的资源
-            Area area = new Area();
-            area.setFather(resourceCity);
-            List<Area> areas = areaService.selectAreaList(area);
-            for (Area area1 : areas) {
-                resource.setResourceAreaId(area1.getAreaId());
-                if ("{0}".equals(flag)) {
-                    startPage();
-                    list.addAll(resourceService.selectResourceListHasDis(resource));
-                } else {
-                    startPage();
-                    list.addAll(resourceService.selectResourceList(resource));
-                }
-            }
-        }
-
+        //获取资源点列表后进行表格内字段的设置
         for (Resource resource1 : list) {
             //设置表格中数据库没有的列名
             Integer resourceAreaId1 = resource1.getResourceAreaId();
+            //若该资源有对应的驻点，则分配完成，否则分配未完成
             if (resource1.getResourceStagantionCompany() != null) {
+                //设置表格内显示的分配状态
                 resource1.setDistributeStatus("分配已完成");
+                //设置表格内显示的驻点名称
                 Integer resourceStagantionCompany = resource1.getResourceStagantionCompany();
                 Stagnation stagnation = stagnationService.selectStagnationById(resourceStagantionCompany);
                 resource1.setStagantionCompanyName(stagnation.getStagnationPname());
@@ -131,12 +122,15 @@ public class ResourceController extends BaseController {
                 resource1.setDistributeStatus("分配未完成");
             int i = Integer.parseInt(resourceAreaId1.toString().substring(0, 1));
             if (i == 4) {
+                //若资源点地区编号以4开头(市级编号)，则设置表格内显示的地区名称为对应市的名称
                 resource1.setAreaName(cityService.selectCityById(resource1.getResourceAreaId()).getCityName());
             } else {
+                //若资源点地区编号不以4开头，则设置表格内显示的地区名称为对应县的名称
                 Integer resourceAreaId = resource1.getResourceAreaId();
                 resource1.setAreaName(areaService.selectAreaById(resourceAreaId).getAreaName());
             }
             if(resource1.getResourceCycle()!=null) {
+                //当资源点巡检周期不为空时，设置其表格内显示的巡检周期的名称
                 resource1.setCycleName(resourcesCycleTypeService.selectResourcesCycleTypeById(resource1.getResourceCycle()).getResourcesCycleName());
             }
         }
@@ -229,6 +223,7 @@ public class ResourceController extends BaseController {
         int i = 0;
         for (String id : ids.split(",")) {
             Resource resource = resourceService.selectResourceById(Long.valueOf(id).longValue());
+            //将resource的驻点公司设置为stagantion
             resource.setResourceStagantionCompany(stagantion);
             i += resourceService.updateResource(resource);
         }
@@ -245,22 +240,37 @@ public class ResourceController extends BaseController {
         int i = 0;
         for (String id : ids.split(",")) {
             Resource resource = resourceService.selectResourceById(Long.valueOf(id).longValue());
+            //取消站点和驻点的关联
             i += resourceService.cancelDistribute(resource);
         }
         return toAjax(i);
     }
 
+    /**
+     * 跳转到设置巡检周期页面
+     * @param rows
+     * @param map
+     * @return
+     */
     @GetMapping("/toSetCycle")
     public String toSetCycle(@RequestParam Object rows,Map<String,Object> map){
         map.put("rows",rows);
         return prefix + "/setCycle";
     }
+
+    /**
+     * 设置巡检周期
+     * @param cycle 巡检周期ID
+     * @param ids 所选资源ID
+     * @return
+     */
     @RequiresPermissions("system:resource:setCycle")
     @PostMapping("/setCycle")
     @ResponseBody
     public AjaxResult setCycle(int cycle,String ids){
         int i = 0;
         for (String id : ids.split(",")) {
+            //根据ids中的每一个id获取对应的资源点，并设置对应的巡检周期
             Resource resource= resourceService.selectResourceById(Long.valueOf(id).longValue());
             resource.setResourceCycle(cycle);
             i += resourceService.updateResource(resource);

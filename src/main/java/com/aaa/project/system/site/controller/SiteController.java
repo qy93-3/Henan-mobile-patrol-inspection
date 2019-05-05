@@ -73,6 +73,13 @@ public class SiteController extends BaseController
 
 	/**
 	 * 查询站点列表
+	 * @param flag 判断选项卡选择的是'资源点分配'还是'驻点资源'，默认是前者
+	 * @param siteCity 下拉框选择的城市
+	 * @param siteArea 下拉框选择的地区
+	 * @param stagantion 下拉框选择的驻点
+	 * @param map
+	 * @param site
+	 * @return
 	 */
 	@RequiresPermissions("system:site:list")
 	@PostMapping("/list/{flag}")
@@ -83,17 +90,15 @@ public class SiteController extends BaseController
 		startPage();
 		List<Site> list = null;
 		//判断地区编号是市还是区县
-		int step = 0;
 		if (siteArea != null) {
 			if (siteArea != 0)
-				site.setSiteAreaId(siteArea);
+				site.setSiteAreaId(siteArea);//如果Area不为空且不为0('请选择')，则设置查询条件中siteAreaId为Area
 			else if (siteCity != 0) {
-				site.setSiteAreaId(siteCity);
-				step = 1;
+				site.setSiteAreaId(siteCity);//如果Area为0但City不为0('请选择')，则设置查询条件中siteAreaId为City
 			}
 		}
 		if (stagantion!=null&&stagantion!=0)
-			site.setSiteStagantionCompany(stagantion);
+			site.setSiteStagantionCompany(stagantion);//如果驻点不为空且不为0('请选择')，则设置为查询条件
 
 		//判断所需的查询条件
 		if ("{0}".equals(flag)) {
@@ -102,25 +107,15 @@ public class SiteController extends BaseController
 			list = siteService.selectSiteListHasDis(site);
 		}
 
-		if (step == 1) {
-			//地区编号是市，则列表中再添加所有该市下县和区的资源
-			Area area = new Area();
-			area.setFather(siteCity);
-			List<Area> areas = areaService.selectAreaList(area);
-			for (Area area1 : areas) {
-				site.setSiteAreaId(area1.getAreaId());
-				if ("{0}".equals(flag)) {
-					list.addAll(siteService.selectSiteList(site));
-				} else {
-					list.addAll(siteService.selectSiteListHasDis(site));
-				}
-			}
-		}
+		//获取资源点列表后进行表格内字段的设置
 		for (Site site1 : list) {
 			//设置表格中数据库没有的列名
 			Integer siteAreaId1 = site1.getSiteAreaId();
+			//若该资源有对应的驻点，则分配完成，否则分配未完成
 			if (site1.getSiteStagantionCompany() != null) {
+				//设置表格内显示的分配状态
 				site1.setDistributeStatus("分配已完成");
+				//设置表格内显示的驻点名称
 				Integer siteStagantionCompany = site1.getSiteStagantionCompany();
 				Stagnation stagnation = stagnationService.selectStagnationById(siteStagantionCompany);
 				site1.setStagantionCompanyName(stagnation.getStagnationPname());
@@ -128,12 +123,15 @@ public class SiteController extends BaseController
 				site1.setDistributeStatus("分配未完成");
 			int i = Integer.parseInt(siteAreaId1.toString().substring(0, 1));
 			if (i == 4) {
+				//若站点地区编号以4开头(市级编号)，则设置表格内显示的地区名称为对应市的名称
 				site1.setAreaName(cityService.selectCityById(site1.getSiteAreaId()).getCityName());
 			} else {
+				//若站点地区编号不以4开头，则设置表格内显示的地区名称为对应县的名称
 				Integer siteAreaId = site1.getSiteAreaId();
 				site1.setAreaName(areaService.selectAreaById(siteAreaId).getAreaName());
 			}
 			if(site1.getSiteCycle()!=null) {
+				//当站点巡检周期不为空时，设置其表格内显示的巡检周期的名称
 				site1.setCycleName(resourcesCycleTypeService.selectResourcesCycleTypeById(site1.getSiteCycle()).getResourcesCycleName());
 			}
 		}
@@ -220,49 +218,64 @@ public class SiteController extends BaseController
 	}
 
 	/**
-	 * 分配资源点
+	 * 分配站点
 	 */
 	@RequiresPermissions("system:site:distribute")
-	@Log(title = "资源点", businessType = BusinessType.DELETE)
+	@Log(title = "站点", businessType = BusinessType.DELETE)
 	@PostMapping("/distribute")
 	@ResponseBody
 	public AjaxResult distribute(String ids, Integer stagantion) {
 		int i = 0;
 		for (String id : ids.split(",")) {
 			Site site = siteService.selectSiteById(Long.valueOf(id).longValue());
+			//将site的驻点公司设置为stagantion
 			site.setSiteStagantionCompany(stagantion);
 			i += siteService.updateSite(site);
 		}
 		return toAjax(i);
 	}
 	/**
-	 * 释放资源点
+	 * 释放站点
 	 */
 	@RequiresPermissions("system:site:cancelDistribute")
-	@Log(title = "资源点", businessType = BusinessType.DELETE)
+	@Log(title = "站点", businessType = BusinessType.DELETE)
 	@PostMapping("/cancelDistribute")
 	@ResponseBody
 	public AjaxResult cancelDistribute(String ids) {
 		int i = 0;
 		for (String id : ids.split(",")) {
 			Site site = siteService.selectSiteById(Long.valueOf(id).longValue());
+			//取消站点和驻点的关联
 			i += siteService.cancelDistribute(site);
 		}
 		return toAjax(i);
 	}
 
+	/**
+	 * 跳转到设置巡检周期页面
+	 * @param rows
+	 * @param map
+	 * @return
+	 */
 	@GetMapping("/toSetCycle")
 	public String toSetCycle(@RequestParam Object rows,Map<String,Object> map){
 		map.put("rows",rows);
 		return prefix + "/setCycle";
 	}
+
+	/**
+	 * 设置巡检周期
+	 * @param cycle 巡检周期ID
+	 * @param ids 所选资源ID
+	 * @return
+	 */
 	@RequiresPermissions("system:site:setCycle")
 	@PostMapping("/setCycle")
 	@ResponseBody
 	public AjaxResult setCycle(int cycle,String ids){
 		int i = 0;
-		System.out.println(cycle);
 		for (String id : ids.split(",")) {
+			//根据ids中的每一个id获取对应的站点，并设置对应的巡检周期
 			Site site = siteService.selectSiteById(Long.valueOf(id).longValue());
 			site.setSiteCycle(cycle);
 			i += siteService.updateSite(site);

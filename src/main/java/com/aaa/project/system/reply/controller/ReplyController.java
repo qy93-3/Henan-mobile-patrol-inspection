@@ -1,6 +1,10 @@
 package com.aaa.project.system.reply.controller;
 
 import java.util.List;
+
+import com.aaa.project.system.resource.service.IResourceService;
+import com.aaa.project.system.routingProject.service.IRoutingProjectService;
+import com.aaa.project.system.site.service.ISiteService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +37,15 @@ public class ReplyController extends BaseController
 	
 	@Autowired
 	private IReplyService replyService;
+
+	@Autowired
+	private IRoutingProjectService routingProjectService;
+
+	@Autowired
+	private ISiteService siteService;
+
+	@Autowired
+	private IResourceService resourceService;
 	
 	@RequiresPermissions("system:reply:view")
 	@GetMapping()
@@ -51,6 +64,18 @@ public class ReplyController extends BaseController
 	{
 		startPage();
         List<Reply> list = replyService.selectReplyList(reply);
+		for (Reply reply1 : list) {
+			//设置表格显示的巡检项目名称
+			reply1.setRoutingProject(routingProjectService.selectRoutingProjectById(reply1.getRoutingProjectId()).getRoutingProjectName());
+			//设置表格显示的隐患状态
+			reply1.setSafety(reply1.getPotentialSafetyHazard()==false?"否":"是");
+			if (reply1.getReplyResourceId()==null){
+				//若回复的资源点为空，则资源类型是站点
+				reply1.setResourcesName(siteService.selectSiteById(reply1.getReplySiteId()).getSiteName());
+			}else{
+				reply1.setResourcesName(resourceService.selectResourceById(reply1.getReplyResourceId()).getResourceName());
+			}
+		}
 		return getDataTable(list);
 	}
 	

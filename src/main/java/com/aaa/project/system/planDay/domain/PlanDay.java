@@ -60,9 +60,19 @@ public class PlanDay extends BaseEntity implements Cloneable {
 
     private String resourcesName;
 
+    private String resourcesAddress;
+
     private Site site;
 
     private Resource resource;
+
+    public String getResourcesAddress() {
+        return resourcesAddress;
+    }
+
+    public void setResourcesAddress(String resourcesAddress) {
+        this.resourcesAddress = resourcesAddress;
+    }
 
     public Site getSite() {
         return site;

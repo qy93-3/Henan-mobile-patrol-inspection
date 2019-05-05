@@ -31,7 +31,40 @@ public class Reply extends BaseEntity
 	/** 巡检人员编号 */
 	private Integer routingPersonId;
 
-	public void setReplyId(Integer replyId) 
+	/** 巡检项目名称 */
+	private String routingProject;
+
+	/** 隐患状态 */
+	private String safety;
+
+	/** 资源名称 */
+	private String resourcesName;
+
+	public String getResourcesName() {
+		return resourcesName;
+	}
+
+	public void setResourcesName(String resourcesName) {
+		this.resourcesName = resourcesName;
+	}
+
+	public String getSafety() {
+		return safety;
+	}
+
+	public void setSafety(String safety) {
+		this.safety = safety;
+	}
+
+	public String getRoutingProject() {
+		return routingProject;
+	}
+
+	public void setRoutingProject(String routingProject) {
+		this.routingProject = routingProject;
+	}
+
+	public void setReplyId(Integer replyId)
 	{
 		this.replyId = replyId;
 	}

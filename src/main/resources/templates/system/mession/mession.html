@@ -1,170 +1,172 @@
 <!DOCTYPE HTML>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <meta charset="utf-8">
+<script th:src="@{/css/layui/layui.js}"></script>
+<link th:href="@{/css/select.css}" rel="stylesheet"/>
 <head th:include="include :: header"></head>
 <body class="gray-bg">
-    
-     <div class="container-div">
-		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="formId">
-					<div class="select-list">
-						<ul>
-							<li>
-								巡检人员编号：<input type="text" name="messionRoutingId"/>
-							</li>
 
-							<li>
-								任务日计划编号：<input type="text" name="messionDayId"/>
-							</li>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <table>
+                        <tr>
+                            <td>巡检人员编号：</td>
+                            <td>
+                                <input type="text" name="messionRoutingId"/>
+                            </td>
+                            <td>任务状态：</td>
+                            <td>
+                                <select name="status">
+                                    <option value=10>--请选择--</option>
+                                    <div th:each="status:${messionStatusList}">
+                                        <option th:value="${status.messionStatusId}"
+                                                th:text="${status.messionStatusName}"></option>
+                                    </div>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>巡检人员驻点</td>
+                            <td colspan="3"><select name="resourceCity" id="city">
+                                <option value=0>--请选择--</option>
+                                <div th:each="city:${cities}">
+                                    <option th:value="${city.cityId}" th:text="${city.cityName}"></option>
+                                </div>
+                            </select>
+                                <select name="resourceArea" id="area">
+                                    <option value=0>--请选择--</option>
+                                </select>
+                                <select id="stagantion" name="stagantion">
+                                    <option value=0>--请选择驻点--</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <div align="center">
+                        <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                class="fa fa-refresh"></i>&nbsp;重置</a>
+                    </div>
+                </div>
+            </form>
+        </div>
 
-							<li>
-								任务站点编号：<input type="text" name="messionSiteId"/>
-							</li>
+        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:mession:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:mession:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:mession:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:mession:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:mession:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:mession:remove')}]];
+    var prefix = ctx + "system/mession";
 
-							<li>
-								任务资源点编号：<input type="text" name="messionResourceId"/>
-							</li>
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "日计划分配任务",
+            search: false,
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'messionId',
+                    title: '任务表编号',
+                    visible: false
+                },
+                {
+                    field: 'messionRoutingId',
+                    title: '巡检人员编号',
+                    sortable: true
+                },
+                {
+                    field: 'resourcesName',
+                    title: '任务资源'
+                },
+                {
+                    field: 'resourcesType',
+                    title: '任务资源类型'
+                },
+                {
+                    field: 'statusName',
+                    title: '任务状态'
+                },
+                {
+                    field: 'stagnationName',
+                    title: '任务驻点'
+                },
+                {
+                    field: 'messionDate',
+                    title: '任务日期'
+                }
+            ]
+        };
+        $.table.init(options);
+        /**
+         * 选择地市下拉框获取相应的区县和驻点
+         */
+        $("#city").change(function () {
+            getChild("city", "area", "city", "city", "area", ctx + "system/city/getLocation");
+            getChild("city", "stagnation", "city", "city", "stagantion", ctx + "system/city/getStagantion")
+        })
+        $("#area").change(function () {
+            getChild("area", "stagnation", "city", "area", "stagantion", ctx + "system/city/getStagantion")
+        })
 
-							<li>
-								任务日期：<input type="text" name="messionDate"/>
-							</li>
-
-							<li>
-								任务状态：<input type="text" name="messionStatus"/>
-							</li>
-
-							<li>
-								任务签到状态：<input type="text" name="messionCheckStatus"/>
-							</li>
-
-							<li>
-								任务驻点编号：<input type="text" name="messionStagnationId"/>
-							</li>
-
-							<li>
-								任务签到经度：<input type="text" name="messionLongitude"/>
-							</li>
-
-							<li>
-								任务签到纬度：<input type="text" name="messionLatitude"/>
-							</li>
-
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
-					</div>
-				</form>
-			</div>
-			
-	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:mession:add">
-					<i class="fa fa-plus"></i> 添加
-				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:mession:edit">
-					<i class="fa fa-edit"></i> 修改
-				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:mession:remove">
-					<i class="fa fa-remove"></i> 删除
-				</a>
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:mession:export">
-						<i class="fa fa-download"></i> 导出
-				 </a>
-			</div>
-			<div class="col-sm-12 select-table table-striped">
-				<table id="bootstrap-table" data-mobile-responsive="true"></table>
-			</div>
-		</div>
-	</div>
-    <div th:include="include :: footer"></div>
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:mession:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:mession:remove')}]];
-        var prefix = ctx + "system/mession";
-
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-				exportUrl: prefix + "/export",
-                modalName: "日计划分配任务",
-				search: false,
-		        showExport: true,
-                columns: [{
-		            checkbox: true
-		        },
-				{
-					field : 'messionId', 
-					title : '任务表编号',
-					visible: false
-				},
-				{
-					field : 'messionRoutingId', 
-					title : '巡检人员编号',
-					sortable: true
-				},
-				{
-					field : 'messionDayId', 
-					title : '任务日计划编号',
-					sortable: true
-				},
-				{
-					field : 'messionSiteId', 
-					title : '任务站点编号',
-					sortable: true
-				},
-				{
-					field : 'messionResourceId', 
-					title : '任务资源点编号',
-					sortable: true
-				},
-				{
-					field : 'messionDate', 
-					title : '任务日期',
-					sortable: true
-				},
-				{
-					field : 'messionStatus', 
-					title : '任务状态',
-					sortable: true
-				},
-				{
-					field : 'messionCheckStatus', 
-					title : '任务签到状态',
-					sortable: true
-				},
-				{
-					field : 'messionStagnationId', 
-					title : '任务驻点编号',
-					sortable: true
-				},
-				{
-					field : 'messionLongitude', 
-					title : '任务签到经度',
-					sortable: true
-				},
-				{
-					field : 'messionLatitude', 
-					title : '任务签到纬度',
-					sortable: true
-				},
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.messionId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.messionId + '\')"><i class="fa fa-remove"></i>删除</a>');
-						return actions.join('');
-		            }
-		        }]
-            };
-            $.table.init(options);
-        });
-    </script>
+        function getChild(level, getLevel, fatherNodeId, nowNodeId, childNodeId, url) {
+            $("#" + childNodeId + " option:not(:first)").remove();
+            var address = $("#" + nowNodeId).val();
+            var dataArr;
+            if (level == "area" && address == "0") {
+                address = $("#" + fatherNodeId).val();
+                level = "city"
+            }
+            dataArr = {
+                locationId: address,
+                areaLevel: level
+            }
+            $.post(url, dataArr, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var childId;
+                    var childName;
+                    if (getLevel == "area") {
+                        childId = data[i].areaId;
+                        childName = data[i].areaName;
+                    } else {
+                        childId = data[i].stagnationId;
+                        childName = data[i].stagnationPname;
+                    }
+                    $("#" + childNodeId).append("<option value='" + childId + "'>" + childName + "</option>");
+                }
+            })
+        }
+    });
+</script>
 </body>
 </html>
