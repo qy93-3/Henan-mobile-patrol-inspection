@@ -12,6 +12,8 @@ import com.aaa.project.system.city.domain.City;
 import com.aaa.project.system.city.service.ICityService;
 import com.aaa.project.system.danger.domain.Danger;
 import com.aaa.project.system.danger.service.IDangerService;
+import com.aaa.project.system.message.domain.Message;
+import com.aaa.project.system.message.service.IMessageService;
 import com.aaa.project.system.mession.results.Result;
 import com.aaa.project.system.messionStatus.domain.MessionStatus;
 import com.aaa.project.system.messionStatus.service.IMessionStatusService;
@@ -35,6 +37,7 @@ import com.aaa.project.system.stagnation.service.IStagnationService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sun.jna.platform.unix.solaris.LibKstat;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +103,9 @@ public class MessionController extends BaseController {
 
     @Autowired
     private IPlanDayService planDayService;
+
+    @Autowired
+    private  IMessageService messageService;
 
     @RequiresPermissions("system:mession:view")
     @GetMapping()
@@ -321,7 +327,7 @@ public class MessionController extends BaseController {
         /**
          * 上传图片
          */
-        String path = "D:\\IdeaProjects\\Henan-mobile-patrol-inspection\\src\\main\\resources\\file\\";
+        String path = "http://yidongdaiwei.ngrok.ibanzhuan.cn/profile/avatar/";
         if (!file.isEmpty()) {
             // 上传文件名(防止文件名重复)
             System.out.println(file.getOriginalFilename());
@@ -374,7 +380,7 @@ public class MessionController extends BaseController {
         } else {
             danger.setDangerResourceId(mession1.getMessionResourceId());
         }
-        String path = "D:\\IdeaProjects\\Henan-mobile-patrol-inspection\\src\\main\\resources\\wrong\\";
+        String path = "http://yidongdaiwei.ngrok.ibanzhuan.cn/profile/avatar/";
         if (!file.isEmpty()) {
             //上传文件名
             String filename = new Date().getTime() + "." + file.getOriginalFilename().split("\\.")[3];
@@ -440,35 +446,42 @@ public class MessionController extends BaseController {
         PlanCalendar planCalendar = new PlanCalendar();
         RoutingPeople routingPeople = new RoutingPeople();
         routingPeople.setOpenId(map.get("openId"));
+       
         RoutingPeople routingPeople1 = routingPeopleService.selectRoutingPeople(routingPeople);
-        System.out.println(routingPeople1.getStagnationId());
+
         planMonth.setMonthPlanStagnation(routingPeople1.getStagnationId());
         planMonth.setMonthPlanMonth(Integer.parseInt(map.get("month")));
         planMonth.setMonthPlanYear(Integer.parseInt(map.get("year")));
         List<PlanMonth> planMonths = planMonthService.selectPlanMonthList(planMonth);
-        PlanMonth planMonth1 = planMonths.get(0);
-        planCalendar.setMonthPlanId(planMonth1.getMonthPlanId());
-        List<PlanCalendar> planCalendarsLsit = planCalendarService.selectPlanCalendarList(planCalendar);
-        result.setData(planCalendarsLsit);
-        return result;
-    }
+        System.out.println(planMonths);
+        if(planMonths.size()!=0){
+            PlanMonth planMonth1 = planMonths.get(0);
+            planCalendar.setMonthPlanId(planMonth1.getMonthPlanId());
+            List<PlanCalendar> planCalendarsLsit = planCalendarService.selectPlanCalendarList(planCalendar);
+            result.setData(planCalendarsLsit);
+        }
 
-    /**
-     * 认领
-     *
-     * @param map
-     * @return
-     */
-    @RequestMapping("/wxclaim")
-    @ResponseBody
-    public Result wxclaim(@RequestBody Map<String, Integer> map) {
-        Result result = new Result();
-        Mession mession = messionService.selectMessionById(map.get("messionId"));
-        mession.setMessionStatus(1);
-        messionService.updateMession(mession);
-        result.setCode(200);
         return result;
     }
+	/**
+	 * 认领
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/wxclaim")
+	@ResponseBody
+	public Result wxclaim(@RequestBody Map<String,String> map,RoutingPeople routingPeople){
+		Result result = new Result();
+		routingPeople.setOpenId(map.get("openId"));
+        RoutingPeople routingPeople1 = routingPeopleService.selectRoutingPeople(routingPeople);
+
+        Mession mession = messionService.selectMessionById(Integer.parseInt(map.get("messionId")));
+        mession.setMessionRoutingId(routingPeople1.getRoutingId());
+		mession.setMessionStatus(1);
+		messionService.updateMession(mession);
+		result.setCode(200);
+		return result;
+	}
 
     /**
      * 任务详情
@@ -485,11 +498,11 @@ public class MessionController extends BaseController {
         } else {
             planDay.setDayPlanResource(map.get("resourceId"));
         }
+        System.out.println(planDay.getDayPlanResource());
         int calendarId = Integer.parseInt(Long.toString(map.get("calendarId")));
         PlanCalendar planCalendar = planCalendarService.selectPlanCalendarById(calendarId);
         planDay.setMonthPlanId(planCalendar.getMonthPlanId());
-        System.out.println(planDay.getDayPlanSite());
-        System.out.println(planDay.getDayPlanResource());
+        
         List<PlanDay> planDayList = planDayService.selectPlanDayList(planDay);
         for (PlanDay day : planDayList) {
             if (day.getDayPlanResource() == null) {
@@ -505,6 +518,21 @@ public class MessionController extends BaseController {
         result.setData(planDayList);
         result.setCode(200);
         return result;
+    }
+    /**
+     * 公告
+     * @param message
+     * @return
+     */
+	@RequestMapping("/wxnotice")
+    @ResponseBody
+	public  Result wxnotice(Message message){
+        Result result = new Result();
+        List<Message> messageList = messageService.selectMessageList(message);
+        result.setCode(200);
+        System.out.println(33333);
+        result.setData(messageList);
+        return  result;
     }
 
 }

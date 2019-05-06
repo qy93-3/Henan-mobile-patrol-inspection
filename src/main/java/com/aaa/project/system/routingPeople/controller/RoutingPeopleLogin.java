@@ -3,6 +3,7 @@ package com.aaa.project.system.routingPeople.controller;
 import com.aaa.project.system.routingPeople.domain.RoutingPeople;
 import com.aaa.project.system.routingPeople.service.IRoutingPeopleService;
 import com.google.gson.Gson;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,9 +43,9 @@ private IRoutingPeopleService iRoutingPeopleService;
         String code=request.getParameter("code");
 
         //小程序唯一标识   (在微信小程序管理后台获取)
-        String wxspAppid = "wx99dc57bef6ee0275";
+        String wxspAppid = "wxaca0cf56e0b8b32d";
         //小程序的 app secret (在微信小程序管理后台获取)
-       String wxspSecret = "bad25c8ffbdd9c4c5345017bdc8af2f4";
+       String wxspSecret = "304bd2a2f45564bdb5c716916b7e1218";
 //
 //
 //        //////////////// 1、向微信服务器 使用登录凭证 code 获取 session_key 和 openid ////////////////
