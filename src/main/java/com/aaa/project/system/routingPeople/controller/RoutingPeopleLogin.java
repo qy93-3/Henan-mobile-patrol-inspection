@@ -37,6 +37,7 @@ private IRoutingPeopleService iRoutingPeopleService;
         response.setHeader("Access-Control-Allow-Methods", "GET,POST");
         String user=request.getParameter("user");
         String psd=request.getParameter("psd");
+        String name=request.getParameter("name");
         System.out.println(user);
         String code=request.getParameter("code");
 
@@ -58,7 +59,7 @@ private IRoutingPeopleService iRoutingPeopleService;
         String openid=(String) map.get("openid");
            RoutingPeople routingPeople = new RoutingPeople();
         routingPeople.setOpenId(openid);
-
+        routingPeople.setRoutingName(name);
         routingPeople.setRoutingUsername(user);
         routingPeople.setRoutingPassword(psd);
         session.setAttribute("openId",openid);

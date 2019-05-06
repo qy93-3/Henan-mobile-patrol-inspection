@@ -30,6 +30,16 @@ public class RoutingPeople extends BaseEntity
 	private Integer routingPoint;
 	/**用户openid*/
 	private  String  openId;
+	private String stagnationPname;
+
+	public String getStagnationPname() {
+		return stagnationPname;
+	}
+
+	public void setStagnationPname(String stagnationPname) {
+		this.stagnationPname = stagnationPname;
+	}
+
 
 	/** 表格内显示的驻点名称 */
 	private String stagnationName;
@@ -123,6 +133,7 @@ public class RoutingPeople extends BaseEntity
             .append("routingIdcard", getRoutingIdcard())
             .append("stagnationId", getStagnationId())
             .append("routingPoint", getRoutingPoint())
+				.append("stagnationPname", getStagnationPname())
             .toString();
     }
 }

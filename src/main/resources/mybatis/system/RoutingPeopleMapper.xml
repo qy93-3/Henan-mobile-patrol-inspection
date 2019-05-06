@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="stagnationId"    column="stagnation_id"    />
         <result property="routingPoint"    column="routing_point"    />
         <result property="openId"    column="open_id"    />
+        <result property="stagnationPname"    column="stagnation_pname"    />
     </resultMap>
 	
 	<sql id="selectRoutingPeopleVo">
@@ -39,8 +40,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectRoutingPeopleLogin"  resultMap="RoutingPeopleResult">
-        <include refid="selectRoutingPeopleVo"/>
-        where routing_username = #{routingUsername} and  routing_password = #{routingPassword}
+       select r.routing_id, r.routing_name, r.routing_username, r.routing_password, r.routing_idcard, r.stagnation_id, r.routing_point, r.open_id ,s.stagnation_pname from tbl_routing_people r,tbl_stagnation s
+        where routing_username = #{routingUsername} and  routing_password = #{routingPassword} and r.stagnation_id=s.stagnation_id
+
     </select>
 
     <select id="selectRoutingPeople"  resultMap="RoutingPeopleResult">
