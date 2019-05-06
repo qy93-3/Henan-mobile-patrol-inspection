@@ -294,10 +294,11 @@
         })
 
         function getChild(level, getLevel, fatherNodeId,nowNodeId, childNodeId, url) {
-            $("#" + childNodeId + " option:not(:first)").remove();
-            var address = $("#" + nowNodeId).val();
+            $("#" + childNodeId + " option:not(:first)").remove();//先将下级的下拉框清空
+            var address = $("#" + nowNodeId).val();//获取当前下拉框的值
             var dataArr;
             if (level == "area" && address == "0") {
+                //如果下拉框是区县下拉框且未选择，则根据城市下拉框的值进行显示
                 address = $("#" + fatherNodeId).val();
                 level = "city"
             }
@@ -316,6 +317,7 @@
                         childId = data[i].stagnationId;
                         childName = data[i].stagnationPname;
                     }
+                    //拼接要获取的下拉框选项的值和内容
                     $("#" + childNodeId).append("<option value='" + childId + "'>" + childName + "</option>");
                 }
             })

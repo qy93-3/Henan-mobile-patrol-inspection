@@ -53,7 +53,6 @@ public class CityController extends BaseController
 		Area area = new Area();
 		area.setFather(locationId);
 		List<Area> data = areaService.selectAreaList(area);
-		System.out.println(locationId);
 		return data;
 	}
 
@@ -71,6 +70,7 @@ public class CityController extends BaseController
 		stagnation.setAddressId(locationId);
 		List<Stagnation> data = stagnationService.selectStagnationList(stagnation);
 		if ("city".equals(areaLevel)) {
+			//当下拉框为城市时，将该城市下所有的区县的驻点也添加进去
 			Area area = new Area();
 			area.setFather(locationId);
 			List<Area> areas = areaService.selectAreaList(area);

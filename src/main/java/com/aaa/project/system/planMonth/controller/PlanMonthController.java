@@ -445,13 +445,15 @@ public class PlanMonthController extends BaseController {
                 flag = 0;
             }
         } else if ("addSite".equals(from)) {
+            //如果点击添加站点之后的获取站点信息，则id为站点id
             site = siteService.selectSiteById(id);
             flag = 1;
         } else if ("addResource".equals(from)) {
+            //如果点击添加资源点之后的获取资源点信息，则id为资源点id
             resource = resourceService.selectResourceById(id);
             flag = 0;
         }
-        System.out.println(from);
+        //设置资源信息
         if (flag == 1) {
             resourcesName = site.getSiteName();
             resourcesType = site.getSiteType();
@@ -469,6 +471,7 @@ public class PlanMonthController extends BaseController {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             resourcesInnetDate = sdf.format(resource.getResourceStartTime());
         }
+        //将资源信息包装成json返回
         resultMap.put("resourcesName", resourcesName);
         resultMap.put("resourcesType", resourcesType);
         resultMap.put("resourcesLongitude", resourcesLongitude);
@@ -508,60 +511,6 @@ public class PlanMonthController extends BaseController {
         return prefix + "/planAddReaource";
     }
 
-    /**
-     * 跳转首页报表
-     */
-    @PostMapping("/search")
-    @ResponseBody
-    public String search(@RequestParam(required = false) Integer stagantionId) {
-        if (stagantionId == null)
-            stagantionId = 20877;
-        Stagnation stagnation = stagnationService.selectStagnationById(stagantionId);
-        Integer grandFatherId = 0;
-        Integer resourceGrandFatherNum = 0;
-        Integer resourceNum = 0;
-        if (stagnation.getAreaLevelId() == 3) {
-            resourceNum = stagnation.getResourcesNumber();
-        } else if (stagnation.getAreaLevelId() == 2) {
-            Integer resourceSonNum = 0;
-            Stagnation stagnationSon = new Stagnation();
-            stagnationSon.setPID(stagnation.getStagnationId());
-            List<Stagnation> stagnationList = stagnationService.selectStagnationList(stagnation);
-            for (Stagnation stagnation1 : stagnationList) {
-                if (stagnation1.getResourcesNumber() == null) {
-                    stagnation1.setResourcesNumber(0);
-                    stagnationService.updateStagnation(stagnation1);
-                }
-                resourceSonNum += stagnation1.getResourcesNumber();
-            }
-            resourceNum = resourceSonNum + stagnation.getResourcesNumber();
-        } else {
-            Integer resourceSonNum = 0;
-            Stagnation stagnationSon = new Stagnation();
-            stagnationSon.setPID(stagnation.getStagnationId());
-            List<Stagnation> stagnationSonList = stagnationService.selectStagnationList(stagnationSon);
-            for (Stagnation stagnation1 : stagnationSonList) {
-                Integer resourceGrandSonNum = 0;
-                Stagnation stagnationGrandSon = new Stagnation();
-                stagnationGrandSon.setPID(stagnation1.getStagnationId());
-                List<Stagnation> stagnationGrandSonList = stagnationService.selectStagnationList(stagnationGrandSon);
-                for (Stagnation stagnation2 : stagnationGrandSonList) {
-                    if (stagnation2.getResourcesNumber() == null) {
-                        stagnation2.setResourcesNumber(0);
-                        stagnationService.updateStagnation(stagnation2);
-                    }
-                    resourceGrandSonNum += stagnation1.getResourcesNumber();
-                }
-                if (stagnation1.getResourcesNumber() == null) {
-                    stagnation1.setResourcesNumber(0);
-                    stagnationService.updateStagnation(stagnation1);
-                }
-                resourceSonNum += stagnation1.getResourcesNumber() + resourceGrandSonNum;
-            }
-            resourceNum = resourceSonNum + stagnation.getResourcesNumber();
-        }
-        return "";
-    }
 
     /**
      * 查询巡检站点列表

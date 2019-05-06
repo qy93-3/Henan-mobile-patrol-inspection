@@ -12,16 +12,14 @@ import com.aaa.project.system.city.service.ICityService;
 import com.aaa.project.system.stagnation.domain.Stagnation;
 import com.aaa.project.system.stagnation.service.IStagnationService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.tomcat.jni.FileInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import com.aaa.common.utils.file.FileUtils;
 import com.aaa.framework.config.DouDouConfig;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 通用请求处理

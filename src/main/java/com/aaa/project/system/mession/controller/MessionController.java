@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.aaa.common.utils.file.FileUploadUtils;
+import com.aaa.framework.config.DouDouConfig;
 import com.aaa.project.system.city.domain.City;
 import com.aaa.project.system.city.service.ICityService;
 import com.aaa.project.system.danger.domain.Danger;
@@ -365,11 +367,13 @@ public class MessionController extends BaseController {
 
     @RequestMapping("/wxwrong")
     @ResponseBody
-    public Result wxwrong(@RequestParam(value = "file", required = false) MultipartFile file, Mession mession, RoutingPeople routingPeople, RoutingProject routingProject, Danger danger) {
+    public Result wxwrong(@RequestParam(value = "file", required = false) MultipartFile file, Mession mession, RoutingPeople routingPeople, RoutingProject routingProject, Danger danger) throws IOException {
         Result result = new Result();
+        System.out.println("routingPeople:"+routingPeople);
         System.out.println("danger " + danger.getDangerLevel());
         Mession mession1 = messionService.selectMessionById(mession.getMessionId());
         RoutingPeople routingPeople1 = routingPeopleService.selectRoutingPeople(routingPeople);
+        System.out.println("routingPeople1:"+routingPeople1);
         danger.setMessionId(mession1.getMessionId());
         danger.setRoutingPersonId(routingPeople1.getRoutingId());
         danger.setRoutingProjectId(routingProject.getRoutingProjectId());
@@ -380,25 +384,9 @@ public class MessionController extends BaseController {
         } else {
             danger.setDangerResourceId(mession1.getMessionResourceId());
         }
-        String path = "http://yidongdaiwei.ngrok.ibanzhuan.cn/profile/avatar/";
-        if (!file.isEmpty()) {
-            //上传文件名
-            String filename = new Date().getTime() + "." + file.getOriginalFilename().split("\\.")[3];
-            // 创建了一个File对象，名字是filepath，路径是path，名字是filename。
-            File filepath = new File(path, filename);
-            // 判断路径是否存在，如果不存在就创建一个
-            if (filepath.getParentFile().exists()) {
-                filepath.getParentFile().mkdirs();
-            }
-
-            try {
-                file.transferTo(filepath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            danger.setDangerPicture(path + filename);
-        }
+        String avatarPath = DouDouConfig.getAvatarPath();
+        String fileName = FileUploadUtils.upload(avatarPath, file);
+        danger.setDangerPicture(fileName);
         dangerService.insertDanger(danger);
         result.setCode(200);
         result.setMsg("上报成功");
@@ -446,7 +434,7 @@ public class MessionController extends BaseController {
         PlanCalendar planCalendar = new PlanCalendar();
         RoutingPeople routingPeople = new RoutingPeople();
         routingPeople.setOpenId(map.get("openId"));
-       
+
         RoutingPeople routingPeople1 = routingPeopleService.selectRoutingPeople(routingPeople);
 
         planMonth.setMonthPlanStagnation(routingPeople1.getStagnationId());
@@ -502,7 +490,7 @@ public class MessionController extends BaseController {
         int calendarId = Integer.parseInt(Long.toString(map.get("calendarId")));
         PlanCalendar planCalendar = planCalendarService.selectPlanCalendarById(calendarId);
         planDay.setMonthPlanId(planCalendar.getMonthPlanId());
-        
+
         List<PlanDay> planDayList = planDayService.selectPlanDayList(planDay);
         for (PlanDay day : planDayList) {
             if (day.getDayPlanResource() == null) {

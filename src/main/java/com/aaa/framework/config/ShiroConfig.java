@@ -249,7 +249,7 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/system/mession/**", "anon");
         filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
         filterChainDefinitionMap.put("/system/**", "anon");
-
+        filterChainDefinitionMap.put("http://yidongdaiwei.ngrok.ibanzhuan.cn/system/**","anon");
         // 退出 logout地址，shiro去清除session
         filterChainDefinitionMap.put("/logout", "logout");
 
