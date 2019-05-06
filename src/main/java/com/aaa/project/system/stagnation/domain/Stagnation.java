@@ -29,7 +29,38 @@ public class Stagnation extends BaseEntity
 	/** 省公司所属资源点数 */
 	private Integer spCount;
 
-	public void setStagnationId(Integer stagnationId) 
+	/** 上级驻点名称 */
+	private String fatherName;
+	/** 市县名称 */
+	private String areaName;
+	/** 驻点级别 */
+	private String levelName;
+
+	public String getLevelName() {
+		return levelName;
+	}
+
+	public void setLevelName(String levelName) {
+		this.levelName = levelName;
+	}
+
+	public String getAreaName() {
+		return areaName;
+	}
+
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
+	}
+
+	public String getFatherName() {
+		return fatherName;
+	}
+
+	public void setFatherName(String fatherName) {
+		this.fatherName = fatherName;
+	}
+
+	public void setStagnationId(Integer stagnationId)
 	{
 		this.stagnationId = stagnationId;
 	}

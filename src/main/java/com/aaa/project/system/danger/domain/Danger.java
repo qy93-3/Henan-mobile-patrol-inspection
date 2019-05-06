@@ -57,8 +57,48 @@ public class Danger extends BaseEntity
 	private DangerStatus tdangerStatus;
 	private RoutingPeople troutingPeople;
 
+	/** 资源名称 */
+	private String resourcesName;
+	/** 隐患项目名称 */
+	private String projectName;
+	/** 隐患状态名称 */
+	private String statusName;
+	/** 隐患程度名称 */
+	private String levelName;
 
-	public void setDangerId(Integer dangerId) 
+	public String getLevelName() {
+		return levelName;
+	}
+
+	public void setLevelName(String levelName) {
+		this.levelName = levelName;
+	}
+
+	public String getStatusName() {
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public String getResourcesName() {
+		return resourcesName;
+	}
+
+	public void setResourcesName(String resourcesName) {
+		this.resourcesName = resourcesName;
+	}
+
+	public void setDangerId(Integer dangerId)
 	{
 		this.dangerId = dangerId;
 	}

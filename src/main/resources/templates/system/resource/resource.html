@@ -68,13 +68,20 @@
                 </div>
             </form>
         </div>
-
-        <div id="stagnationResource" style="display: none"shiro:hasPermission="system:resource:distribute">
-            <button style="background-color: #E9F4FF;color: #2A70A7;" onclick="cancelDistribute()">释放关系</button>
-            <button onclick="setCycle()">设置巡检周期</button>
-        </div>
-        <div id="distributeResource"shiro:hasPermission="system:resource:distribute">
-            <label style="color: red;">分配到：</label>
+        <div class="btn-group-sm hidden-xs" role="group">
+            <a class="btn btn-primary btn-edit" onclick="$.operate.edit()"
+               shiro:hasPermission="system:resource:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:resource:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+            <span id="stagnationResource" style="display: none" shiro:hasPermission="system:resource:distribute">
+                <a class="btn btn-sm btn-info btn-edit" onclick="cancelDistribute()"><i class="fa fa-edit"></i>释放关系</a>
+                <a class="btn btn-sm btn-danger btn-edit" onclick="setCycle()"><i class="fa fa-edit"></i>设置巡检周期</a>
+            </span>
+            <span id="distributeResource" shiro:hasPermission="system:resource:distribute">
+                <label style="color: red;">分配到：</label>
             <select id="city2">
                 <option value=0>--请选择城市--</option>
                 <div th:each="city:${cities}">
@@ -87,17 +94,9 @@
             <select id="stagantion2">
                 <option value=0>--请选择驻点--</option>
             </select>
-            <button style="background-color: #E9F4FF;color: #2A70A7;" onclick="distribute()">分配资源</button>
-            <button onclick="setCycle()">设置巡检周期</button>
-        </div>
-        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="system:resource:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:resource:export">
-                <i class="fa fa-download"></i> 导出
-            </a>
+                <a class="btn btn-sm btn-info btn-edit" onclick="distribute()"><i class="fa fa-edit"></i>分配资源</a>
+                <a class="btn btn-sm btn-danger btn-edit" onclick="setCycle()"><i class="fa fa-edit"></i>设置巡检周期</a>
+            </span>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -254,21 +253,21 @@
          * 选择地市下拉框获取相应的区县和驻点
          */
         $("#city").change(function () {
-            getChild("city","area","city","city","area",ctx+"system/city/getLocation");
-            getChild("city","stagnation","city","city","stagantion",ctx+"system/city/getStagantion")
+            getChild("city", "area", "city", "city", "area", ctx + "system/city/getLocation");
+            getChild("city", "stagnation", "city", "city", "stagantion", ctx + "system/city/getStagantion")
         })
         $("#city2").change(function () {
-            getChild("city","area","city2","city2","area2",ctx+"system/city/getLocation");
-            getChild("city","stagnation","city2","city2","stagantion2",ctx+"system/city/getStagantion")
+            getChild("city", "area", "city2", "city2", "area2", ctx + "system/city/getLocation");
+            getChild("city", "stagnation", "city2", "city2", "stagantion2", ctx + "system/city/getStagantion")
         })
         $("#area").change(function () {
-            getChild("area","stagnation","city","area","stagantion",ctx+"system/city/getStagantion")
+            getChild("area", "stagnation", "city", "area", "stagantion", ctx + "system/city/getStagantion")
         })
         $("#area2").change(function () {
-            getChild("area","stagnation","city2","area2","stagantion2",ctx+"system/city/getStagantion")
+            getChild("area", "stagnation", "city2", "area2", "stagantion2", ctx + "system/city/getStagantion")
         })
 
-        function getChild(level, getLevel, fatherNodeId,nowNodeId, childNodeId, url) {
+        function getChild(level, getLevel, fatherNodeId, nowNodeId, childNodeId, url) {
             $("#" + childNodeId + " option:not(:first)").remove();
             var address = $("#" + nowNodeId).val();
             var dataArr;
@@ -347,6 +346,7 @@
             });
         }
     }
+
     /**
      * 批量设置巡检周期
      */
@@ -355,7 +355,7 @@
         if (rows.length == 0) {
             $.modal.alertWarning("请选择站点");
         } else {
-            $.modal.open("设置巡检周期", "/system/resource/toSetCycle?rows=" + rows,400,230);
+            $.modal.open("设置巡检周期", "/system/resource/toSetCycle?rows=" + rows, 400, 230);
         }
     }
 </script>

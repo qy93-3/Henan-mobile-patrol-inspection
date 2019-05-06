@@ -1,7 +1,10 @@
 package com.aaa.project.system.reply.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import com.aaa.project.system.mession.service.IMessionService;
 import com.aaa.project.system.resource.service.IResourceService;
 import com.aaa.project.system.routingProject.service.IRoutingProjectService;
 import com.aaa.project.system.site.service.ISiteService;
@@ -46,6 +49,9 @@ public class ReplyController extends BaseController
 
 	@Autowired
 	private IResourceService resourceService;
+
+	@Autowired
+	private IMessionService messionService;
 	
 	@RequiresPermissions("system:reply:view")
 	@GetMapping()
@@ -65,6 +71,10 @@ public class ReplyController extends BaseController
 		startPage();
         List<Reply> list = replyService.selectReplyList(reply);
 		for (Reply reply1 : list) {
+			Date messionDate = messionService.selectMessionById(reply1.getMessionId()).getMessionDate();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String date = sdf.format(messionDate);
+			reply1.setReplyDate(date);
 			//设置表格显示的巡检项目名称
 			reply1.setRoutingProject(routingProjectService.selectRoutingProjectById(reply1.getRoutingProjectId()).getRoutingProjectName());
 			//设置表格显示的隐患状态

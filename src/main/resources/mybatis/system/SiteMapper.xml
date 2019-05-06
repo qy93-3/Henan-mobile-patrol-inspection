@@ -40,7 +40,7 @@
         <include refid="selectSiteVo"/>
         <where>
             <if test="siteId != null ">and site_id = #{siteId}</if>
-            <if test="siteName != null  and siteName != '' ">and site_name = #{siteName}</if>
+            <if test="siteName != null  and siteName != '' ">and site_name like "%"#{siteName}"%"</if>
             <if test="siteNameAbbreviate != null  and siteNameAbbreviate != '' ">and site_name_abbreviate =
                 #{siteNameAbbreviate}
             </if>

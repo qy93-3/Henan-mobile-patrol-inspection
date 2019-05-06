@@ -36,7 +36,7 @@
         <where>
             <if test="resourceId != null ">and resource_id = #{resourceId}</if>
             <if test="resourceAreaId != null ">and resource_area_id = #{resourceAreaId}</if>
-            <if test="resourceName != null  and resourceName != '' ">and resource_name = #{resourceName}</if>
+            <if test="resourceName != null  and resourceName != '' ">and resource_name like "%"#{resourceName}"%"</if>
             <if test="resourceLongitude != null  and resourceLongitude != '' ">and resource_longitude =
                 #{resourceLongitude}
             </if>

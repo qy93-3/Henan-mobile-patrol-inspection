@@ -9,18 +9,15 @@
 <body class="gray-bg">
 <div class="container-div">
     <div class="row">
-        <div>
+        <div class="btn-group-sm">
 			<span th:if="${from eq 'check'}">
-            <a class="btn" style="background-color: #E9F4FF;color: #2A70A7;" th:href="@{/system/check}"
-               th:text="返回月计划"></a></span>
+            <a class="btn btn-warning btn-edit"th:href="@{/system/check}"><i class="fa fa-list"></i>返回月计划</a></span>
             <span th:if="${from eq 'month'}">
-            <a class="btn" style="background-color: #E9F4FF;color: #2A70A7;" th:href="@{/system/planMonth}"
-               th:text="返回月计划"></a></span>
+            <a class="btn btn-warning btn-edit"th:href="@{/system/planMonth}"><i class="fa fa-list"></i>返回月计划</a></span>
             <span th:if="${from eq 'month'}">
 				<span th:if="${sta eq 'ing'}">
-                <a class="btn" style="background-color: #E9F4FF;color: #2A70A7;"
-                   onclick="sendToCheck()" shiro:hasPermission="system:planCalendar:sendToCheck"
-                   th:text="提交审核"></a></span></span>
+                <a class="btn btn-info btn-edit"
+                   onclick="sendToCheck()" shiro:hasPermission="system:planCalendar:sendToCheck"><i class="fa fa-edit"></i>提交审核</a></span></span>
             <span th:text="${dateStr}" hidden th:hidden="hidden" id="dateStr"></span>
             <span hidden th:text="${from}" id="from"></span>
             <span hidden th:text="${sta}" id="sta"></span>
@@ -55,7 +52,7 @@
                             </tr>
                         </table>
                         <div style="text-align: center">
-                            <button onclick="check()" type="button" class="layui-btn">提交</button>
+                            <button onclick="check()" type="button" class="btn btn-info btn-edit"><i class="fa fa-edit"></i>提交</button>
                         </div>
                     </form>
                 </div>

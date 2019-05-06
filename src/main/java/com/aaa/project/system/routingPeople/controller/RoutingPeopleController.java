@@ -1,15 +1,15 @@
 package com.aaa.project.system.routingPeople.controller;
 
 import java.util.List;
+import java.util.Map;
+
+import com.aaa.project.system.city.service.ICityService;
+import com.aaa.project.system.stagnation.service.IStagnationService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.aaa.framework.aspectj.lang.annotation.Log;
 import com.aaa.framework.aspectj.lang.enums.BusinessType;
 import com.aaa.project.system.routingPeople.domain.RoutingPeople;
@@ -33,12 +33,19 @@ public class RoutingPeopleController extends BaseController
 	
 	@Autowired
 	private IRoutingPeopleService routingPeopleService;
+
+	@Autowired
+	private IStagnationService stagnationService;
+
+	@Autowired
+	private ICityService cityService;
 	
 	@RequiresPermissions("system:routingPeople:view")
 	@GetMapping()
-	public String routingPeople()
+	public String routingPeople(Map<String, Object> map)
 	{
-	    return prefix + "/routingPeople";
+	    map.put("cities", cityService.selectCityList(null));
+		return prefix + "/routingPeople";
 	}
 	
 	/**
@@ -47,10 +54,16 @@ public class RoutingPeopleController extends BaseController
 	@RequiresPermissions("system:routingPeople:list")
 	@PostMapping("/list")
 	@ResponseBody
-	public TableDataInfo list(RoutingPeople routingPeople)
+	public TableDataInfo list(RoutingPeople routingPeople, @RequestParam(required = false) Integer stagantion)
 	{
+		if (stagantion!=null&&stagantion!=0)
+			routingPeople.setStagnationId(stagantion);
 		startPage();
         List<RoutingPeople> list = routingPeopleService.selectRoutingPeopleList(routingPeople);
+		for (RoutingPeople people : list) {
+			//设置表格内显示的驻点名称
+			people.setStagnationName(stagnationService.selectStagnationById(people.getStagnationId()).getStagnationPname());
+		}
 		return getDataTable(list);
 	}
 	

@@ -10,7 +10,7 @@
 			<div class="col-sm-12 search-collapse">
 				<form id="formId">
 					<div class="select-list">
-						<table>
+						<table style="height: 100px">
 							<tr>
 								<td>任务编号：</td>
 								<td>
@@ -73,8 +73,8 @@
 					sortable: true
 				},
 				{
-					field : 'routingProjectId', 
-					title : '巡检项目编号',
+					field : 'routingProject',
+					title : '巡检项目',
 					sortable: true
 				},
 				{
@@ -83,35 +83,19 @@
 					sortable: false
 				},
 				{
-					field : 'replySiteId', 
-					title : '回复站点编号',
+					field : 'resourcesName',
+					title : '回复资源名称',
 					sortable: true
 				},
 				{
-					field : 'replyResourceId', 
-					title : '回复资源点编号',
-					sortable: true
-				},
-				{
-					field : 'picture', 
-					title : '上传图片',
-					sortable: true
+					field : 'replyDate',
+					title : '回复日期'
 				},
 				{
 					field : 'routingPersonId', 
 					title : '巡检人员编号',
 					sortable: true
-				},
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.replyId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.replyId + '\')"><i class="fa fa-remove"></i>删除</a>');
-						return actions.join('');
-		            }
-		        }]
+				}]
             };
             $.table.init(options);
         });

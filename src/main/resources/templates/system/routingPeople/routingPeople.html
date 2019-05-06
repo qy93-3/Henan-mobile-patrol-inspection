@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <meta charset="utf-8">
+<link th:href="@{/css/select.css}" rel="stylesheet"/>
 <head th:include="include :: header"></head>
 <body class="gray-bg">
     
@@ -9,54 +10,41 @@
 			<div class="col-sm-12 search-collapse">
 				<form id="formId">
 					<div class="select-list">
-						<ul>
-							<li>
-								巡检人员姓名：<input type="text" name="routingName"/>
-							</li>
-
-							<li>
-								巡检人员用户名：<input type="text" name="routingUsername"/>
-							</li>
-
-							<li>
-								巡检人员密码：<input type="text" name="routingPassword"/>
-							</li>
-
-							<li>
-								巡检人员身份证号：<input type="text" name="routingIdcard"/>
-							</li>
-
-							<li>
-								巡检人员驻点公司编号：<input type="text" name="stagnationId"/>
-							</li>
-
-							<li>
-								巡检人员积分：<input type="text" name="routingPoint"/>
-							</li>
-
-							<li>
-								巡检人员OpenId：<input type="text" name="openId"/>
-							</li>
-
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
+						<table style="height: 100px">
+							<tr>
+								<td>巡检人员姓名：</td>
+								<td>
+									<input type="text" name="routingName"/>
+								</td>
+							</tr>
+							<tr>
+								<td>维护驻点</td>
+								<td><select name="resourceCity" id="city">
+									<option value=0>--请选择市--</option>
+									<div th:each="city:${cities}">
+										<option th:value="${city.cityId}" th:text="${city.cityName}"></option>
+									</div>
+								</select>
+									<select name="resourceArea" id="area">
+										<option value=0>--请选择县--</option>
+									</select>
+									<select id="stagantion" name="stagantion">
+										<option value=0>--请选择驻点--</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+						<div align="center">
+							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+									class="fa fa-search"></i>&nbsp;搜索</a>
+							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+									class="fa fa-refresh"></i>&nbsp;重置</a>
+						</div>
 					</div>
 				</form>
 			</div>
 			
 	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:routingPeople:add">
-					<i class="fa fa-plus"></i> 添加
-				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:routingPeople:edit">
-					<i class="fa fa-edit"></i> 修改
-				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:routingPeople:remove">
-					<i class="fa fa-remove"></i> 删除
-				</a>
 				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:routingPeople:export">
 						<i class="fa fa-download"></i> 导出
 				 </a>
@@ -88,7 +76,7 @@
 				{
 					field : 'routingId', 
 					title : '巡检人员编号',
-					visible: false
+					visible: true
 				},
 				{
 					field : 'routingName', 
@@ -96,47 +84,55 @@
 					sortable: true
 				},
 				{
-					field : 'routingUsername', 
+					field : 'routingUsername',
 					title : '巡检人员用户名',
 					sortable: true
 				},
 				{
-					field : 'routingPassword', 
-					title : '巡检人员密码',
-					sortable: true
-				},
-				{
-					field : 'routingIdcard', 
-					title : '巡检人员身份证号',
-					sortable: true
-				},
-				{
-					field : 'stagnationId', 
-					title : '巡检人员驻点公司编号',
-					sortable: true
-				},
-				{
-					field : 'routingPoint', 
-					title : '巡检人员积分',
-					sortable: true
-				},
-				{
-					field : 'openId', 
-					title : '巡检人员OpenId',
-					sortable: true
-				},
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.routingId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.routingId + '\')"><i class="fa fa-remove"></i>删除</a>');
-						return actions.join('');
-		            }
-		        }]
+					field : 'stagnationName',
+					title : '巡检人员驻点公司'
+				}]
             };
             $.table.init(options);
+
+			/**
+			 * 选择地市下拉框获取相应的区县和驻点
+			 */
+			$("#city").change(function () {
+				getChild("city", "area", "city", "city", "area", ctx + "system/city/getLocation");
+				getChild("city", "stagnation", "city", "city", "stagantion", ctx + "system/city/getStagantion")
+			})
+			$("#area").change(function () {
+				getChild("area", "stagnation", "city", "area", "stagantion", ctx + "system/city/getStagantion")
+			})
+
+			function getChild(level, getLevel, fatherNodeId, nowNodeId, childNodeId, url) {
+				$("#" + childNodeId + " option:not(:first)").remove();
+				var address = $("#" + nowNodeId).val();
+				var dataArr;
+				if (level == "area" && address == "0") {
+					address = $("#" + fatherNodeId).val();
+					level = "city"
+				}
+				dataArr = {
+					locationId: address,
+					areaLevel: level
+				}
+				$.post(url, dataArr, function (data) {
+					for (var i = 0; i < data.length; i++) {
+						var childId;
+						var childName;
+						if (getLevel == "area") {
+							childId = data[i].areaId;
+							childName = data[i].areaName;
+						} else {
+							childId = data[i].stagnationId;
+							childName = data[i].stagnationPname;
+						}
+						$("#" + childNodeId).append("<option value='" + childId + "'>" + childName + "</option>");
+					}
+				})
+			}
         });
     </script>
 </body>

@@ -68,12 +68,20 @@
                 </div>
             </form>
         </div>
-        <div id="stagnationSite" style="display: none"shiro:hasPermission="system:site:distribute">
-            <button style="background-color: #E9F4FF;color: #2A70A7;" onclick="cancelDistribute()">释放关系</button>
-            <button onclick="setCycle()">设置巡检周期</button>
-        </div>
-        <div id="distributeSite"shiro:hasPermission="system:site:distribute">
-            <label style="color: red;">分配到：</label>
+        <div class="btn-group-sm hidden-xs" role="group">
+            <a class="btn btn-primary btn-edit" onclick="$.operate.edit()"
+               shiro:hasPermission="system:site:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:site:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+            <span id="stagnationSite" style="display: none"shiro:hasPermission="system:site:distribute">
+                <a class="btn btn-sm btn-info btn-edit" onclick="cancelDistribute()"><i class="fa fa-edit"></i>释放关系</a>
+                <a class="btn btn-sm btn-danger btn-edit" onclick="setCycle()"><i class="fa fa-edit"></i>设置巡检周期</a>
+            </span>
+            <span id="distributeSite"shiro:hasPermission="system:site:distribute">
+                <label style="color: red;">分配到：</label>
             <select id="city2">
                 <option value=0>--请选择城市--</option>
                 <div th:each="city:${cities}">
@@ -86,17 +94,9 @@
             <select id="stagantion2">
                 <option value=0>--请选择驻点--</option>
             </select>
-            <button style="background-color: #E9F4FF;color: #2A70A7;" onclick="distribute()">分配资源</button>
-            <button onclick="setCycle()">设置巡检周期</button>
-        </div>
-        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
-               shiro:hasPermission="system:site:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:site:export">
-                <i class="fa fa-download"></i> 导出
-            </a>
+                <a class="btn btn-sm btn-info btn-edit" onclick="distribute()"><i class="fa fa-edit"></i>分配资源</a>
+                <a class="btn btn-sm btn-danger btn-edit" onclick="setCycle()"><i class="fa fa-edit"></i>设置巡检周期</a>
+            </span>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table" data-mobile-responsive="true"></table>

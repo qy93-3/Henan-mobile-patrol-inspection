@@ -65,7 +65,7 @@ public class CheckController extends BaseController {
 
     @RequiresPermissions("system:check:view")
     @GetMapping()
-    public String check(Map<String, Object> map ,@RequestParam(required=false) String sta) {
+    public String check(Map<String, Object> map, @RequestParam(required = false) String sta) {
         List<City> cities = cityService.selectCityList(null);
         map.put("cities", cities);
         List<PlanMonthStatus> planMonthStatuses = planMonthStatusService.selectPlanMonthStatusList(null);
@@ -83,27 +83,31 @@ public class CheckController extends BaseController {
         PlanMonth planMonth = planMonthService.selectPlanMonthById(id);
         check.setCheckMonthPlan(id);
         if (check.getCheckResult())
-            planMonth.setMonthPlanStatus(3);
+            planMonth.setMonthPlanStatus(3);//更改状态为审核通过
         else
-            planMonth.setMonthPlanStatus(1);
+            planMonth.setMonthPlanStatus(1);//更改状态为制定中
         planMonthService.updatePlanMonth(planMonth);
         int i = checkService.insertCheck(check);
-        PlanDay planDay = new PlanDay();
-        planDay.setMonthPlanId(id);
-        List<PlanDay> planDayList = planDayService.selectPlanDayList(planDay);
-        for (PlanDay planDay1 : planDayList) {
-            planDay1.setDayPlanStatus(1);
-            planDayService.updatePlanDay(planDay1);
-            Mession mession = new Mession();
-            mession.setMessionDayId(planDay1.getDayPlanId());
-            if (planDay1.getDayPlanSite() != null)
-                mession.setMessionSiteId(planDay1.getDayPlanSite());
-            else
-                mession.setMessionResourceId(planDay1.getDayPlanResource());
-            mession.setMessionDate(planDay1.getDayPlanDate());
-            mession.setMessionStatus(0);
-            mession.setMessionStagnationId(planDay1.getDayPlanStagnation());
-            messionService.insertMession(mession);
+        if (check.getCheckResult()) {
+            PlanDay planDay = new PlanDay();
+            planDay.setMonthPlanId(id);
+            List<PlanDay> planDayList = planDayService.selectPlanDayList(planDay);
+            for (PlanDay planDay1 : planDayList) {
+                //设置日计划状态为可用
+                planDay1.setDayPlanStatus(1);
+                planDayService.updatePlanDay(planDay1);
+                //审核成功时将计划添加到任务中
+                Mession mession = new Mession();
+                mession.setMessionDayId(planDay1.getDayPlanId());
+                if (planDay1.getDayPlanSite() != null)
+                    mession.setMessionSiteId(planDay1.getDayPlanSite());
+                else
+                    mession.setMessionResourceId(planDay1.getDayPlanResource());
+                mession.setMessionDate(planDay1.getDayPlanDate());
+                mession.setMessionStatus(0);
+                mession.setMessionStagnationId(planDay1.getDayPlanStagnation());
+                messionService.insertMession(mession);
+            }
         }
         return toAjax(i);
     }

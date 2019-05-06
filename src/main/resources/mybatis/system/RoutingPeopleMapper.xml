@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectRoutingPeopleVo"/>
         <where>  
             <if test="routingId != null "> and routing_id = #{routingId}</if>
-             <if test="routingName != null  and routingName != '' "> and routing_name = #{routingName}</if>
+             <if test="routingName != null  and routingName != '' "> and routing_name like "%"#{routingName}"%"</if>
              <if test="routingUsername != null  and routingUsername != '' "> and routing_username = #{routingUsername}</if>
              <if test="routingPassword != null  and routingPassword != '' "> and routing_password = #{routingPassword}</if>
              <if test="routingIdcard != null  and routingIdcard != '' "> and routing_idcard = #{routingIdcard}</if>

@@ -144,9 +144,8 @@ public class PlanMonthController extends BaseController {
                     planMonthService.insertPlanMonth(planMonth1);
                 }
             }
-            if (stagantion != 0)
-                //若选择了驻点，则设置为月计划的查询条件
-                planMonth.setMonthPlanStagnation(stagantion);
+            //若选择了驻点，则设置为月计划的查询条件
+            planMonth.setMonthPlanStagnation(stagantion);
         }
         if (planYear != null && planYear != 0)
             //若选择了年份，就设置为月计划的查询条件
@@ -422,7 +421,7 @@ public class PlanMonthController extends BaseController {
     /**
      * Ajax显示具体资源信息
      *
-     * @param id 日计划ID或资源点ID或站点ID
+     * @param id   日计划ID或资源点ID或站点ID
      * @param from 发送该请求的页面标识
      * @return
      */
@@ -430,10 +429,10 @@ public class PlanMonthController extends BaseController {
     @ResponseBody
     public String resourcesDetail(@RequestParam(required = false) Long id, @RequestParam(required = false) String from) {
         Map<String, Object> resultMap = new HashMap<>();
-        String resourcesName="",resourcesType="",resourcesLongitude="",resourcesLatitude="",resourcesAddress="",resourcesInnetDate="";
+        String resourcesName = "", resourcesType = "", resourcesLongitude = "", resourcesLatitude = "", resourcesAddress = "", resourcesInnetDate = "";
         Site site = null;
         Resource resource = null;
-        int flag=1;
+        int flag = 1;
         if ("planDay".equals(from)) {
             PlanDay planDay = planDayService.selectPlanDayById(id.intValue());
             if (planDay.getDayPlanSite() != null) {
@@ -445,28 +444,28 @@ public class PlanMonthController extends BaseController {
                 resource = resourceService.selectResourceById(planDay.getDayPlanResource());
                 flag = 0;
             }
-        }else if("addSite".equals(from)){
+        } else if ("addSite".equals(from)) {
             site = siteService.selectSiteById(id);
             flag = 1;
-        }else if("addResource".equals(from)){
+        } else if ("addResource".equals(from)) {
             resource = resourceService.selectResourceById(id);
             flag = 0;
         }
         System.out.println(from);
-        if (flag==1){
-            resourcesName=site.getSiteName();
-            resourcesType=site.getSiteType();
-            resourcesLongitude=site.getSiteLongitude();
-            resourcesLatitude=site.getSiteLatitude();
-            resourcesAddress=site.getSiteAddress();
+        if (flag == 1) {
+            resourcesName = site.getSiteName();
+            resourcesType = site.getSiteType();
+            resourcesLongitude = site.getSiteLongitude();
+            resourcesLatitude = site.getSiteLatitude();
+            resourcesAddress = site.getSiteAddress();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             resourcesInnetDate = sdf.format(site.getSiteInnetDate());
-        }else{
-            resourcesName=resource.getResourceName();
-            resourcesType=resource.getResourceType();
-            resourcesLongitude=resource.getResourceLongitude();
-            resourcesLatitude=resource.getResourceLatitude();
-            resourcesAddress=resource.getResourceAddress();
+        } else {
+            resourcesName = resource.getResourceName();
+            resourcesType = resource.getResourceType();
+            resourcesLongitude = resource.getResourceLongitude();
+            resourcesLatitude = resource.getResourceLatitude();
+            resourcesAddress = resource.getResourceAddress();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             resourcesInnetDate = sdf.format(resource.getResourceStartTime());
         }

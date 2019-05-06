@@ -31,6 +31,17 @@ public class RoutingPeople extends BaseEntity
 	/**用户openid*/
 	private  String  openId;
 
+	/** 表格内显示的驻点名称 */
+	private String stagnationName;
+
+	public String getStagnationName() {
+		return stagnationName;
+	}
+
+	public void setStagnationName(String stagnationName) {
+		this.stagnationName = stagnationName;
+	}
+
 	public String getOpenId() {
 		return openId;
 	}

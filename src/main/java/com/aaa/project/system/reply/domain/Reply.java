@@ -40,6 +40,17 @@ public class Reply extends BaseEntity
 	/** 资源名称 */
 	private String resourcesName;
 
+	/** 回复日期 */
+	private String replyDate;
+
+	public String getReplyDate() {
+		return replyDate;
+	}
+
+	public void setReplyDate(String replyDate) {
+		this.replyDate = replyDate;
+	}
+
 	public String getResourcesName() {
 		return resourcesName;
 	}
