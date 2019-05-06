@@ -79,5 +79,14 @@ public class StagnationServiceImpl implements IStagnationService
 	{
 		return stagnationMapper.deleteStagnationByIds(Convert.toStrArray(ids));
 	}
-	
+
+	@Override
+	public List<Stagnation> findAllPSCount() {
+		return stagnationMapper.findAllPSCount();
+	}
+
+	@Override
+	public List<Stagnation> findAllPS() {
+		return stagnationMapper.findAllPS();
+	}
 }

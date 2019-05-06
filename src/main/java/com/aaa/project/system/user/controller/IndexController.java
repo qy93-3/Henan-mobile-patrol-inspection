@@ -1,6 +1,8 @@
 package com.aaa.project.system.user.controller;
 
 import java.util.List;
+
+import com.aaa.project.system.stagnation.service.IStagnationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,6 +12,8 @@ import com.aaa.framework.web.controller.BaseController;
 import com.aaa.project.system.menu.domain.Menu;
 import com.aaa.project.system.menu.service.IMenuService;
 import com.aaa.project.system.user.domain.User;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 首页 业务处理
@@ -24,6 +28,9 @@ public class IndexController extends BaseController
 
     @Autowired
     private DouDouConfig douDouConfig;
+
+    @Autowired
+    IStagnationService stagnationService;
 
     // 系统首页
     @GetMapping("/index")
@@ -41,9 +48,10 @@ public class IndexController extends BaseController
 
     // 系统介绍
     @GetMapping("/system/main")
-    public String main(ModelMap mmap)
+    public String main(ModelMap mmap, HttpServletRequest request)
     {
         mmap.put("version", douDouConfig.getVersion());
+        request.setAttribute("stagnationPCList",stagnationService.findAllPS());
         return "main";
     }
 }

@@ -148,7 +148,7 @@ public class DangerController extends BaseController
 	 * @Author ryy
 	 * @Description 获取巡检人员对应的提交的隐患信息
 	 * @Date 2019/4/23 16:23
-	 * @Param []
+	 * @Param [routingPeople]
 	 * @return java.util.List<com.aaa.project.system.danger.domain.Danger>
 	 **/
 	@RequestMapping("/empDangerList")

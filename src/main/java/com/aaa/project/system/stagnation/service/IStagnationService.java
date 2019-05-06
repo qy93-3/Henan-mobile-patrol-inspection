@@ -50,5 +50,23 @@ public interface IStagnationService
      * @return 结果
      */
 	public int deleteStagnationByIds(String ids);
-	
+
+
+	/**
+	 * @Author ryy
+	 * @Description 查询所有省公司所有所属资源点数
+	 * @Date 2019/5/5 15:46
+	 * @Param []
+	 * @return java.util.List<com.aaa.project.system.stagnation.domain.Stagnation>
+	 **/
+	List<Stagnation> findAllPSCount();
+
+	/**
+	 * @Author ryy
+	 * @Description 查询所有的省公司
+	 * @Date 2019/5/5 19:51
+	 * @Param []
+	 * @return java.util.List<com.aaa.project.system.stagnation.domain.Stagnation>
+	 **/
+	List<Stagnation> findAllPS();
 }

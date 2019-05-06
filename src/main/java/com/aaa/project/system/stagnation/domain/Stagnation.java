@@ -26,6 +26,8 @@ public class Stagnation extends BaseEntity
 	private Integer resourcesNumber;
 	/** 地域级别编号 */
 	private Integer areaLevelId;
+	/** 省公司所属资源点数 */
+	private Integer spCount;
 
 	public void setStagnationId(Integer stagnationId) 
 	{
@@ -82,7 +84,15 @@ public class Stagnation extends BaseEntity
 		return areaLevelId;
 	}
 
-    public String toString() {
+	public Integer getSpCount() {
+		return spCount;
+	}
+
+	public void setSpCount(Integer spCount) {
+		this.spCount = spCount;
+	}
+
+	public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("stagnationId", getStagnationId())
             .append("stagnationPname", getStagnationPname())

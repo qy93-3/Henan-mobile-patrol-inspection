@@ -53,7 +53,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 日计划分配任务 信息操作处理
- *
+ * 
  * @author aaa
  * @date 2019-04-20
  */
@@ -244,11 +244,11 @@ public class MessionController extends BaseController {
     }
 
     /**
-     * @return java.util.List<com.aaa.project.system.mession.domain.Mession>
      * @Author ryy
-     * @Description
+     * @Description 获取巡检人员对应的认领过的全部任务信息
      * @Date 2019/4/26 17:50
      * @Param [routingPeople]
+     * @return java.util.List<com.aaa.project.system.mession.domain.Mession>
      **/
     @RequestMapping("/empMessionList")
     @ResponseBody

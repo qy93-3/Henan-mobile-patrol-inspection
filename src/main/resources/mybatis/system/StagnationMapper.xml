@@ -76,5 +76,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{stagnationId}
         </foreach>
     </delete>
-    
+
+    <!-- 查询所有省公司的所属资源点数 -->
+    <select id="findAllPSCount"  resultMap="StagnationResult">
+       select sp.*,IFNULL(sp.resources_number,0)+IFNULL(scc.scCount,0) spCount from tbl_stagnation sp LEFT JOIN (select scr.*,IFNULL(scr.resources_number,0)+IFNULL(sar.resources_number,0) scCount from (select * from tbl_stagnation sc,(select * from tbl_plan_month where area_level=2) pma where sc.stagnation_id=pma.month_plan_stagnation GROUP BY sc.stagnation_id) scr LEFT JOIN (select * from tbl_stagnation sc,(select * from tbl_plan_month where area_level=3) pma where sc.stagnation_id=pma.month_plan_stagnation GROUP BY sc.stagnation_id) sar on scr.stagnation_id=sar.PID) scc ON sp.stagnation_id=scc.PID where sp.PID is null  and sp.stagnation_id != 10000 GROUP BY sp.stagnation_id
+    </select>
+
+    <select id="findAllPS"  resultMap="StagnationResult">
+        <include refid="selectStagnationVo"/>
+        where PID is null and stagnation_id !=10000
+    </select>
+
 </mapper>
