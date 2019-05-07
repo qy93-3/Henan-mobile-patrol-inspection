@@ -72,9 +72,9 @@ public class StagnationController extends BaseController {
                     stagnation1.setLevelName("县级分公司");
                     Area area = areaService.selectAreaById(stagnation1.getAddressId());
                     City city = cityService.selectCityById(area.getFather());
-                    stagnation1.setAreaName(city.getCityName()+area.getAreaName());
+                    stagnation1.setAreaName(city.getCityName() + area.getAreaName());
                 }
-            }else{
+            } else {
                 stagnation1.setLevelName("总公司");
             }
         }

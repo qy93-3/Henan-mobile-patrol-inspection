@@ -59,11 +59,11 @@ public class StagnationCountController {
         //当stagnationId为null设置默认显示省公司图表
         if (stagnationId==null||stagnationId==""){//21344  20776 20661
             //设置默认展示的图表
-            List<PlanMonth> planMonths = planMonthService.findByStagnationId(20661);
+            List<PlanMonth> planMonths = planMonthService.findByStagnationId(20776);
             for (PlanMonth pm:planMonths) {
                 monthResources.add(pm.getStagnationByMonth());
             }
-            List<PlanMonth> planFinishedMonths = planMonthService.findByFinishedStagnationId(20661);
+            List<PlanMonth> planFinishedMonths = planMonthService.findByFinishedStagnationId(20776);
             for (PlanMonth pm: planFinishedMonths) {
                 monthFinishedResources.add(pm.getStagnationByMonth());
             }
@@ -80,9 +80,7 @@ public class StagnationCountController {
         }
 
         stagnationEcharts.setMonthResources(monthResources);
-        System.out.println(stagnationEcharts.getMonthResources().toString());
         stagnationEcharts.setMonthFinishedResources(monthFinishedResources);
-        System.out.println(stagnationEcharts.getMonthFinishedResources().toString());
 
         return stagnationEcharts;
     }

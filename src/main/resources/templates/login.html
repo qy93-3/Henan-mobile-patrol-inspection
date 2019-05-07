@@ -28,11 +28,8 @@
         <div class="row">
             <div class="col-sm-7">
                 <div class="signin-info">
-                    <div class="logopanel m-b">
-                        <h1>[ 河南移动代维管理系统 ]</h1>
-                    </div>
                     <div class="m-b"></div>
-                    <h4>欢迎使用 <strong>河南移动代维管理系统</strong></h4>
+                    <h2>欢迎使用 <strong>河南移动代维管理系统</strong></h2>
                     <ul class="m-b">
                         <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 分配站点或资源</li>
                         <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 制定巡检计划</li>
@@ -44,11 +41,17 @@
                 </div>
             </div>
             <div class="col-sm-5">
-                <form id="signupForm">
-                    <h4 class="no-margins">登录：</h4>
-
-                    <input type="text"     name="username" class="form-control uname"     placeholder="用户名" value="admin"    />
-                    <input type="password" name="password" class="form-control pword"     placeholder="密码"   value="admin123" />
+                <form id="signupForm" style="padding-top: 10px;background: none;border: none">
+                    <table style="border: none">
+                        <tr>
+                            <td class="col-lg-5">用户名：</td>
+                            <td><input type="text"     name="username" class="form-control uname"     placeholder="用户名" value="admin"    /></td>
+                        </tr>
+                        <tr>
+                            <td class="col-lg-5">密码：</td>
+                            <td><input type="password" name="password" class="form-control pword"     placeholder="密码"   value="admin123" /></td>
+                        </tr>
+                    </table>
 					<div class="row m-t" th:if="${captchaEnabled==true}">
 						<div class="col-xs-6">
 						    <input type="text" name="validateCode" class="form-control code" placeholder="验证码" maxlength="5">
@@ -62,7 +65,7 @@
                     <div class="checkbox-custom">
 				        <input type="checkbox" id="rememberme" name="rememberme"> <label for="rememberme">记住我</label>
 				    </div>
-                    <button class="btn btn-success btn-block" id="btnSubmit" data-loading="正在验证登录，请稍后...">登录</button>
+                    <button class="btn btn-success btn-block" id="btnSubmit" data-loading="正在验证登录，请稍后..."style="padding-left: 30px">登录</button>
                 </form>
             </div>
         </div>
