@@ -104,10 +104,6 @@ $(function () {
         var myChart = echarts.init(document.getElementById('line'));
         $.get("/system/stagnationCount/stagnationByMonth?stagnationId="+stagnationId).done(
             function(data) {
-                console.log(data)
-                console.log(data.monthResources)
-                console.log(data.monthFinishedResources)
-
                 // 指定图表的配置项和数据
                 myChart.setOption({
                     title : {
