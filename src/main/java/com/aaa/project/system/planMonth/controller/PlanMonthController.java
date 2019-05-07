@@ -117,9 +117,9 @@ public class PlanMonthController extends BaseController {
      * @param planMonth  查询条件：月计划
      * @return
      */
-    @PostMapping("/list")
+    @PostMapping("/list/{from}")
     @ResponseBody
-    public TableDataInfo list(@RequestParam(required = false) Integer planYear, @RequestParam(required = false) Integer planStatus, @RequestParam(required = false) Integer stagantion, PlanMonth planMonth) {
+    public TableDataInfo list(@RequestParam(required = false) Integer planYear, @RequestParam(required = false) Integer planStatus, @RequestParam(required = false) Integer stagantion, PlanMonth planMonth,@PathVariable("from") String from) {
         if (stagantion != null && stagantion != 0) {
             for (int i = 1; i <= 12; i++) {
                 PlanMonth planMonth1 = new PlanMonth();
@@ -153,6 +153,8 @@ public class PlanMonthController extends BaseController {
         if (planStatus != null && planStatus != 0)
             //若选择了状态，就设置为月计划的查询条件
             planMonth.setMonthPlanStatus(planStatus);
+        if ("check".equals(from)&&planMonth.getMonthPlanStatus()==null)
+            planMonth.setMonthPlanStatus(2);
         startPage();
         List<PlanMonth> list = planMonthService.selectPlanMonthList(planMonth);
         for (PlanMonth plan : list) {

@@ -95,7 +95,13 @@
 					field : 'routingPersonId', 
 					title : '巡检人员编号',
 					sortable: true
-				}]
+				}, {
+						field: 'filePath',
+						title: '文件预览',
+						formatter: function (value, row, index) {
+							return '<a href="/profile/avatar/' + row.picture + '" target="_blank"><img style="width:30;height:30px;"  src="/profile/avatar/' + row.picture + '"/></a>';
+						}
+					}]
             };
             $.table.init(options);
         });

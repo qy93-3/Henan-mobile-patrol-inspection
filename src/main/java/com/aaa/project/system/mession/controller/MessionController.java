@@ -230,7 +230,6 @@ public class MessionController extends BaseController {
     public Result<Mession> wxmessionlist(Mession mession, PlanDay planDay, @RequestBody Map<String, Integer> data) {
         ArrayList list = new ArrayList();
         planDay.setCalendarPlanId(data.get("calendarId"));
-        System.out.println("calendarId" + data.get("calendarId"));
         List<PlanDay> planDayList = planDayService.selectPlanDayList(planDay);
         for (PlanDay day : planDayList) {
             mession.setMessionStatus(data.get("messionStatus"));
@@ -317,9 +316,8 @@ public class MessionController extends BaseController {
      */
     @RequestMapping("/wxprojectsave")
     @ResponseBody
-    public Result wxprojectsave(@RequestParam(value = "file", required = false) MultipartFile file, RoutingPeople routingPeople, Mession mession, RoutingProject routingProject, Reply reply) {
+    public Result wxprojectsave(@RequestParam(value = "file", required = false) MultipartFile file, RoutingPeople routingPeople, Mession mession, RoutingProject routingProject, Reply reply) throws IOException {
         Result result = new Result();
-        System.out.println(mession.getMessionId());
         RoutingPeople routingPeople1 = routingPeopleService.selectRoutingPeople(routingPeople);
         Mession mession1 = messionService.selectMessionById(mession.getMessionId());
         reply.setRoutingPersonId(routingPeople1.getRoutingId());
@@ -333,25 +331,9 @@ public class MessionController extends BaseController {
         /**
          * 上传图片
          */
-        String path = "http://yidongdaiwei.ngrok.ibanzhuan.cn/profile/avatar/";
-        if (!file.isEmpty()) {
-            // 上传文件名(防止文件名重复)
-            System.out.println(file.getOriginalFilename());
-            String fileName = new Date().getTime() + "." + file.getOriginalFilename().split("\\.")[3];
-            //创建了一个File对象，名字是filepath，路径是path，名字是filename。
-            File filepath = new File(path, fileName);
-            // 判断路径是否存在，如果不存在就创建一个
-            if (!filepath.getParentFile().exists()) {
-                filepath.getParentFile().mkdirs();
-            }
-            try {
-                file.transferTo(filepath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            reply.setPicture(path + fileName);
-
-        }
+        String avatarPath = DouDouConfig.getAvatarPath();
+        String fileName = FileUploadUtils.upload(avatarPath, file);
+        reply.setPicture(fileName);
         replyService.insertReply(reply);
         result.setCode(200);
         result.setMsg("保存成功");
@@ -373,11 +355,8 @@ public class MessionController extends BaseController {
     @ResponseBody
     public Result wxwrong(@RequestParam(value = "file", required = false) MultipartFile file, Mession mession, RoutingPeople routingPeople, RoutingProject routingProject, Danger danger) throws IOException {
         Result result = new Result();
-        System.out.println("routingPeople:"+routingPeople);
-        System.out.println("danger " + danger.getDangerLevel());
         Mession mession1 = messionService.selectMessionById(mession.getMessionId());
         RoutingPeople routingPeople1 = routingPeopleService.selectRoutingPeople(routingPeople);
-        System.out.println("routingPeople1:"+routingPeople1);
         danger.setMessionId(mession1.getMessionId());
         danger.setRoutingPersonId(routingPeople1.getRoutingId());
         danger.setRoutingProjectId(routingProject.getRoutingProjectId());
@@ -445,7 +424,6 @@ public class MessionController extends BaseController {
         planMonth.setMonthPlanMonth(Integer.parseInt(map.get("month")));
         planMonth.setMonthPlanYear(Integer.parseInt(map.get("year")));
         List<PlanMonth> planMonths = planMonthService.selectPlanMonthList(planMonth);
-        System.out.println(planMonths);
         if(planMonths.size()!=0){
             PlanMonth planMonth1 = planMonths.get(0);
             planCalendar.setMonthPlanId(planMonth1.getMonthPlanId());
@@ -490,7 +468,6 @@ public class MessionController extends BaseController {
         } else {
             planDay.setDayPlanResource(map.get("resourceId"));
         }
-        System.out.println(planDay.getDayPlanResource());
         int calendarId = Integer.parseInt(Long.toString(map.get("calendarId")));
         PlanCalendar planCalendar = planCalendarService.selectPlanCalendarById(calendarId);
         planDay.setMonthPlanId(planCalendar.getMonthPlanId());
@@ -503,10 +480,6 @@ public class MessionController extends BaseController {
                 day.setResource(resourceService.selectResourceById(day.getDayPlanResource()));
             }
         }
-        for (PlanDay day : planDayList) {
-            System.out.println(day.getDayPlanId());
-        }
-
         result.setData(planDayList);
         result.setCode(200);
         return result;
@@ -522,7 +495,6 @@ public class MessionController extends BaseController {
         Result result = new Result();
         List<Message> messageList = messageService.selectMessageList(message);
         result.setCode(200);
-        System.out.println(33333);
         result.setData(messageList);
         return  result;
     }

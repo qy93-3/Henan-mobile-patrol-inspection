@@ -4,145 +4,154 @@
 <link th:href="@{/css/select.css}" rel="stylesheet"/>
 <head th:include="include :: header"></head>
 <body class="gray-bg">
-    
-     <div class="container-div">
-		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="formId">
-					<div class="select-list">
-						<table>
-							<tr>
-								<td>隐患项目：</td>
-								<td>
-									<select name="projectId">
-										<option value=0>--请选择--</option>
-										<div th:each="project:${projects}">
-											<option th:value="${project.routingProjectId}" th:text="${project.routingProjectName}"></option>
-										</div>
-									</select>
-								</td>
-								<td>严重程度</td>
-								<td>
-									<select name="level">
-										<option value=0>--请选择--</option>
-										<div th:each="level:${levels}">
-											<option th:value="${level.dangerLevelId}" th:text="${level.dangerLevelName}"></option>
-										</div>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									隐患状态：
-								</td>
-								<td colspan="3">
-									<select name="status">
-										<option value=10>--请选择--</option>
-										<div th:each="status:${statuses}">
-											<option th:value="${status.dangerHandleId}" th:text="${status.dangerHandleName}"></option>
-										</div>
-									</select>
-								</td>
-							</tr>
-						</table>
-						<div align="center">
-							<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
-									class="fa fa-search"></i>&nbsp;搜索</a>
-							<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-									class="fa fa-refresh"></i>&nbsp;重置</a>
-						</div>
-					</div>
-				</form>
-			</div>
-			
-	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:danger:export">
-						<i class="fa fa-download"></i> 导出
-				 </a>
-			</div>
-			<div class="col-sm-12 select-table table-striped">
-				<table id="bootstrap-table" data-mobile-responsive="true"></table>
-			</div>
-		</div>
-	</div>
-    <div th:include="include :: footer"></div>
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:danger:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:danger:remove')}]];
-        var prefix = ctx + "system/danger";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-				exportUrl: prefix + "/export",
-                modalName: "巡检资源隐患",
-				search: false,
-		        showExport: true,
-                columns: [{
-		            checkbox: true
-		        },
-				{
-					field : 'dangerId', 
-					title : '隐患ID',
-					visible: false
-				},
-				{
-					field : 'dangerName', 
-					title : '隐患名称',
-					sortable: true
-				},
-				{
-					field : 'messionId', 
-					title : '任务编号',
-					sortable: true
-				},
-				{
-					field : 'resourcesName',
-					title : '隐患资源名称'
-				},
-				{
-					field : 'projectName',
-					title : '巡检项目名称'
-				},
-				{
-					field : 'levelName',
-					title : '严重程度'
-				},
-				{
-					field : 'statusName',
-					title : '隐患状态'
-				},
-				{
-					field : 'dangerSources', 
-					title : '隐患来源',
-					sortable: true
-				},
-				{
-					field : 'dangerDescription', 
-					title : '问题描述',
-					sortable: true
-				},
-				{
-					field : 'dangerSolution', 
-					title : '解决办法',
-					sortable: true
-				},
-				{
-					field : 'dangerDate', 
-					title : '发现日期',
-					sortable: true
-				},
-				{
-					field : 'routingPersonId', 
-					title : '提交巡检人员编号',
-					sortable: true
-				}]
-            };
-            $.table.init(options);
-        });
-    </script>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <table>
+                        <tr>
+                            <td>隐患项目：</td>
+                            <td>
+                                <select name="projectId">
+                                    <option value=0>--请选择--</option>
+                                    <div th:each="project:${projects}">
+                                        <option th:value="${project.routingProjectId}"
+                                                th:text="${project.routingProjectName}"></option>
+                                    </div>
+                                </select>
+                            </td>
+                            <td>严重程度</td>
+                            <td>
+                                <select name="level">
+                                    <option value=0>--请选择--</option>
+                                    <div th:each="level:${levels}">
+                                        <option th:value="${level.dangerLevelId}"
+                                                th:text="${level.dangerLevelName}"></option>
+                                    </div>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                隐患状态：
+                            </td>
+                            <td colspan="3">
+                                <select name="status">
+                                    <option value=10>--请选择--</option>
+                                    <div th:each="status:${statuses}">
+                                        <option th:value="${status.dangerHandleId}"
+                                                th:text="${status.dangerHandleName}"></option>
+                                    </div>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <div align="center">
+                        <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                class="fa fa-refresh"></i>&nbsp;重置</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:danger:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:danger:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:danger:remove')}]];
+    var prefix = ctx + "system/danger";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "巡检资源隐患",
+            search: false,
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'dangerId',
+                    title: '隐患ID',
+                    visible: false
+                },
+                {
+                    field: 'dangerName',
+                    title: '隐患名称',
+                    sortable: true
+                },
+                {
+                    field: 'messionId',
+                    title: '任务编号',
+                    sortable: true
+                },
+                {
+                    field: 'resourcesName',
+                    title: '隐患资源名称'
+                },
+                {
+                    field: 'projectName',
+                    title: '巡检项目名称'
+                },
+                {
+                    field: 'levelName',
+                    title: '严重程度'
+                },
+                {
+                    field: 'statusName',
+                    title: '隐患状态'
+                },
+                {
+                    field: 'dangerSources',
+                    title: '隐患来源',
+                    sortable: true
+                },
+                {
+                    field: 'dangerDescription',
+                    title: '问题描述',
+                    sortable: true
+                },
+                {
+                    field: 'dangerSolution',
+                    title: '解决办法',
+                    sortable: true
+                },
+                {
+                    field: 'dangerDate',
+                    title: '发现日期',
+                    sortable: true
+                },
+                {
+                    field: 'routingPersonId',
+                    title: '提交巡检人员编号',
+                    sortable: true
+                }, {
+                    field: 'filePath',
+                    title: '文件预览',
+                    formatter: function (value, row, index) {
+                        return '<a href="/profile/avatar/' + row.dangerPicture + '" target="_blank"><img style="width:30;height:30px;"  src="/profile/avatar/' + row.dangerPicture + '"/></a>';
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+</script>
 </body>
 </html>

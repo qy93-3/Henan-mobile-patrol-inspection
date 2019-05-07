@@ -7,7 +7,7 @@
 
 <div class="container-div">
     <div class="row">
-        <div class="col-sm-12 search-collapse">
+        <div class="col-sm-12 search-collapse" th:if="${from eq 'month'}">
             <form id="formId">
                 <div class="select-list">
                     <table>
@@ -72,7 +72,7 @@
         // if (from=="month")
         //     $.modal.open("设置驻点", "/system/planMonth/toSetStagnation", 450, 450);
         var options = {
-            url: prefix + "/list",
+            url: prefix + "/list/"+from,
             updateUrl: prefix + "/edit/{id}",
             exportUrl: prefix + "/export",
             showUrl: prefix + "/toPlanCalendar{id}",

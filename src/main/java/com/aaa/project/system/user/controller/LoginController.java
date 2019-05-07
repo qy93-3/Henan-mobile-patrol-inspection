@@ -52,12 +52,6 @@ public class LoginController extends BaseController
         try
         {
             subject.login(token);
-            //根据登录用户名和密码来获取用户，并将该用户放到session中
-            User user = new User();
-            user.setUserName(username);
-            user.setPassword(password);
-            User user1 = userService.selectUserList(user).get(0);
-            ShiroUtils.setSysUser(user1);
             return success();
         }
         catch (AuthenticationException e)
