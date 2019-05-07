@@ -9,6 +9,7 @@ import com.aaa.project.system.dangerStatus.domain.DangerStatus;
 import com.aaa.project.system.dangerStatus.service.IDangerStatusService;
 import com.aaa.project.system.mession.domain.Mession;
 import com.aaa.project.system.mession.service.IMessionService;
+import com.aaa.project.system.resource.domain.Resource;
 import com.aaa.project.system.resource.service.IResourceService;
 import com.aaa.project.system.routingPeople.domain.RoutingPeople;
 import com.aaa.project.system.routingPeople.service.IRoutingPeopleService;
@@ -188,8 +189,11 @@ public class DangerController extends BaseController {
                 //获取隐患站点信息
                 Site site = siteService.selectSiteById(danger.getDangerSiteId());
                 danger.setTsite(site);
+                //获取隐患资源点信息
+                Resource resource = resourceService.selectResourceById(danger.getDangerResourceId());
+                danger.setResource(resource);
                 //获取隐患等级信息
-                DangerLevel dangerLevel = dangerLevelService.selectDangerLevelById(danger.getDangerId());
+                DangerLevel dangerLevel = dangerLevelService.selectDangerLevelById(danger.getDangerLevel());
                 danger.setTdangerLevel(dangerLevel);
                 //获取隐患状态信息
                 DangerStatus dangerStatus = dangerStatusService.selectDangerStatusById(danger.getDangerStatus());

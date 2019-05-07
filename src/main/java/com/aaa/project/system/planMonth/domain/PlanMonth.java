@@ -44,6 +44,16 @@ public class PlanMonth extends BaseEntity
 	/** 表格显示的月计划状态 */
 	private String statusName;
 
+	private Integer stagnationByMonth;
+
+	public Integer getStagnationByMonth() {
+		return stagnationByMonth;
+	}
+
+	public void setStagnationByMonth(Integer stagnationByMonth) {
+		this.stagnationByMonth = stagnationByMonth;
+	}
+
 	public String getStatusName() {
 		return statusName;
 	}

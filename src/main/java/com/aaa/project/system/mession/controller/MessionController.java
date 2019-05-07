@@ -27,6 +27,7 @@ import com.aaa.project.system.planMonth.domain.PlanMonth;
 import com.aaa.project.system.planMonth.service.IPlanMonthService;
 import com.aaa.project.system.reply.domain.Reply;
 import com.aaa.project.system.reply.service.IReplyService;
+import com.aaa.project.system.resource.domain.Resource;
 import com.aaa.project.system.resource.service.IResourceService;
 import com.aaa.project.system.routingPeople.domain.RoutingPeople;
 import com.aaa.project.system.routingPeople.service.IRoutingPeopleService;
@@ -273,6 +274,9 @@ public class MessionController extends BaseController {
                 //获取巡检站点信息
                 Site site = siteService.selectSiteById(tmession.getMessionSiteId());
                 tmession.setSite(site);
+                //获取巡检资源点信息
+                Resource resource = resourceService.selectResourceById(tmession.getMessionResourceId());
+                tmession.setResource(resource);
                 //获取巡检任务状态信息
                 MessionStatus messionStatus = messionStatusService.selectMessionStatusById(tmession.getMessionStatus());
                 tmession.setTblMessionStatus(messionStatus);

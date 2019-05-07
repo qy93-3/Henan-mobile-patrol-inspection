@@ -50,5 +50,23 @@ public interface IPlanMonthService
      * @return 结果
      */
 	public int deletePlanMonthByIds(String ids);
+
+	/**
+	 * @Author ryy
+	 * @Description 根据省公司id获取每月省公司资源点数
+	 * @Date 2019/5/6 10:02
+	 * @Param [stagnationId]
+	 * @return java.util.List<com.aaa.project.system.planMonth.domain.PlanMonth>
+	 **/
+	List<PlanMonth> findByStagnationId(Integer stagnationId);
+
+	/**
+	 * @Author ryy
+	 * @Description 根据省公司id获取每月省公司已巡检的资源点数
+	 * @Date 2019/5/6 21:18
+	 * @Param [stagnationId]
+	 * @return java.util.List<com.aaa.project.system.planMonth.domain.PlanMonth>
+	 **/
+	List<PlanMonth> findByFinishedStagnationId(Integer stagnationId);
 	
 }

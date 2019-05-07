@@ -20,81 +20,189 @@
 </head>
 
 <body class="gray-bg">
-
-
-<!-- 选项卡菜单-->
-<ul id="myTab" class="nav nav-tabs" role="tablist">
-    <li class="active"><a href="#stagnationPC" role="tab" data-toggle="tab">总资源点</a></li>
-    <li><a href="#rule" role="tab" data-toggle="tab">资源点详情</a></li>
-
-</ul>
-<!-- 选项卡面板 -->
-<div id="myTabContent" class="tab-content">
-    <div class="tab-pane active" id="stagnationPC" style="height: 500px">
-        <div id="container" style="height: 100%;"></div>
-    </div>
-    <div class="tab-pane " id="rule">
-        <div class="form-group">
-            <div class=" col-sm-4">
-                <select class="form-control col-sm-6" name="stagnationId">
-                    <option th:each="pc : ${stagnationPCList}" th:value="${pc.stagnationId}" th:text="${pc.stagnationPname}"></option>
-                </select>
-
-            </div>
-            <button class="btn-primary btn-sm">查询</button>
+<div style="height: 750px">
+    <div id="container" style="height: 60%;"></div>
+    <div class="form-group">
+        <div class=" col-sm-4">
+            <select class="form-control col-sm-6" name="stagnationId" id="stagnationId">
+                <option th:each="pc : ${stagnationPCList}" th:value="${pc.stagnationId}" th:text="${pc.stagnationPname}"></option>
+            </select>
+            <!--  <div id="line" style="height: 40%;"></div>-->
         </div>
-
+        <button class="btn-primary btn-sm" id="findByStagnationId">查询</button>
+        <!-- <div id="line" style="height: 40%;"></div>-->
     </div>
-    <div id='line' style="height:500px;border:1px solid #ccc;padding:10px;"></div>
+    <div id="line" style="height: 40%;"></div>
 </div>
-
 
 </body>
 <script th:inline="javascript">
-    var myChart = echarts.init(document.getElementById('container'));
-    $.get("/system/stagnationCount/stagnationPC").done(
-        function(data) {
-            var textArray = new Array();
-            var valueArray = new Array();
-            $.each(data, function(i, n) {
-              /*  console.log(n.stagnationPname)*/
-                textArray.push(n.stagnationPname)
-                valueArray.push(n.spCount)
+    $(function () {
+        var myChart = echarts.init(document.getElementById('container'));
+        $.get("/system/stagnationCount/stagnationPC").done(
+            function(data) {
+                var textArray = new Array();
+                var valueArray = new Array();
+                $.each(data, function(i, n) {
+                    /*  console.log(n.stagnationPname)*/
+                    textArray.push(n.stagnationPname)
+                    valueArray.push(n.spCount)
+                })
+
+                // 指定图表的配置项和数据
+                myChart.setOption({
+                    title : {
+                        text : '省公司总资源点数'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+                    legend : {
+                        data : [ '资源点数' ]
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis : {
+                        type: 'value',
+                        boundaryGap: [0, 0.01]
+                    },
+                    yAxis : {
+                        data : textArray
+                    },
+                    series : [ {
+                        name : '资源点数',
+                        type : 'bar',
+                        data : valueArray
+                    } ]
+                });
+            });
+    })
+
+</script>
+<script th:inline="javascript">
+$(function () {
+    $("#findByStagnationId").click(function () {
+        var stagnationId= $("#stagnationId option:selected").val();
+        var myChart = echarts.init(document.getElementById('line'));
+        $.get("/system/stagnationCount/stagnationByMonth?stagnationId="+stagnationId).done(
+            function(data) {
+                console.log(data)
+                console.log(data.monthResources)
+                console.log(data.monthFinishedResources)
+
+                // 指定图表的配置项和数据
+                myChart.setOption({
+                    title : {
+                        text : '省公司月资源点数'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    legend : {
+                        data : [ '月资源点数','已巡检月资源点数' ]
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {show: true},
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    calculable : true,
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap : false,
+                        data :['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        name : '月资源点数',
+                        data : data.monthResources,
+                        type: 'line'
+                    },
+                        {
+                            name : '已巡检月资源点数',
+                            data : data.monthFinishedResources,
+                            type: 'line'
+                        }
+                    ]
+                });
             })
+    })
+    var myChart = echarts.init(document.getElementById('line'));
+    $.get("/system/stagnationCount/stagnationByMonth").done(
+        function(data) {
+            console.log(data)
+            console.log(data.monthResources)
+            console.log(data.monthFinishedResources)
 
             // 指定图表的配置项和数据
             myChart.setOption({
-                 title : {
-                    text : '省公司总资源点数'
+                title : {
+                    text : '省公司月资源点数'
                 },
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow'
-                    }
+                tooltip : {
+                    trigger: 'axis'
                 },
                 legend : {
-                    data : [ '资源点数' ]
+                    data : [ '月资源点数','已巡检月资源点数' ]
                 },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
+                toolbox: {
+                    show : true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
                 },
-                xAxis : {
-                    type: 'value',
-                    boundaryGap: [0, 0.01]
+                calculable : true,
+                xAxis: {
+                    type: 'category',
+                    boundaryGap : false,
+                    data :['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
                 },
-                yAxis : {
-                    data : textArray
+                yAxis: {
+                    type: 'value'
                 },
-                series : [ {
-                    name : '资源点数',
-                    type : 'bar',
-                    data : valueArray
-                } ]
+                series: [{
+                    name : '月资源点数',
+                    data : data.monthResources,
+                    type: 'line'
+                },
+                    {
+                        name : '已巡检月资源点数',
+                        data : data.monthFinishedResources,
+                        type: 'line'
+                    }
+                ]
             });
         });
+})
 </script>
+
 </html>

@@ -56,6 +56,15 @@ public class Danger extends BaseEntity
 	private DangerLevel tdangerLevel;
 	private DangerStatus tdangerStatus;
 	private RoutingPeople troutingPeople;
+	private Resource resource;
+
+	public Resource getResource() {
+		return resource;
+	}
+
+	public void setResource(Resource resource) {
+		this.resource = resource;
+	}
 
 	/** 资源名称 */
 	private String resourcesName;
