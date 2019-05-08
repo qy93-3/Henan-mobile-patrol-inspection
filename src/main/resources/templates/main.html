@@ -51,6 +51,7 @@
 
                 // 指定图表的配置项和数据
                 myChart.setOption({
+                    color: ['#ed5565'],
                     title : {
                         text : '省公司总资源点数'
                     },
@@ -90,7 +91,7 @@
                     series : [ {
                         name : '资源点数',
                         type : 'bar',
-                        data : valueArray
+                        data : valueArray,
                     } ]
                 });
             });
@@ -137,12 +138,22 @@ $(function () {
                     series: [{
                         name : '月资源点数',
                         data : data.monthResources,
-                        type: 'line'
+                        type: 'line',
+                        itemStyle:{
+                            normal:{
+                                color:'#ed5565'
+                            }
+                        }
                     },
                         {
                             name : '已巡检月资源点数',
                             data : data.monthFinishedResources,
-                            type: 'line'
+                            type: 'line',
+                            itemStyle:{
+                                normal:{
+                                    color:'#1ab394'
+                                }
+                            }
                         }
                     ]
                 });
@@ -188,12 +199,22 @@ $(function () {
                 series: [{
                     name : '月资源点数',
                     data : data.monthResources,
-                    type: 'line'
+                    type: 'line',
+                    itemStyle:{
+                        normal:{
+                            color:'#ed5565'
+                        }
+                    }
                 },
                     {
                         name : '已巡检月资源点数',
                         data : data.monthFinishedResources,
-                        type: 'line'
+                        type: 'line',
+                        itemStyle:{
+                            normal:{
+                                color:'#1ab394'
+                            }
+                        }
                     }
                 ]
             });

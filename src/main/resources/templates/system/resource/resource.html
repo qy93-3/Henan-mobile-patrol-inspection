@@ -69,14 +69,10 @@
             </form>
         </div>
         <div class="btn-group-sm hidden-xs" role="group">
-            <a class="btn btn-primary btn-edit" onclick="$.operate.edit()"
-               shiro:hasPermission="system:resource:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
             <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:resource:export">
                 <i class="fa fa-download"></i> 导出
             </a>
-            <span id="stagnationResource" style="display: none" shiro:hasPermission="system:resource:distribute">
+            <span id="stagnationResource" style="display: none" shiro:hasPermission="system:resource:relase">
                 <a class="btn btn-sm btn-info btn-edit" onclick="cancelDistribute()"><i class="fa fa-edit"></i>释放关系</a>
                 <a class="btn btn-sm btn-danger btn-edit" onclick="setCycle()"><i class="fa fa-edit"></i>设置巡检周期</a>
             </span>

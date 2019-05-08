@@ -232,7 +232,7 @@ public class ResourceController extends BaseController {
     /**
      * 释放资源点
      */
-    @RequiresPermissions("system:resource:cancelDistribute")
+    @RequiresPermissions("system:resource:relase")
     @Log(title = "资源点", businessType = BusinessType.DELETE)
     @PostMapping("/cancelDistribute")
     @ResponseBody

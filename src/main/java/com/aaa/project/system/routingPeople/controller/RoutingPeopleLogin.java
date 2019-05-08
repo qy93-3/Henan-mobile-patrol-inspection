@@ -49,12 +49,14 @@ public class RoutingPeopleLogin {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<String, Object>();
         map = gson.fromJson(s, map.getClass());
+        //获取小程序登录时的OPENID
         String openid = (String) map.get("openid");
         RoutingPeople routingPeople = new RoutingPeople();
         routingPeople.setOpenId(openid);
         routingPeople.setRoutingName(name);
         routingPeople.setRoutingUsername(user);
         routingPeople.setRoutingPassword(psd);
+        //将openid传入Session中
         session.setAttribute("openId", openid);
         RoutingPeople people = iRoutingPeopleService.selectRoutingPeopleLogin(routingPeople);
         Integer routingId = people.getRoutingId();
@@ -65,7 +67,7 @@ public class RoutingPeopleLogin {
         response.setContentType("application/json;charset=UTF-8");
         response.setHeader("catch-control", "no-catch");
         if (people != null) {
-            return people;
+            return people1;
         } else {
             return null;
         }

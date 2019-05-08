@@ -79,5 +79,10 @@ public class RoutingProjectServiceImpl implements IRoutingProjectService
 	{
 		return routingProjectMapper.deleteRoutingProjectByIds(Convert.toStrArray(ids));
 	}
-	
+
+	@Override
+	public List<RoutingProject> selectRoutingProjectListNotIn(String ids) {
+		return routingProjectMapper.selectRoutingProjectListNotIn(ids);
+	}
+
 }

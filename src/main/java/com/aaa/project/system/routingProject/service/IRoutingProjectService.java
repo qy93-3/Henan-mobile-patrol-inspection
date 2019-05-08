@@ -50,5 +50,12 @@ public interface IRoutingProjectService
      * @return 结果
      */
 	public int deleteRoutingProjectByIds(String ids);
+
+	/**
+	 * 查询不在指定id中的巡检资源项目
+	 * @param ids 需要排除的数据ID
+	 * @return
+	 */
+	public List<RoutingProject> selectRoutingProjectListNotIn(String ids);
 	
 }

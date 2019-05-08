@@ -237,7 +237,7 @@ public class SiteController extends BaseController
 	/**
 	 * 释放站点
 	 */
-	@RequiresPermissions("system:site:cancelDistribute")
+	@RequiresPermissions("system:site:relase")
 	@Log(title = "站点", businessType = BusinessType.DELETE)
 	@PostMapping("/cancelDistribute")
 	@ResponseBody

@@ -17,10 +17,12 @@
         <result property="monthRoutingResources" column="month_routing_resources"/>
     </resultMap>
 
+    <!--SQL字段-->
     <sql id="selectPlanMonthVo">
         select month_plan_id, month_plan_name, month_plan_type, month_plan_month, month_plan_year, month_plan_stagnation, month_plan_resources, month_plan_status, area_level, month_routing_resources from tbl_plan_month
     </sql>
 
+    <!--根据指定月计划属性查询对应的月计划-->
     <select id="selectPlanMonthList" parameterType="PlanMonth" resultMap="PlanMonthResult">
         <include refid="selectPlanMonthVo"/>
         <where>
@@ -37,11 +39,13 @@
         </where>
     </select>
 
+    <!--根据月计划ID查询-->
     <select id="selectPlanMonthById" parameterType="Integer" resultMap="PlanMonthResult">
         <include refid="selectPlanMonthVo"/>
         where month_plan_id = #{monthPlanId}
     </select>
 
+    <!--新增一条月计划-->
     <insert id="insertPlanMonth" parameterType="PlanMonth">
         insert into tbl_plan_month
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -70,6 +74,7 @@
         </trim>
     </insert>
 
+    <!--根据月计划ID更新月计划-->
     <update id="updatePlanMonth" parameterType="PlanMonth">
         update tbl_plan_month
         <trim prefix="SET" suffixOverrides=",">
@@ -86,10 +91,11 @@
         where month_plan_id = #{monthPlanId}
     </update>
 
+    <!--根据月计划ID删除-->
     <delete id="deletePlanMonthById" parameterType="Integer">
         delete from tbl_plan_month where month_plan_id = #{monthPlanId}
     </delete>
-
+    <!--根据月计划ID拼接成的字符串批量删除-->
     <delete id="deletePlanMonthByIds" parameterType="String">
         delete from tbl_plan_month where month_plan_id in
         <foreach item="monthPlanId" collection="array" open="(" separator="," close=")">
@@ -103,6 +109,7 @@
         UNION
         select a.*,sum(IFNULL(a.month_plan_resources,0)+IFNULL(b.month_plan_resources,0)) stagnationByMonth from (select pm.*from tbl_plan_month pm,(select sc.* from tbl_stagnation sc,(select * from tbl_stagnation where  stagnation_id=#{stagnationId}) sp where sc.PID=sp.stagnation_id) scr where scr.stagnation_id=pm.month_plan_stagnation )  a  right JOIN (select pm.* from tbl_plan_month pm,(select sa.* from tbl_stagnation sa,(select sc.* from tbl_stagnation sc,(select * from tbl_stagnation where  stagnation_id =#{stagnationId}) sp where sc.PID=sp.stagnation_id) scr where sa.PID=scr.stagnation_id) sar where pm.month_plan_stagnation=sar.stagnation_id) b on a.month_plan_month=b.month_plan_month GROUP BY a.month_plan_month
     </select>
+    <!--获取省公司各月已完成资源点数-->
     <select id="findByFinishedStagnationId" parameterType="Integer" resultMap="PlanMonthResult">
         select a.*,sum(IFNULL(a.month_routing_resources,0)+IFNULL(b.month_routing_resources,0)) stagnationByMonth from (select pm.*from tbl_plan_month pm,(select sc.* from tbl_stagnation sc,(select * from tbl_stagnation where  stagnation_id=#{stagnationId}) sp where sc.PID=sp.stagnation_id) scr where scr.stagnation_id=pm.month_plan_stagnation )  a  LEFT JOIN (select pm.* from tbl_plan_month pm,(select sa.* from tbl_stagnation sa,(select sc.* from tbl_stagnation sc,(select * from tbl_stagnation where  stagnation_id =#{stagnationId}) sp where sc.PID=sp.stagnation_id) scr where sa.PID=scr.stagnation_id) sar where pm.month_plan_stagnation=sar.stagnation_id) b on a.month_plan_month=b.month_plan_month GROUP BY a.month_plan_month
         UNION

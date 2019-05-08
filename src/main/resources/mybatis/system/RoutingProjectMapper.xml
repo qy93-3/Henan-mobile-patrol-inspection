@@ -20,7 +20,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="routingProjectName != null  and routingProjectName != '' "> and routing_project_name = #{routingProjectName}</if>
          </where>
     </select>
-    
+
+    <select id="selectRoutingProjectListNotIn" parameterType="String" resultMap="RoutingProjectResult">
+        <include refid="selectRoutingProjectVo"/> where routing_project_id not in
+        <foreach item="routingProjectId" collection="array" open="(" separator="," close=")">
+            #{routingProjectId}
+        </foreach>
+    </select>
+
     <select id="selectRoutingProjectById" parameterType="Integer" resultMap="RoutingProjectResult">
         <include refid="selectRoutingProjectVo"/>
         where routing_project_id = #{routingProjectId}
@@ -51,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 	
     <delete id="deleteRoutingProjectByIds" parameterType="String">
-        delete from tbl_routing_project where routing_project_id in 
+        delete from tbl_routing_project where routing_project_id in
         <foreach item="routingProjectId" collection="array" open="(" separator="," close=")">
             #{routingProjectId}
         </foreach>

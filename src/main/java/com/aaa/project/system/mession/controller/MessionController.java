@@ -59,7 +59,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 日计划分配任务 信息操作处理
- * 
+ *
  * @author aaa
  * @date 2019-04-20
  */
@@ -108,7 +108,7 @@ public class MessionController extends BaseController {
     private IPlanDayService planDayService;
 
     @Autowired
-    private  IMessageService messageService;
+    private IMessageService messageService;
 
     @RequiresPermissions("system:mession:view")
     @GetMapping()
@@ -252,11 +252,11 @@ public class MessionController extends BaseController {
     }
 
     /**
+     * @return java.util.List<com.aaa.project.system.mession.domain.Mession>
      * @Author ryy
      * @Description 获取巡检人员对应的认领过的全部任务信息
      * @Date 2019/4/26 17:50
      * @Param [routingPeople]
-     * @return java.util.List<com.aaa.project.system.mession.domain.Mession>
      **/
     @RequestMapping("/empMessionList")
     @ResponseBody
@@ -387,17 +387,21 @@ public class MessionController extends BaseController {
     public Result wxfinish(@RequestBody Map<String, Integer> map) {
         Result result = new Result();
         Mession mession = messionService.selectMessionById(map.get("messionId"));
-        mession.setMessionStatus(mession.getMessionStatus() + 1);
+
         //完成时更新月计划中的巡检完成资源数
         //根据mession获取对应的日计划
         PlanDay planDay = planDayService.selectPlanDayById(mession.getMessionDayId());
         //根据日计划获取月计划
         PlanMonth planMonth = planMonthService.selectPlanMonthById(planDay.getMonthPlanId());
         //将月计划已巡检资源数+1
-        Integer finishResouecesNum = planMonth.getMonthRoutingResources()==null?0:planMonth.getMonthRoutingResources();
-        finishResouecesNum++;
+        Integer finishResouecesNum = planMonth.getMonthRoutingResources() == null ? 0 : planMonth.getMonthRoutingResources();
+        if (mession.getMessionStatus() != 2) {
+            finishResouecesNum++;
+            mession.setMessionStatus(2);
+        }
         planMonth.setMonthRoutingResources(finishResouecesNum);
         planMonthService.updatePlanMonth(planMonth);
+
         messionService.updateMession(mession);
         return result;
     }
@@ -417,14 +421,13 @@ public class MessionController extends BaseController {
         PlanCalendar planCalendar = new PlanCalendar();
         RoutingPeople routingPeople = new RoutingPeople();
         routingPeople.setOpenId(map.get("openId"));
-
         RoutingPeople routingPeople1 = routingPeopleService.selectRoutingPeople(routingPeople);
 
         planMonth.setMonthPlanStagnation(routingPeople1.getStagnationId());
         planMonth.setMonthPlanMonth(Integer.parseInt(map.get("month")));
         planMonth.setMonthPlanYear(Integer.parseInt(map.get("year")));
         List<PlanMonth> planMonths = planMonthService.selectPlanMonthList(planMonth);
-        if(planMonths.size()!=0){
+        if (planMonths.size() != 0) {
             PlanMonth planMonth1 = planMonths.get(0);
             planCalendar.setMonthPlanId(planMonth1.getMonthPlanId());
             List<PlanCalendar> planCalendarsLsit = planCalendarService.selectPlanCalendarList(planCalendar);
@@ -433,25 +436,27 @@ public class MessionController extends BaseController {
 
         return result;
     }
-	/**
-	 * 认领
-	 * @param map
-	 * @return
-	 */
-	@RequestMapping("/wxclaim")
-	@ResponseBody
-	public Result wxclaim(@RequestBody Map<String,String> map,RoutingPeople routingPeople){
-		Result result = new Result();
-		routingPeople.setOpenId(map.get("openId"));
+
+    /**
+     * 认领
+     *
+     * @param map
+     * @return
+     */
+    @RequestMapping("/wxclaim")
+    @ResponseBody
+    public Result wxclaim(@RequestBody Map<String, String> map, RoutingPeople routingPeople) {
+        Result result = new Result();
+        routingPeople.setOpenId(map.get("openId"));
         RoutingPeople routingPeople1 = routingPeopleService.selectRoutingPeople(routingPeople);
 
         Mession mession = messionService.selectMessionById(Integer.parseInt(map.get("messionId")));
         mession.setMessionRoutingId(routingPeople1.getRoutingId());
-		mession.setMessionStatus(1);
-		messionService.updateMession(mession);
-		result.setCode(200);
-		return result;
-	}
+        mession.setMessionStatus(1);
+        messionService.updateMession(mession);
+        result.setCode(200);
+        return result;
+    }
 
     /**
      * 任务详情
@@ -484,19 +489,21 @@ public class MessionController extends BaseController {
         result.setCode(200);
         return result;
     }
+
     /**
      * 公告
+     *
      * @param message
      * @return
      */
-	@RequestMapping("/wxnotice")
+    @RequestMapping("/wxnotice")
     @ResponseBody
-	public  Result wxnotice(Message message){
+    public Result wxnotice(Message message) {
         Result result = new Result();
         List<Message> messageList = messageService.selectMessageList(message);
         result.setCode(200);
         result.setData(messageList);
-        return  result;
+        return result;
     }
 
 }
